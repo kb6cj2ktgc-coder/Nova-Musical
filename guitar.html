@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101416">
+
 <title>Nova Musical — Guitar Tuner</title>
 
 <style>
@@ -18,21 +20,41 @@
   --grey:#777d81;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
 body{
   margin:0;
   min-height:100vh;
   background:var(--bg);
   color:var(--white);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+button{
+  font-family:inherit;
 }
 
 .app{
   width:min(100%,760px);
   margin:auto;
-  padding:18px 14px 45px;
+  padding:
+    max(18px,env(safe-area-inset-top))
+    14px
+    max(45px,env(safe-area-inset-bottom));
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .topbar{
   display:flex;
@@ -45,24 +67,28 @@ body{
 .back{
   color:#d0d4d6;
   text-decoration:none;
-  font-size:27px;
+  font-size:29px;
   font-weight:800;
+  line-height:1;
 }
 
 .logo{
   flex:1;
   font-size:22px;
   font-weight:950;
+  letter-spacing:-.4px;
 }
 
-.logo span{color:var(--green)}
+.logo span{
+  color:var(--green);
+}
 
 .auto-control{
   display:flex;
   align-items:center;
   gap:8px;
   font-size:14px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .auto-box{
@@ -88,10 +114,15 @@ body{
   font-weight:1000;
 }
 
+/* =========================
+   TITLE
+========================= */
+
 h1{
   margin:0;
   text-align:center;
   font-size:30px;
+  letter-spacing:-.7px;
 }
 
 .subtitle{
@@ -100,22 +131,38 @@ h1{
   color:var(--muted);
 }
 
+/* =========================
+   TUNER CARD
+========================= */
+
 .tuner{
   overflow:hidden;
   border:1px solid #ffffff12;
   border-radius:25px;
   background:var(--panel);
+  box-shadow:0 20px 60px #0004;
 }
 
-/* METER */
+/* =========================
+   METER
+========================= */
 
 .meter{
   position:relative;
-  height:220px;
+  height:225px;
   border-bottom:1px solid #ffffff10;
+
   background:
-    linear-gradient(#ffffff07 1px,transparent 1px),
-    linear-gradient(90deg,#ffffff07 1px,transparent 1px);
+    linear-gradient(
+      #ffffff07 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      #ffffff07 1px,
+      transparent 1px
+    );
+
   background-size:32px 32px;
 }
 
@@ -134,11 +181,13 @@ h1{
   width:2px;
   height:34px;
   background:#e8e9e9;
+  opacity:.75;
 }
 
 .tick.big{
   top:48px;
   height:56px;
+  opacity:1;
 }
 
 .target{
@@ -186,10 +235,15 @@ h1{
   background:var(--grey);
   z-index:5;
 
-  /* visual smoothing only */
+  /*
+    Smooth visually.
+
+    This does NOT slow down or average
+    the actual pitch measurement.
+  */
   transition:
-    left .22s cubic-bezier(.22,.61,.36,1),
-    background .15s ease;
+    left .11s linear,
+    background .12s ease;
 }
 
 .number{
@@ -197,27 +251,36 @@ h1{
   top:126px;
   left:50%;
   transform:translateX(-50%);
+  min-width:120px;
+  text-align:center;
   font-size:36px;
   font-weight:950;
+  font-variant-numeric:tabular-nums;
 }
 
 .instruction{
   position:absolute;
-  top:174px;
+  top:177px;
   left:50%;
   transform:translateX(-50%);
+  width:90%;
+  text-align:center;
   white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
   font-size:17px;
   font-weight:850;
 }
 
-/* GUITAR */
+/* =========================
+   GUITAR
+========================= */
 
 .guitar{
   position:relative;
   width:min(100%,650px);
-  height:370px;
-  margin:12px auto 0;
+  height:375px;
+  margin:10px auto 0;
 }
 
 .wood{
@@ -228,8 +291,16 @@ h1{
   height:230px;
 
   clip-path:polygon(
-    0 22%,8% 5%,64% 8%,80% 17%,100% 28%,
-    100% 72%,80% 83%,64% 92%,8% 95%,0 78%
+    0 22%,
+    8% 5%,
+    64% 8%,
+    80% 17%,
+    100% 28%,
+    100% 72%,
+    80% 83%,
+    64% 92%,
+    8% 95%,
+    0 78%
   );
 
   background:
@@ -264,13 +335,22 @@ h1{
   font-weight:1000;
 }
 
+/*
+  Fretboard.
+*/
+
 .neck{
   position:absolute;
   left:75%;
   right:0;
   top:126px;
   height:110px;
-  background:linear-gradient(#38241a,#60402c 50%,#352219);
+  background:
+    linear-gradient(
+      #38241a,
+      #60402c 50%,
+      #352219
+    );
   box-shadow:inset 0 0 15px #0008;
   z-index:2;
 }
@@ -294,10 +374,22 @@ h1{
   z-index:3;
 }
 
-.fret1{right:12%}
-.fret2{right:4%}
+.fret1{
+  right:12%;
+}
 
-/* STRINGS */
+.fret2{
+  right:4%;
+}
+
+/* =========================
+   STRINGS
+
+   Moved a little farther down,
+   as requested.
+
+   They remain inside the neck.
+========================= */
 
 .string-svg{
   position:absolute;
@@ -314,7 +406,9 @@ h1{
   stroke-width:1.6;
   stroke-linecap:round;
   stroke-linejoin:round;
-  transition:stroke .14s,filter .14s;
+  transition:
+    stroke .14s,
+    filter .14s;
 }
 
 .s2{stroke-width:1.9}
@@ -325,15 +419,23 @@ h1{
 
 .guitar-string.bad{
   stroke:var(--red);
-  filter:drop-shadow(0 0 5px var(--red));
+  filter:
+    drop-shadow(
+      0 0 5px var(--red)
+    );
 }
 
 .guitar-string.good{
   stroke:var(--green);
-  filter:drop-shadow(0 0 6px var(--green));
+  filter:
+    drop-shadow(
+      0 0 6px var(--green)
+    );
 }
 
-/* PEGS */
+/* =========================
+   PEGS
+========================= */
 
 .peg{
   position:absolute;
@@ -368,25 +470,39 @@ h1{
   border:2px solid #5c6062;
 }
 
-.p3{left:29%;top:83px}
-.p2{left:45%;top:83px}
-.p1{left:61%;top:83px}
-
-.p4{left:29%;top:235px}
-.p5{left:45%;top:235px}
-.p6{left:61%;top:235px}
-
-.peg.bad{
-  border-color:var(--red);
-  box-shadow:0 0 16px var(--red);
+.p3{
+  left:29%;
+  top:83px;
 }
 
-.peg.good{
-  border-color:var(--green);
-  box-shadow:0 0 17px var(--green);
+.p2{
+  left:45%;
+  top:83px;
 }
 
-/* STRING BUTTONS */
+.p1{
+  left:61%;
+  top:83px;
+}
+
+.p4{
+  left:29%;
+  top:235px;
+}
+
+.p5{
+  left:45%;
+  top:235px;
+}
+
+.p6{
+  left:61%;
+  top:235px;
+}
+
+/* =========================
+   STRING BUTTONS
+========================= */
 
 .string-choice{
   position:absolute;
@@ -399,15 +515,38 @@ h1{
   font-size:20px;
   font-weight:900;
   z-index:12;
+  cursor:pointer;
 }
 
-.c3{left:28.2%;top:27px}
-.c2{left:44.2%;top:27px}
-.c1{left:60.2%;top:27px}
+.c3{
+  left:28.2%;
+  top:27px;
+}
 
-.c4{left:28.2%;top:293px}
-.c5{left:44.2%;top:293px}
-.c6{left:60.2%;top:293px}
+.c2{
+  left:44.2%;
+  top:27px;
+}
+
+.c1{
+  left:60.2%;
+  top:27px;
+}
+
+.c4{
+  left:28.2%;
+  top:293px;
+}
+
+.c5{
+  left:44.2%;
+  top:293px;
+}
+
+.c6{
+  left:60.2%;
+  top:293px;
+}
 
 .string-choice.active{
   background:white;
@@ -426,6 +565,10 @@ h1{
   box-shadow:0 0 18px #16d59a99;
 }
 
+/* =========================
+   CONTROLS
+========================= */
+
 .controls{
   padding:8px 18px 24px;
 }
@@ -439,6 +582,11 @@ h1{
   color:#06150f;
   font-size:16px;
   font-weight:900;
+  cursor:pointer;
+}
+
+.start:disabled{
+  opacity:.55;
 }
 
 .status{
@@ -462,7 +610,14 @@ h1{
 }
 
 @media(max-width:520px){
-  .guitar{height:340px}
+
+  .guitar{
+    height:350px;
+  }
+
+  h1{
+    font-size:28px;
+  }
 }
 </style>
 </head>
@@ -471,1316 +626,2241 @@ h1{
 
 <div class="app">
 
-<div class="topbar">
+  <div class="topbar">
 
-<a class="back" href="index.html">‹</a>
+    <a
+      class="back"
+      href="index.html"
+      aria-label="Back">
+      ‹
+    </a>
 
-<div class="logo">
-NOVA <span>MUSICAL</span>
+    <div class="logo">
+      NOVA <span>MUSICAL</span>
+    </div>
+
+    <div class="auto-control">
+
+      <span>Automatic</span>
+
+      <div
+        class="auto-box on"
+        id="autoBox"
+        role="checkbox"
+        aria-checked="true">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <h1 id="title">
+    Tune your guitar
+  </h1>
+
+  <div class="subtitle">
+    Standard • E A D G B E
+  </div>
+
+
+  <div class="tuner">
+
+    <div class="meter">
+
+      <div class="track"></div>
+
+      <div
+        class="tick big"
+        style="left:8%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:16%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:24%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:32%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:40%">
+      </div>
+
+      <div
+        class="tick big"
+        style="left:50%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:60%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:68%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:76%">
+      </div>
+
+      <div
+        class="tick"
+        style="left:84%">
+      </div>
+
+      <div
+        class="tick big"
+        style="left:92%">
+      </div>
+
+
+      <div class="target">
+
+        <div
+          class="fill"
+          id="fill">
+        </div>
+
+      </div>
+
+
+      <div class="center"></div>
+
+      <div
+        class="needle"
+        id="needle">
+      </div>
+
+
+      <div
+        class="number"
+        id="number">
+        0
+      </div>
+
+
+      <div
+        class="instruction"
+        id="instruction">
+        Start tuning and play any string
+      </div>
+
+    </div>
+
+
+    <div class="guitar">
+
+      <div class="wood"></div>
+
+      <div class="neck"></div>
+
+      <div class="nut"></div>
+
+      <div class="fret fret1"></div>
+
+      <div class="fret fret2"></div>
+
+
+      <svg
+        class="string-svg"
+        viewBox="0 0 650 375"
+        preserveAspectRatio="none">
+
+        <!-- High E -->
+
+        <path
+          id="string1"
+          class="guitar-string s1"
+          d="
+            M419 105
+            L490 153
+            L650 153
+          "/>
+
+        <!-- B -->
+
+        <path
+          id="string2"
+          class="guitar-string s2"
+          d="
+            M315 105
+            L490 170
+            L650 170
+          "/>
+
+        <!-- G -->
+
+        <path
+          id="string3"
+          class="guitar-string s3"
+          d="
+            M211 105
+            L490 187
+            L650 187
+          "/>
+
+        <!-- D -->
+
+        <path
+          id="string4"
+          class="guitar-string s4"
+          d="
+            M211 257
+            L490 204
+            L650 204
+          "/>
+
+        <!-- A -->
+
+        <path
+          id="string5"
+          class="guitar-string s5"
+          d="
+            M315 257
+            L490 221
+            L650 221
+          "/>
+
+        <!-- Low E -->
+
+        <path
+          id="string6"
+          class="guitar-string s6"
+          d="
+            M419 257
+            L490 235
+            L650 235
+          "/>
+
+      </svg>
+
+
+      <div
+        class="peg p1"
+        id="peg1">
+      </div>
+
+      <div
+        class="peg p2"
+        id="peg2">
+      </div>
+
+      <div
+        class="peg p3"
+        id="peg3">
+      </div>
+
+      <div
+        class="peg p4"
+        id="peg4">
+      </div>
+
+      <div
+        class="peg p5"
+        id="peg5">
+      </div>
+
+      <div
+        class="peg p6"
+        id="peg6">
+      </div>
+
+
+      <button
+        class="string-choice c3"
+        data-string="3">
+        G
+      </button>
+
+      <button
+        class="string-choice c2"
+        data-string="2">
+        B
+      </button>
+
+      <button
+        class="string-choice c1"
+        data-string="1">
+        E
+      </button>
+
+      <button
+        class="string-choice c4"
+        data-string="4">
+        D
+      </button>
+
+      <button
+        class="string-choice c5"
+        data-string="5">
+        A
+      </button>
+
+      <button
+        class="string-choice c6"
+        data-string="6">
+        E
+      </button>
+
+    </div>
+
+
+    <div class="controls">
+
+      <button
+        class="start"
+        id="start">
+        Start tuning
+      </button>
+
+      <div
+        class="status"
+        id="status">
+        Automatic detection is on.
+      </div>
+
+      <div
+        class="complete"
+        id="complete">
+        ✓ All six strings are tuned
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
-<div class="auto-control">
-<span>Automatic</span>
-<div
-  class="auto-box on"
-  id="autoBox"
-  role="checkbox"
-  aria-checked="true">
-</div>
-</div>
-
-</div>
-
-<h1 id="title">Tune your guitar</h1>
-
-<div class="subtitle">
-Standard • E A D G B E
-</div>
-
-<div class="tuner">
-
-<div class="meter">
-
-<div class="track"></div>
-
-<div class="tick big" style="left:8%"></div>
-<div class="tick" style="left:16%"></div>
-<div class="tick" style="left:24%"></div>
-<div class="tick" style="left:32%"></div>
-<div class="tick" style="left:40%"></div>
-
-<div class="tick big" style="left:50%"></div>
-
-<div class="tick" style="left:60%"></div>
-<div class="tick" style="left:68%"></div>
-<div class="tick" style="left:76%"></div>
-<div class="tick" style="left:84%"></div>
-<div class="tick big" style="left:92%"></div>
-
-<div class="target">
-<div class="fill" id="fill"></div>
-</div>
-
-<div class="center"></div>
-<div class="needle" id="needle"></div>
-
-<div class="number" id="number">0</div>
-
-<div class="instruction" id="instruction">
-Start tuning and play any string
-</div>
-
-</div>
-
-<div class="guitar">
-
-<div class="wood"></div>
-<div class="neck"></div>
-<div class="nut"></div>
-
-<div class="fret fret1"></div>
-<div class="fret fret2"></div>
-
-<!--
-  All six strings moved slightly DOWN.
-  Neck = y126 through y236.
--->
-
-<svg
-class="string-svg"
-viewBox="0 0 650 370"
-preserveAspectRatio="none">
-
-<path
-id="string1"
-class="guitar-string s1"
-d="M419 105 L490 150 L650 150"/>
-
-<path
-id="string2"
-class="guitar-string s2"
-d="M315 105 L490 167 L650 167"/>
-
-<path
-id="string3"
-class="guitar-string s3"
-d="M211 105 L490 184 L650 184"/>
-
-<path
-id="string4"
-class="guitar-string s4"
-d="M211 257 L490 201 L650 201"/>
-
-<path
-id="string5"
-class="guitar-string s5"
-d="M315 257 L490 218 L650 218"/>
-
-<path
-id="string6"
-class="guitar-string s6"
-d="M419 257 L490 234 L650 234"/>
-
-</svg>
-
-<div class="peg p1" id="peg1"></div>
-<div class="peg p2" id="peg2"></div>
-<div class="peg p3" id="peg3"></div>
-
-<div class="peg p4" id="peg4"></div>
-<div class="peg p5" id="peg5"></div>
-<div class="peg p6" id="peg6"></div>
-
-<button class="string-choice c3" data-string="3">G</button>
-<button class="string-choice c2" data-string="2">B</button>
-<button class="string-choice c1" data-string="1">E</button>
-
-<button class="string-choice c4" data-string="4">D</button>
-<button class="string-choice c5" data-string="5">A</button>
-<button class="string-choice c6" data-string="6">E</button>
-
-</div>
-
-<div class="controls">
-
-<button class="start" id="start">
-Start tuning
-</button>
-
-<div class="status" id="status">
-Automatic detection is on.
-</div>
-
-<div class="complete" id="complete">
-✓ All six strings are tuned
-</div>
-
-</div>
-
-</div>
-</div>
 
 <script>
 
-/* ======================================
-   NOVA MUSICAL PRECISION TUNER
-   McLeod-style pitch detector
-====================================== */
+/*
+=========================================================
+NOVA MUSICAL
+GUITAR TUNER INTERFACE
 
-const GUITAR=[
- {number:6,label:"E",name:"Low E",hz:82.4069},
- {number:5,label:"A",name:"A",hz:110},
- {number:4,label:"D",name:"D",hz:146.8324},
- {number:3,label:"G",name:"G",hz:195.9977},
- {number:2,label:"B",name:"B",hz:246.9417},
- {number:1,label:"E",name:"High E",hz:329.6276}
+Pitch detection is performed by:
+
+nova-tuner-worklet.js
+
+This page handles:
+- automatic string selection
+- manual string selection
+- meter
+- tuning directions
+- stability confirmation
+- tuned-string memory for this session only
+=========================================================
+*/
+
+
+/* =====================================================
+   STANDARD GUITAR FREQUENCIES
+===================================================== */
+
+const GUITAR = [
+
+  {
+    number:6,
+    label:"E",
+    name:"Low E",
+    hz:82.4069
+  },
+
+  {
+    number:5,
+    label:"A",
+    name:"A",
+    hz:110.0000
+  },
+
+  {
+    number:4,
+    label:"D",
+    name:"D",
+    hz:146.8324
+  },
+
+  {
+    number:3,
+    label:"G",
+    name:"G",
+    hz:195.9977
+  },
+
+  {
+    number:2,
+    label:"B",
+    name:"B",
+    hz:246.9417
+  },
+
+  {
+    number:1,
+    label:"E",
+    name:"High E",
+    hz:329.6276
+  }
+
 ];
 
-const startButton=document.getElementById("start");
-const autoBox=document.getElementById("autoBox");
-const needle=document.getElementById("needle");
-const numberDisplay=document.getElementById("number");
-const instruction=document.getElementById("instruction");
-const fill=document.getElementById("fill");
-const status=document.getElementById("status");
-const title=document.getElementById("title");
-const complete=document.getElementById("complete");
 
-const choiceButtons=[
- ...document.querySelectorAll(".string-choice")
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const startButton =
+  document.getElementById("start");
+
+const autoBox =
+  document.getElementById("autoBox");
+
+const needle =
+  document.getElementById("needle");
+
+const numberDisplay =
+  document.getElementById("number");
+
+const instruction =
+  document.getElementById("instruction");
+
+const fill =
+  document.getElementById("fill");
+
+const status =
+  document.getElementById("status");
+
+const title =
+  document.getElementById("title");
+
+const complete =
+  document.getElementById("complete");
+
+const choiceButtons = [
+  ...document.querySelectorAll(
+    ".string-choice"
+  )
 ];
 
-let automatic=true;
-let selectedString=null;
 
-let audioContext=null;
-let analyser=null;
-let stream=null;
-let buffer=null;
-let running=false;
+/* =====================================================
+   AUDIO STATE
+===================================================== */
 
-let currentCandidate=null;
-let candidateCount=0;
+let audioContext = null;
 
-let recentCents=[];
-let recentPitch=[];
+let stream = null;
 
-let stableStart=null;
-let stableString=null;
+let source = null;
 
-let displayedNeedle=0;
+let workletNode = null;
 
-let lastAnalysis=0;
-let lastPitchTime=0;
+let silentGain = null;
 
-const tuned=new Set();
+let running = false;
 
-/* ======================================
-   MODE
-====================================== */
 
-function toggleAutomatic(){
+/* =====================================================
+   TUNER STATE
+===================================================== */
 
- automatic=!automatic;
+let automatic = true;
 
- autoBox.classList.toggle("on",automatic);
+let selectedString = null;
 
- autoBox.setAttribute(
-   "aria-checked",
-   automatic?"true":"false"
- );
-
- selectedString=null;
-
- resetTracking();
- resetConfirmation();
- clearActive();
-
- title.textContent="Tune your guitar";
-
- if(automatic){
-
-   instruction.textContent=
-     running
-     ?"Play any open string"
-     :"Start tuning and play any string";
-
-   status.textContent=
-     "Automatic detection is on.";
-
- }else{
-
-   instruction.textContent=
-     "Choose a string to tune";
-
-   status.textContent=
-     "Choose E, A, D, G, B or E.";
- }
-}
-
-autoBox.addEventListener(
- "click",
- toggleAutomatic
-);
-
-/* ======================================
-   MANUAL SELECTION
-====================================== */
-
-choiceButtons.forEach(button=>{
-
- button.addEventListener("click",()=>{
-
-   const number=
-     Number(button.dataset.string);
-
-   selectedString=
-     GUITAR.find(
-       s=>s.number===number
-     );
-
-   automatic=false;
-
-   autoBox.classList.remove("on");
-
-   autoBox.setAttribute(
-     "aria-checked",
-     "false"
-   );
-
-   resetTracking();
-   resetConfirmation();
-   clearActive();
-
-   if(!tuned.has(number)){
-     button.classList.add("active");
-   }
-
-   title.textContent=
-     "Tune "+selectedString.name;
-
-   instruction.textContent=
-     "Play "+selectedString.name;
-
-   status.textContent=
-     "Listening for "+selectedString.name+".";
- });
-});
-
-/* ======================================
-   MICROPHONE
-====================================== */
-
-startButton.addEventListener(
- "click",
- async()=>{
-
- if(running){
-   stopTuner();
-   return;
- }
-
- try{
-
-   stream=
-     await navigator.mediaDevices
-     .getUserMedia({
-       audio:{
-         echoCancellation:false,
-         noiseSuppression:false,
-         autoGainControl:false,
-         channelCount:1
-       }
-     });
-
-   audioContext=
-     new(
-       window.AudioContext ||
-       window.webkitAudioContext
-     )();
-
-   await audioContext.resume();
-
-   const source=
-     audioContext
-     .createMediaStreamSource(stream);
-
-   analyser=
-     audioContext.createAnalyser();
-
-   /*
-     16384 samples gives Low E
-     substantially more waveform cycles
-     than a tiny tuner buffer.
-   */
-
-   analyser.fftSize=16384;
-   analyser.smoothingTimeConstant=0;
-
-   buffer=
-     new Float32Array(
-       analyser.fftSize
-     );
-
-   source.connect(analyser);
-
-   running=true;
-
-   startButton.textContent=
-     "Stop tuning";
-
-   status.textContent="Listening…";
-
-   instruction.textContent=
-     automatic
-     ?"Play any open string"
-     :selectedString
-       ?"Play "+selectedString.name
-       :"Choose a string to tune";
-
-   requestAnimationFrame(listen);
-
- }catch(error){
-
-   status.textContent=
-     "Please allow microphone access.";
- }
-});
-
-function stopTuner(){
-
- running=false;
-
- if(stream){
-   stream.getTracks().forEach(
-     track=>track.stop()
-   );
- }
-
- if(audioContext){
-   audioContext.close();
- }
-
- stream=null;
- audioContext=null;
-
- startButton.textContent=
-   "Start tuning";
-
- status.textContent=
-   "Microphone is off.";
-}
-
-/* ======================================
-   ANALYSIS LOOP
-====================================== */
-
-function listen(timestamp){
-
- if(!running)return;
-
- /*
-   14-ish analyses per second.
-   Fast enough to feel live without
-   reacting to every tiny waveform
-   disturbance.
- */
-
- if(timestamp-lastAnalysis>=70){
-
-   lastAnalysis=timestamp;
-
-   analyser.getFloatTimeDomainData(buffer);
-
-   const level=rms(buffer);
-
-   if(level>.004){
-
-     const result=
-       mcleodPitch(
-         buffer,
-         audioContext.sampleRate
-       );
-
-     if(
-       result &&
-       result.clarity>=.86
-     ){
-
-       lastPitchTime=timestamp;
-
-       if(automatic){
-         processAutomatic(result);
-       }else if(selectedString){
-         processManual(result);
-       }
-     }
-
-   }else if(
-     timestamp-lastPitchTime>500
-   ){
-
-     /*
-       A new pluck should start fresh.
-       Don't let the previous Low E
-       contaminate the next G/A/D etc.
-     */
-
-     resetTracking();
-     resetConfirmation();
-   }
- }
-
- requestAnimationFrame(listen);
-}
-
-/* ======================================
-   LEVEL
-====================================== */
-
-function rms(data){
-
- let sum=0;
-
- for(let i=0;i<data.length;i++){
-   sum+=data[i]*data[i];
- }
-
- return Math.sqrt(
-   sum/data.length
- );
-}
-
-/* ======================================
-   McLEOD PITCH METHOD
-
-   Normalized Square Difference Function
-   + key maximum selection.
-
-   The pitch is discovered independently.
-   It is NOT told which guitar string
-   we want.
-====================================== */
-
-function mcleodPitch(
- samples,
- sampleRate
-){
-
- const minFrequency=65;
- const maxFrequency=400;
-
- const minLag=
-   Math.floor(
-     sampleRate/maxFrequency
-   );
-
- const maxLag=
-   Math.ceil(
-     sampleRate/minFrequency
-   );
-
- /*
-   Use a long central section but keep
-   the computation reasonable on iPhone.
- */
-
- const N=Math.min(
-   8192,
-   samples.length-maxLag-1
- );
-
- if(N<3000){
-   return null;
- }
-
- /*
-   Remove DC offset.
- */
-
- let mean=0;
-
- for(let i=0;i<N+maxLag;i++){
-   mean+=samples[i];
- }
-
- mean/=(N+maxLag);
-
- /*
-   Normalized Square Difference Function.
-
-   NSDF =
-   2 * correlation /
-   (energy1 + energy2)
- */
-
- const nsdf=
-   new Float64Array(
-     maxLag+2
-   );
-
- for(
-   let lag=minLag;
-   lag<=maxLag;
-   lag++
- ){
-
-   let acf=0;
-   let divisor=0;
-
-   /*
-     Step 2 is enough for the waveform
-     comparison while making this much
-     more practical on a phone.
-   */
-
-   for(
-     let i=0;
-     i<N;
-     i+=2
-   ){
-
-     const a=
-       samples[i]-mean;
-
-     const b=
-       samples[i+lag]-mean;
-
-     acf+=a*b;
-
-     divisor+=
-       a*a+
-       b*b;
-   }
-
-   nsdf[lag]=
-     divisor>0
-     ?2*acf/divisor
-     :0;
- }
-
- /*
-   Find positive local maxima.
- */
-
- const peaks=[];
-
- let positive=false;
-
- for(
-   let lag=minLag+1;
-   lag<maxLag;
-   lag++
- ){
-
-   if(nsdf[lag]>0){
-     positive=true;
-   }
-
-   if(
-     positive &&
-     nsdf[lag]>=nsdf[lag-1] &&
-     nsdf[lag]>nsdf[lag+1]
-   ){
-
-     peaks.push({
-       lag,
-       value:nsdf[lag]
-     });
-   }
-
-   if(nsdf[lag]<0){
-     positive=false;
-   }
- }
-
- if(!peaks.length){
-   return null;
- }
-
- /*
-   Strongest peak establishes the
-   reference quality.
- */
-
- let strongest=peaks[0];
-
- for(const peak of peaks){
-
-   if(peak.value>strongest.value){
-     strongest=peak;
-   }
- }
-
- if(strongest.value<.72){
-   return null;
- }
-
- /*
-   McLeod-style peak picking:
-
-   Take the FIRST important peak whose
-   strength is close to the strongest
-   peak.
-
-   This is what helps distinguish the
-   real fundamental from later period
-   multiples.
- */
-
- const cutoff=
-   strongest.value*.90;
-
- let chosen=null;
-
- for(const peak of peaks){
-
-   if(peak.value>=cutoff){
-
-     chosen=peak;
-     break;
-   }
- }
-
- if(!chosen){
-   chosen=strongest;
- }
-
- let lag=chosen.lag;
-
- /*
-   Parabolic interpolation.
-
-   Gives fractional-lag resolution
-   instead of forcing the frequency
-   onto whole sample positions.
- */
-
- const y1=nsdf[lag-1];
- const y2=nsdf[lag];
- const y3=nsdf[lag+1];
-
- const denominator=
-   y1-
-   2*y2+
-   y3;
-
- let refinedLag=lag;
-
- if(
-   Math.abs(denominator)>
-   .0000001
- ){
-
-   const adjustment=
-     .5*
-     (y1-y3)/
-     denominator;
-
-   if(
-     Number.isFinite(adjustment) &&
-     Math.abs(adjustment)<=1
-   ){
-     refinedLag+=adjustment;
-   }
- }
-
- const frequency=
-   sampleRate/refinedLag;
-
- if(
-   !Number.isFinite(frequency) ||
-   frequency<minFrequency ||
-   frequency>maxFrequency
- ){
-   return null;
- }
-
- return{
-   frequency,
-   clarity:chosen.value
- };
-}
-
-/* ======================================
-   DIFFERENCE
-====================================== */
-
-function centsBetween(
- frequency,
- target
-){
-
- return(
-   1200*
-   Math.log2(
-     frequency/target
-   )
- );
-}
-
-/* ======================================
-   AUTOMATIC
-
-   IMPORTANT CHANGE:
-   If candidate changes from E to G,
-   history is cleared immediately.
-   G is NOT averaged with the old E.
-====================================== */
-
-function processAutomatic(result){
-
- const pitch=result.frequency;
-
- let best=null;
- let smallest=Infinity;
-
- for(const string of GUITAR){
-
-   const distance=
-     Math.abs(
-       centsBetween(
-         pitch,
-         string.hz
-       )
-     );
-
-   if(distance<smallest){
-
-     smallest=distance;
-     best=string;
-   }
- }
-
- /*
-   Open string detection window.
-
-   If the note is nowhere near an open
-   string, don't pretend it is one.
- */
-
- if(!best || smallest>70){
-
-   currentCandidate=null;
-   candidateCount=0;
-   recentCents=[];
-   recentPitch=[];
-
-   resetConfirmation();
-
-   instruction.textContent=
-     "Play an open string";
-
-   instruction.style.color=
-     "var(--muted)";
-
-   return;
- }
-
- /*
-   THIS fixes the sticky Low-E problem.
-
-   The moment a different plausible
-   string appears, previous pitch
-   smoothing is discarded.
- */
-
- if(
-   currentCandidate!==
-   best.number
- ){
-
-   currentCandidate=
-     best.number;
-
-   candidateCount=1;
-
-   recentCents=[];
-   recentPitch=[];
-
-   resetConfirmation();
-
-   return;
-
- }else{
-
-   candidateCount++;
- }
-
- /*
-   Only two consecutive detections
-   required.
-
-   It should switch strings quickly
-   without one random harmonic doing it.
- */
-
- if(candidateCount<2){
-   return;
- }
-
- const difference=
-   centsBetween(
-     pitch,
-     best.hz
-   );
-
- showReading(
-   best,
-   difference,
-   false
- );
-}
-
-/* ======================================
-   MANUAL
-
-   Actual detected pitch is compared
-   directly with the selected target.
-
-   Low E + High E remains ~+2400.
-====================================== */
-
-function processManual(result){
-
- const pitch=result.frequency;
-
- const difference=
-   centsBetween(
-     pitch,
-     selectedString.hz
-   );
-
- const wrongString=
-   Math.abs(difference)>120;
-
- showReading(
-   selectedString,
-   difference,
-   wrongString
- );
-}
-
-/* ======================================
-   ROBUST FILTER
-
-   We use a short MEDIAN.
-
-   A median ignores one crazy reading
-   rather than dragging the display
-   toward it.
-====================================== */
-
-function filteredDifference(value){
-
- recentCents.push(value);
-
- if(recentCents.length>5){
-   recentCents.shift();
- }
-
- if(recentCents.length<3){
-   return value;
- }
-
- const sorted=[
-   ...recentCents
- ].sort((a,b)=>a-b);
-
- return sorted[
-   Math.floor(
-     sorted.length/2
-   )
- ];
-}
-
-/* ======================================
-   DISPLAY
-====================================== */
-
-function showReading(
- target,
- rawDifference,
- wrongString
-){
-
- let difference;
-
- if(wrongString){
-
-   /*
-     Never average a wrong string
-     together with a correct one.
-   */
-
-   recentCents=[];
-   difference=rawDifference;
-
-   resetConfirmation();
-
- }else{
-
-   difference=
-     filteredDifference(
-       rawDifference
-     );
- }
-
- const rounded=
-   Math.round(difference);
-
- numberDisplay.textContent=
-   rounded>0
-   ?"+"+rounded
-   :String(rounded);
-
- /*
-   Visual meter is ±50.
-   Actual number is NOT limited.
- */
-
- const visualTarget=
-   Math.max(
-     -50,
-     Math.min(
-       50,
-       difference
-     )
-   );
-
- /*
-   Extra visual interpolation.
-
-   This changes only how smoothly
-   the needle travels.
-
-   It does NOT alter the measured
-   tuning number.
- */
-
- displayedNeedle+=
-   (
-     visualTarget-
-     displayedNeedle
-   )*.42;
-
- needle.style.left=
-   (
-     50+
-     (displayedNeedle/50)*42
-   )+"%";
-
- title.textContent=
-   "Tune "+target.name;
-
- clearActive();
-
- const button=
-   buttonFor(target.number);
-
- if(!tuned.has(target.number)){
-   button.classList.add("active");
- }
-
- if(wrongString){
-
-   setColour("red");
-
-   instruction.textContent=
-     difference<0
-     ?"Much too low"
-     :"Much too high";
-
-   setBad(target.number);
-
-   return;
- }
-
- clearBad(target.number);
-
- const amount=
-   Math.abs(difference);
-
- /*
-   Accurate tuning zones.
-
-   ±2 = green
-   ±4 = yellow
-   >4 = red
-
-   We don't pretend +6 is tuned.
- */
-
- if(amount<=2){
-
-   setColour("green");
-
-   instruction.textContent=
-     "Hold steady";
-
-   confirmTuning(
-     target,
-     difference
-   );
-
- }else if(amount<=4){
-
-   resetConfirmation();
-
-   setColour("yellow");
-
-   instruction.textContent=
-     difference<0
-     ?"Tune up"
-     :"Tune down";
-
- }else{
-
-   resetConfirmation();
-
-   setColour("red");
-
-   instruction.textContent=
-     difference<0
-     ?"Tune up"
-     :"Tune down";
- }
-}
-
-/* ======================================
-   COLOURS
-====================================== */
-
-function setColour(type){
-
- let colour;
-
- if(type==="green"){
-   colour="var(--green)";
- }
-
- if(type==="yellow"){
-   colour="var(--yellow)";
- }
-
- if(type==="red"){
-   colour="var(--red)";
- }
-
- needle.style.background=colour;
- numberDisplay.style.color=colour;
- instruction.style.color=colour;
-}
-
-/* ======================================
-   CONFIRM TUNED
-
-   We require stability, not one
-   accidental zero crossing.
-====================================== */
-
-function confirmTuning(
- target,
- difference
-){
-
- if(Math.abs(difference)>2){
-
-   resetConfirmation();
-   return;
- }
-
- if(tuned.has(target.number)){
-
-   fill.style.height="100%";
-
-   instruction.textContent=
-     "In tune ✓";
-
-   return;
- }
-
- if(stableString!==target.number){
-
-   stableString=target.number;
-   stableStart=performance.now();
-
-   fill.style.height="0%";
- }
-
- const elapsed=
-   performance.now()-
-   stableStart;
-
- const progress=
-   Math.min(
-     1,
-     elapsed/1800
-   );
-
- fill.style.height=
-   (progress*100)+"%";
-
- if(progress>=1){
-
-   markTuned(target);
-
-   stableStart=null;
-   stableString=null;
- }
-}
-
-function resetConfirmation(){
-
- stableStart=null;
- stableString=null;
-
- fill.style.height="0%";
-}
-
-/* ======================================
-   MARK TUNED
-====================================== */
-
-function markTuned(target){
-
- tuned.add(target.number);
-
- const button=
-   buttonFor(target.number);
-
- const peg=
-   document.getElementById(
-     "peg"+target.number
-   );
-
- const string=
-   document.getElementById(
-     "string"+target.number
-   );
-
- button.classList.remove(
-   "active",
-   "bad"
- );
-
- peg.classList.remove("bad");
- string.classList.remove("bad");
-
- button.classList.add("good");
- peg.classList.add("good");
- string.classList.add("good");
-
- fill.style.height="100%";
-
- numberDisplay.textContent="0";
-
- setColour("green");
-
- instruction.textContent=
-   "In tune ✓";
-
- status.textContent=
-   target.name+" is tuned.";
-
- if(tuned.size===6){
-
-   complete.style.display="block";
-
-   title.textContent=
-     "Guitar tuned ✓";
- }
-}
-
-/* ======================================
-   VISUAL STRING STATES
-====================================== */
-
-function setBad(number){
-
- if(tuned.has(number)){
-   return;
- }
-
- const button=buttonFor(number);
-
- const peg=
-   document.getElementById(
-     "peg"+number
-   );
-
- const string=
-   document.getElementById(
-     "string"+number
-   );
-
- button.classList.remove("active");
-
- button.classList.add("bad");
- peg.classList.add("bad");
- string.classList.add("bad");
-}
-
-function clearBad(number){
-
- if(tuned.has(number)){
-   return;
- }
-
- const button=buttonFor(number);
-
- const peg=
-   document.getElementById(
-     "peg"+number
-   );
-
- const string=
-   document.getElementById(
-     "string"+number
-   );
-
- button.classList.remove("bad");
- peg.classList.remove("bad");
- string.classList.remove("bad");
-}
-
-function buttonFor(number){
-
- return document.querySelector(
-   '.string-choice[data-string="'+
-   number+
-   '"]'
- );
-}
-
-function clearActive(){
-
- choiceButtons.forEach(button=>{
-
-   const number=
-     Number(button.dataset.string);
-
-   if(!tuned.has(number)){
-     button.classList.remove("active");
-   }
- });
-}
-
-function resetTracking(){
-
- currentCandidate=null;
- candidateCount=0;
-
- recentCents=[];
- recentPitch=[];
-
- displayedNeedle=0;
-}
 
 /*
-  Session state deliberately disappears
-  on refresh/exit.
+Automatic mode deliberately uses
+VERY SHORT confirmation.
+
+We do not want Low E hanging around
+while the player is already playing G.
 */
+
+let autoCandidate = null;
+
+let autoCandidateHits = 0;
+
+
+/*
+Meter smoothing.
+
+This is display-only.
+*/
+
+let visualValue = 0;
+
+let visualAnimation = null;
+
+
+/*
+Short tuning history.
+
+Cleared immediately on a new pluck
+or a new detected string.
+*/
+
+let centsHistory = [];
+
+
+/*
+Green hold state.
+*/
+
+let holdStart = null;
+
+let holdString = null;
+
+
+/*
+Strings tuned during THIS page session.
+
+Nothing is stored in localStorage.
+*/
+
+const tuned =
+  new Set();
+
+
+/*
+Last good pitch time.
+*/
+
+let lastPitchTime = 0;
+
+
+/* =====================================================
+   AUTOMATIC / MANUAL MODE
+===================================================== */
+
+autoBox.addEventListener(
+  "click",
+  () => {
+
+    automatic =
+      !automatic;
+
+
+    autoBox.classList.toggle(
+      "on",
+      automatic
+    );
+
+
+    autoBox.setAttribute(
+      "aria-checked",
+      automatic
+        ? "true"
+        : "false"
+    );
+
+
+    selectedString = null;
+
+    resetPitchState();
+
+    resetHold();
+
+    clearActive();
+
+
+    title.textContent =
+      "Tune your guitar";
+
+
+    if (automatic) {
+
+      instruction.textContent =
+        running
+          ? "Play any open string"
+          : "Start tuning and play any string";
+
+
+      status.textContent =
+        "Automatic detection is on.";
+
+    } else {
+
+      instruction.textContent =
+        "Choose a string to tune";
+
+
+      status.textContent =
+        "Choose E, A, D, G, B or E.";
+    }
+  }
+);
+
+
+/* =====================================================
+   MANUAL STRING BUTTONS
+===================================================== */
+
+choiceButtons.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const number =
+          Number(
+            button.dataset.string
+          );
+
+
+        selectedString =
+          GUITAR.find(
+            string =>
+              string.number === number
+          );
+
+
+        automatic = false;
+
+
+        autoBox.classList.remove(
+          "on"
+        );
+
+
+        autoBox.setAttribute(
+          "aria-checked",
+          "false"
+        );
+
+
+        resetPitchState();
+
+        resetHold();
+
+        clearActive();
+
+
+        if (
+          !tuned.has(number)
+        ) {
+
+          button.classList.add(
+            "active"
+          );
+        }
+
+
+        title.textContent =
+          "Tune " +
+          selectedString.name;
+
+
+        instruction.textContent =
+          "Play " +
+          selectedString.name;
+
+
+        status.textContent =
+          "Listening for " +
+          selectedString.name +
+          ".";
+      }
+    );
+  }
+);
+
+
+/* =====================================================
+   START / STOP
+===================================================== */
+
+startButton.addEventListener(
+  "click",
+  async () => {
+
+    if (running) {
+
+      stopTuner();
+
+      return;
+    }
+
+
+    await startTuner();
+  }
+);
+
+
+/* =====================================================
+   START AUDIOWORKLET
+===================================================== */
+
+async function startTuner() {
+
+  startButton.disabled = true;
+
+  status.textContent =
+    "Starting Nova tuner…";
+
+
+  try {
+
+    /*
+    Request raw microphone audio.
+
+    Browser/device may choose to ignore some constraints,
+    but these settings ask it not to modify guitar audio.
+    */
+
+    stream =
+      await navigator.mediaDevices
+        .getUserMedia({
+
+          audio: {
+
+            echoCancellation:false,
+
+            noiseSuppression:false,
+
+            autoGainControl:false,
+
+            channelCount:1
+
+          }
+
+        });
+
+
+    audioContext =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+
+    await audioContext.resume();
+
+
+    /*
+    THIS is the connection to the file
+    you just created.
+    */
+
+    await audioContext.audioWorklet
+      .addModule(
+        "./nova-tuner-worklet.js"
+      );
+
+
+    source =
+      audioContext
+        .createMediaStreamSource(
+          stream
+        );
+
+
+    workletNode =
+      new AudioWorkletNode(
+
+        audioContext,
+
+        "nova-tuner-processor",
+
+        {
+          numberOfInputs:1,
+          numberOfOutputs:1,
+          outputChannelCount:[1]
+        }
+
+      );
+
+
+    /*
+    Worklet output is muted.
+
+    The connection to destination keeps
+    the processing graph alive without
+    playing the microphone through the
+    phone speaker.
+    */
+
+    silentGain =
+      audioContext.createGain();
+
+
+    silentGain.gain.value = 0;
+
+
+    source.connect(
+      workletNode
+    );
+
+
+    workletNode.connect(
+      silentGain
+    );
+
+
+    silentGain.connect(
+      audioContext.destination
+    );
+
+
+    workletNode.port.onmessage =
+      handleWorkletMessage;
+
+
+    running = true;
+
+
+    startButton.disabled = false;
+
+    startButton.textContent =
+      "Stop tuning";
+
+
+    resetPitchState();
+
+    resetHold();
+
+
+    if (automatic) {
+
+      instruction.textContent =
+        "Play any open string";
+
+      status.textContent =
+        "Automatic detection is on.";
+
+    } else if (selectedString) {
+
+      instruction.textContent =
+        "Play " +
+        selectedString.name;
+
+      status.textContent =
+        "Listening for " +
+        selectedString.name +
+        ".";
+
+    } else {
+
+      instruction.textContent =
+        "Choose a string to tune";
+
+      status.textContent =
+        "Choose E, A, D, G, B or E.";
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    startButton.disabled = false;
+
+    startButton.textContent =
+      "Start tuning";
+
+
+    status.textContent =
+      "Nova couldn't start the microphone. Check microphone permission.";
+
+
+    instruction.textContent =
+      "Microphone unavailable";
+
+
+    cleanAudio();
+  }
+}
+
+
+/* =====================================================
+   STOP
+===================================================== */
+
+function stopTuner() {
+
+  running = false;
+
+  cleanAudio();
+
+  resetPitchState();
+
+  resetHold();
+
+  startButton.disabled = false;
+
+  startButton.textContent =
+    "Start tuning";
+
+  status.textContent =
+    "Microphone is off.";
+
+  instruction.textContent =
+    automatic
+      ? "Start tuning and play any string"
+      : selectedString
+        ? "Play " + selectedString.name
+        : "Choose a string to tune";
+}
+
+
+/* =====================================================
+   CLEAN AUDIO
+===================================================== */
+
+function cleanAudio() {
+
+  if (stream) {
+
+    stream
+      .getTracks()
+      .forEach(
+        track =>
+          track.stop()
+      );
+  }
+
+
+  try {
+
+    if (source) {
+      source.disconnect();
+    }
+
+  } catch (error) {}
+
+
+  try {
+
+    if (workletNode) {
+      workletNode.disconnect();
+    }
+
+  } catch (error) {}
+
+
+  try {
+
+    if (silentGain) {
+      silentGain.disconnect();
+    }
+
+  } catch (error) {}
+
+
+  if (audioContext) {
+
+    try {
+      audioContext.close();
+    } catch (error) {}
+  }
+
+
+  stream = null;
+
+  source = null;
+
+  workletNode = null;
+
+  silentGain = null;
+
+  audioContext = null;
+}
+
+
+/* =====================================================
+   RECEIVE WORKLET DATA
+===================================================== */
+
+function handleWorkletMessage(event) {
+
+  if (!running) {
+    return;
+  }
+
+
+  const data =
+    event.data;
+
+
+  if (!data) {
+    return;
+  }
+
+
+  /*
+  -------------------------------------------------------
+  NEW PLUCK
+
+  This is important.
+
+  The previous Low-E averaging is thrown away
+  immediately when the worklet detects a fresh attack.
+  -------------------------------------------------------
+  */
+
+  if (data.type === "onset") {
+
+    centsHistory = [];
+
+    autoCandidate = null;
+
+    autoCandidateHits = 0;
+
+    resetHold();
+
+    return;
+  }
+
+
+  /*
+  -------------------------------------------------------
+  SILENCE
+
+  Don't leave old pitch history hanging around forever.
+  -------------------------------------------------------
+  */
+
+  if (data.type === "silence") {
+
+    if (
+      performance.now() -
+      lastPitchTime >
+      300
+    ) {
+
+      centsHistory = [];
+
+      autoCandidate = null;
+
+      autoCandidateHits = 0;
+
+      resetHold();
+    }
+
+    return;
+  }
+
+
+  /*
+  -------------------------------------------------------
+  PITCH
+  -------------------------------------------------------
+  */
+
+  if (
+    data.type === "pitch" &&
+    Number.isFinite(
+      data.frequency
+    )
+  ) {
+
+    lastPitchTime =
+      performance.now();
+
+
+    if (automatic) {
+
+      processAutomaticPitch(
+        data.frequency,
+        data.confidence
+      );
+
+    } else if (selectedString) {
+
+      processManualPitch(
+        data.frequency,
+        data.confidence
+      );
+    }
+  }
+}
+
+
+/* =====================================================
+   AUTOMATIC STRING DETECTION
+===================================================== */
+
+function processAutomaticPitch(
+  frequency,
+  confidence
+) {
+
+  /*
+  Find the closest REAL open-string frequency.
+
+  No octave folding.
+
+  No forcing every sound into Low E.
+  */
+
+  let bestString = null;
+
+  let bestDistance =
+    Infinity;
+
+
+  for (
+    const string of GUITAR
+  ) {
+
+    const difference =
+      centsBetween(
+        frequency,
+        string.hz
+      );
+
+
+    const distance =
+      Math.abs(
+        difference
+      );
+
+
+    if (
+      distance <
+      bestDistance
+    ) {
+
+      bestDistance =
+        distance;
+
+      bestString =
+        string;
+    }
+  }
+
+
+  /*
+  If it isn't plausibly one of the six
+  open strings, don't lie about which
+  string it is.
+  */
+
+  if (
+    !bestString ||
+    bestDistance > 85
+  ) {
+
+    autoCandidate = null;
+
+    autoCandidateHits = 0;
+
+    centsHistory = [];
+
+    resetHold();
+
+    instruction.textContent =
+      "Play a clear open string";
+
+    instruction.style.color =
+      "var(--muted)";
+
+    return;
+  }
+
+
+  /*
+  New string?
+
+  Change immediately.
+
+  Previous string history disappears.
+  */
+
+  if (
+    autoCandidate !==
+    bestString.number
+  ) {
+
+    autoCandidate =
+      bestString.number;
+
+    autoCandidateHits = 1;
+
+    centsHistory = [];
+
+    resetHold();
+
+
+    showDetectedString(
+      bestString
+    );
+
+
+    /*
+    First reliable reading is already
+    allowed onto the meter.
+
+    This makes Automatic feel fast.
+    */
+
+    const difference =
+      centsBetween(
+        frequency,
+        bestString.hz
+      );
+
+
+    displayReading(
+      bestString,
+      difference,
+      false,
+      confidence
+    );
+
+
+    return;
+  }
+
+
+  autoCandidateHits++;
+
+
+  const difference =
+    centsBetween(
+      frequency,
+      bestString.hz
+    );
+
+
+  displayReading(
+    bestString,
+    difference,
+    false,
+    confidence
+  );
+}
+
+
+/* =====================================================
+   MANUAL MODE
+===================================================== */
+
+function processManualPitch(
+  frequency,
+  confidence
+) {
+
+  if (!selectedString) {
+    return;
+  }
+
+
+  /*
+  Direct comparison.
+
+  Absolutely NO octave folding.
+
+  Example:
+
+  Low E selected
+  High E played
+
+  remains approximately +2400 internally.
+  */
+
+  const difference =
+    centsBetween(
+      frequency,
+      selectedString.hz
+    );
+
+
+  /*
+  More than about one semitone away
+  means this is not the selected string
+  being slightly out of tune.
+  */
+
+  const wrongPitch =
+    Math.abs(
+      difference
+    ) > 120;
+
+
+  displayReading(
+    selectedString,
+    difference,
+    wrongPitch,
+    confidence
+  );
+}
+
+
+/* =====================================================
+   MUSICAL DIFFERENCE
+===================================================== */
+
+function centsBetween(
+  frequency,
+  target
+) {
+
+  return (
+    1200 *
+    Math.log2(
+      frequency /
+      target
+    )
+  );
+}
+
+
+/* =====================================================
+   SHORT ROBUST DISPLAY FILTER
+
+   IMPORTANT:
+   This is deliberately short.
+
+   We want stability without creating
+   the "stuck at -9" problem.
+===================================================== */
+
+function filterDifference(
+  value
+) {
+
+  centsHistory.push(
+    value
+  );
+
+
+  if (
+    centsHistory.length > 3
+  ) {
+
+    centsHistory.shift();
+  }
+
+
+  if (
+    centsHistory.length === 1
+  ) {
+
+    return value;
+  }
+
+
+  /*
+  Median is resistant to a single
+  weird reading.
+  */
+
+  const values =
+    [...centsHistory]
+      .sort(
+        (a,b) => a-b
+      );
+
+
+  if (
+    values.length === 2
+  ) {
+
+    return (
+      values[0] +
+      values[1]
+    ) / 2;
+  }
+
+
+  return values[1];
+}
+
+
+/* =====================================================
+   DISPLAY READING
+===================================================== */
+
+function displayReading(
+  target,
+  rawDifference,
+  wrongPitch,
+  confidence
+) {
+
+  let difference;
+
+
+  if (wrongPitch) {
+
+    /*
+    Do not average a wrong string
+    with the selected string.
+    */
+
+    centsHistory = [];
+
+    difference =
+      rawDifference;
+
+    resetHold();
+
+  } else {
+
+    difference =
+      filterDifference(
+        rawDifference
+      );
+  }
+
+
+  /*
+  -------------------------------------------------------
+  NUMBER
+
+  User-facing UI deliberately shows ONLY the number.
+
+  No "cents".
+  No cent symbol.
+  -------------------------------------------------------
+  */
+
+  let rounded =
+    Math.round(
+      difference
+    );
+
+
+  /*
+  Avoid displaying "-0".
+  */
+
+  if (
+    Object.is(
+      rounded,
+      -0
+    )
+  ) {
+
+    rounded = 0;
+  }
+
+
+  numberDisplay.textContent =
+    rounded > 0
+      ? "+" + rounded
+      : String(rounded);
+
+
+  /*
+  -------------------------------------------------------
+  METER
+
+  Number remains unlimited.
+
+  Only the visual needle is restricted
+  to the meter's physical width.
+  -------------------------------------------------------
+  */
+
+  const meterValue =
+    Math.max(
+      -50,
+      Math.min(
+        50,
+        difference
+      )
+    );
+
+
+  moveNeedle(
+    meterValue
+  );
+
+
+  title.textContent =
+    "Tune " +
+    target.name;
+
+
+  clearActive();
+
+
+  const button =
+    buttonFor(
+      target.number
+    );
+
+
+  if (
+    !tuned.has(
+      target.number
+    )
+  ) {
+
+    button.classList.add(
+      "active"
+    );
+  }
+
+
+  /*
+  -------------------------------------------------------
+  WRONG STRING
+  -------------------------------------------------------
+  */
+
+  if (wrongPitch) {
+
+    setColour("red");
+
+    instruction.textContent =
+      difference < 0
+        ? "Too low for " +
+          target.name
+        : "Too high for " +
+          target.name;
+
+
+    flashWrong(
+      target.number
+    );
+
+
+    return;
+  }
+
+
+  clearWrong(
+    target.number
+  );
+
+
+  const amount =
+    Math.abs(
+      difference
+    );
+
+
+  /*
+  -------------------------------------------------------
+  TUNING ZONES
+
+  ±2  = green
+  ±4  = close
+  >4  = needs tuning
+
+  We do not mark +6 or -9 as tuned.
+  -------------------------------------------------------
+  */
+
+  if (amount <= 2) {
+
+    setColour(
+      "green"
+    );
+
+
+    instruction.textContent =
+      "Hold steady";
+
+
+    confirmTuning(
+      target,
+      difference,
+      confidence
+    );
+
+
+  } else if (amount <= 4) {
+
+    resetHold();
+
+
+    setColour(
+      "yellow"
+    );
+
+
+    instruction.textContent =
+      difference < 0
+        ? "Tune up"
+        : "Tune down";
+
+
+  } else {
+
+    resetHold();
+
+
+    setColour(
+      "red"
+    );
+
+
+    instruction.textContent =
+      difference < 0
+        ? "Tune up"
+        : "Tune down";
+  }
+}
+
+
+/* =====================================================
+   SMOOTH NEEDLE
+
+   The engine measurement itself is untouched.
+
+   Only the drawing is interpolated.
+===================================================== */
+
+function moveNeedle(
+  targetValue
+) {
+
+  if (
+    visualAnimation
+  ) {
+
+    cancelAnimationFrame(
+      visualAnimation
+    );
+  }
+
+
+  function animate() {
+
+    const difference =
+      targetValue -
+      visualValue;
+
+
+    /*
+    Fairly fast smoothing.
+
+    It should glide rather than jerk,
+    but shouldn't lag behind a peg turn.
+    */
+
+    visualValue +=
+      difference * .36;
+
+
+    if (
+      Math.abs(
+        difference
+      ) < .08
+    ) {
+
+      visualValue =
+        targetValue;
+    }
+
+
+    const position =
+      50 +
+      (
+        visualValue /
+        50
+      ) * 42;
+
+
+    needle.style.left =
+      position + "%";
+
+
+    if (
+      Math.abs(
+        targetValue -
+        visualValue
+      ) > .08
+    ) {
+
+      visualAnimation =
+        requestAnimationFrame(
+          animate
+        );
+
+    } else {
+
+      visualAnimation =
+        null;
+    }
+  }
+
+
+  animate();
+}
+
+
+/* =====================================================
+   COLOUR
+===================================================== */
+
+function setColour(
+  colour
+) {
+
+  let value =
+    "var(--grey)";
+
+
+  if (
+    colour === "green"
+  ) {
+
+    value =
+      "var(--green)";
+  }
+
+
+  if (
+    colour === "yellow"
+  ) {
+
+    value =
+      "var(--yellow)";
+  }
+
+
+  if (
+    colour === "red"
+  ) {
+
+    value =
+      "var(--red)";
+  }
+
+
+  needle.style.background =
+    value;
+
+
+  numberDisplay.style.color =
+    value;
+
+
+  instruction.style.color =
+    value;
+}
+
+
+/* =====================================================
+   HOLD / CONFIRM
+
+   A string must remain genuinely
+   centred rather than merely crossing
+   zero for one instant.
+===================================================== */
+
+function confirmTuning(
+  target,
+  difference,
+  confidence
+) {
+
+  if (
+    Math.abs(
+      difference
+    ) > 2
+  ) {
+
+    resetHold();
+
+    return;
+  }
+
+
+  /*
+  Require decent detector confidence
+  before permanently turning green.
+  */
+
+  if (
+    Number.isFinite(confidence) &&
+    confidence < .84
+  ) {
+
+    resetHold();
+
+    return;
+  }
+
+
+  if (
+    tuned.has(
+      target.number
+    )
+  ) {
+
+    fill.style.height =
+      "100%";
+
+
+    instruction.textContent =
+      "In tune ✓";
+
+
+    return;
+  }
+
+
+  if (
+    holdString !==
+    target.number
+  ) {
+
+    holdString =
+      target.number;
+
+
+    holdStart =
+      performance.now();
+
+
+    fill.style.height =
+      "0%";
+  }
+
+
+  const elapsed =
+    performance.now() -
+    holdStart;
+
+
+  /*
+  1.5 seconds.
+
+  Long enough to confirm stability,
+  short enough not to feel annoying.
+  */
+
+  const progress =
+    Math.min(
+      1,
+      elapsed / 1500
+    );
+
+
+  fill.style.height =
+    (
+      progress * 100
+    ) + "%";
+
+
+  if (
+    progress >= 1
+  ) {
+
+    markTuned(
+      target
+    );
+  }
+}
+
+
+/* =====================================================
+   RESET HOLD
+===================================================== */
+
+function resetHold() {
+
+  holdStart = null;
+
+  holdString = null;
+
+  fill.style.height =
+    "0%";
+}
+
+
+/* =====================================================
+   MARK STRING TUNED
+===================================================== */
+
+function markTuned(
+  target
+) {
+
+  tuned.add(
+    target.number
+  );
+
+
+  const button =
+    buttonFor(
+      target.number
+    );
+
+
+  const peg =
+    document.getElementById(
+      "peg" +
+      target.number
+    );
+
+
+  const string =
+    document.getElementById(
+      "string" +
+      target.number
+    );
+
+
+  button.classList.remove(
+    "active",
+    "bad"
+  );
+
+
+  peg.classList.remove(
+    "bad"
+  );
+
+
+  string.classList.remove(
+    "bad"
+  );
+
+
+  button.classList.add(
+    "good"
+  );
+
+
+  peg.classList.add(
+    "good"
+  );
+
+
+  string.classList.add(
+    "good"
+  );
+
+
+  fill.style.height =
+    "100%";
+
+
+  setColour(
+    "green"
+  );
+
+
+  instruction.textContent =
+    "In tune ✓";
+
+
+  status.textContent =
+    target.name +
+    " is tuned.";
+
+
+  holdStart = null;
+
+  holdString = null;
+
+
+  if (
+    tuned.size === 6
+  ) {
+
+    complete.style.display =
+      "block";
+
+
+    title.textContent =
+      "Guitar tuned ✓";
+  }
+}
+
+
+/* =====================================================
+   AUTOMATIC STRING VISUAL
+===================================================== */
+
+function showDetectedString(
+  target
+) {
+
+  clearActive();
+
+
+  const button =
+    buttonFor(
+      target.number
+    );
+
+
+  if (
+    !tuned.has(
+      target.number
+    )
+  ) {
+
+    button.classList.add(
+      "active"
+    );
+  }
+
+
+  status.textContent =
+    "Detected " +
+    target.name +
+    ".";
+}
+
+
+/* =====================================================
+   WRONG STRING FLASH
+
+   Red once, then clear.
+
+   It does NOT continuously blink.
+===================================================== */
+
+const wrongTimers =
+  new Map();
+
+
+function flashWrong(
+  number
+) {
+
+  if (
+    tuned.has(number)
+  ) {
+
+    return;
+  }
+
+
+  const button =
+    buttonFor(number);
+
+
+  const peg =
+    document.getElementById(
+      "peg" + number
+    );
+
+
+  const string =
+    document.getElementById(
+      "string" + number
+    );
+
+
+  button.classList.add(
+    "bad"
+  );
+
+
+  peg.classList.add(
+    "bad"
+  );
+
+
+  string.classList.add(
+    "bad"
+  );
+
+
+  if (
+    wrongTimers.has(number)
+  ) {
+
+    return;
+  }
+
+
+  const timer =
+    setTimeout(
+      () => {
+
+        clearWrong(
+          number
+        );
+
+
+        wrongTimers.delete(
+          number
+        );
+
+      },
+      350
+    );
+
+
+  wrongTimers.set(
+    number,
+    timer
+  );
+}
+
+
+/* =====================================================
+   CLEAR WRONG
+===================================================== */
+
+function clearWrong(
+  number
+) {
+
+  if (
+    tuned.has(number)
+  ) {
+
+    return;
+  }
+
+
+  const button =
+    buttonFor(number);
+
+
+  const peg =
+    document.getElementById(
+      "peg" + number
+    );
+
+
+  const string =
+    document.getElementById(
+      "string" + number
+    );
+
+
+  button.classList.remove(
+    "bad"
+  );
+
+
+  peg.classList.remove(
+    "bad"
+  );
+
+
+  string.classList.remove(
+    "bad"
+  );
+}
+
+
+/* =====================================================
+   BUTTON LOOKUP
+===================================================== */
+
+function buttonFor(
+  number
+) {
+
+  return document.querySelector(
+    '.string-choice[data-string="' +
+    number +
+    '"]'
+  );
+}
+
+
+/* =====================================================
+   CLEAR ACTIVE
+===================================================== */
+
+function clearActive() {
+
+  choiceButtons.forEach(
+    button => {
+
+      const number =
+        Number(
+          button.dataset.string
+        );
+
+
+      if (
+        !tuned.has(number)
+      ) {
+
+        button.classList.remove(
+          "active"
+        );
+      }
+    }
+  );
+}
+
+
+/* =====================================================
+   RESET PITCH STATE
+===================================================== */
+
+function resetPitchState() {
+
+  autoCandidate = null;
+
+  autoCandidateHits = 0;
+
+  centsHistory = [];
+
+  visualValue = 0;
+
+
+  if (
+    visualAnimation
+  ) {
+
+    cancelAnimationFrame(
+      visualAnimation
+    );
+
+
+    visualAnimation = null;
+  }
+
+
+  needle.style.left =
+    "50%";
+
+
+  numberDisplay.textContent =
+    "0";
+
+
+  numberDisplay.style.color =
+    "var(--white)";
+
+
+  needle.style.background =
+    "var(--grey)";
+}
+
+
+/* =====================================================
+   PAGE EXIT
+
+   Stop microphone cleanly.
+
+   Tuned-state intentionally disappears
+   when the page is reloaded or left.
+===================================================== */
+
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    if (running) {
+
+      running = false;
+
+      cleanAudio();
+    }
+  }
+);
 
 </script>
 
