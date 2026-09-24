@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Profile | Nova Musical</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#080c0e;
+ --panel:#111719;
+ --border:rgba(255,255,255,.09);
+ --text:#f5f8f7;
+ --muted:#929d99;
+ --green:#55e6a5;
+}
+html,body{
+ margin:0;
+ min-height:100%;
+ background:var(--bg);
+ color:var(--text);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.page{
+ width:min(100%,600px);
+ margin:auto;
+ padding:max(25px,env(safe-area-inset-top)) 20px 40px;
+}
+.back{
+ color:var(--green);
+ text-decoration:none;
+ font-weight:800;
+ font-size:13px;
+}
+h1{margin:35px 0 7px;font-size:34px}
+.sub{color:var(--muted);font-size:14px}
+.avatar{
+ width:76px;height:76px;
+ margin:30px 0 20px;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ background:rgba(85,230,165,.1);
+ border:1px solid rgba(85,230,165,.25);
+ color:var(--green);
+ font-size:30px;
+ font-weight:900;
+}
+.card{
+ margin-top:15px;
+ padding:19px;
+ border:1px solid var(--border);
+ border-radius:18px;
+ background:var(--panel);
+}
+.label{
+ color:var(--muted);
+ font-size:11px;
+ text-transform:uppercase;
+ letter-spacing:1px;
+}
+.value{
+ margin-top:6px;
+ font-size:16px;
+ font-weight:750;
+}
+.footer{
+ margin-top:45px;
+ text-align:center;
+ color:#58625f;
+ font-size:10px;
+ line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+<a class="back" href="guitar.html">← Back to Nova</a>
+
+<h1>Your profile</h1>
+<div class="sub">Your Nova Musical account.</div>
+
+<div id="avatar" class="avatar">N</div>
+
+<div class="card">
+ <div class="label">Name</div>
+ <div id="name" class="value">Loading...</div>
+</div>
+
+<div class="card">
+ <div class="label">Username</div>
+ <div id="username" class="value">Loading...</div>
+</div>
+
+<div class="card">
+ <div class="label">Email</div>
+ <div id="email" class="value">Loading...</div>
+</div>
+
+<div class="footer">
+© 2026 Nova Musical<br>
+Andrea Fredy • Aryan Jude Fredy
+</div>
+
+</main>
+
+<script>
+const client=supabase.createClient(
+ "https://docyfgbghwncylldlcfs.supabase.co",
+ "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk"
+);
+
+async function load(){
+
+ const {data:{user}}=
+  await client.auth.getUser();
+
+ if(!user){
+  window.location.replace("login.html");
+  return;
+ }
+
+ const {data:profile,error}=
+  await client
+   .from("profiles")
+   .select("username,display_name")
+   .eq("id",user.id)
+   .single();
+
+ if(error){
+  console.error(error);
+ }
+
+ const name=
+  profile?.display_name ||
+  user.user_metadata?.display_name ||
+  "Nova musician";
+
+ const username=
+  profile?.username ||
+  user.user_metadata?.username ||
+  "";
+
+ document.getElementById("name").textContent=name;
+
+ document.getElementById("username").textContent=
+  username ? "@"+username : "Not set";
+
+ document.getElementById("email").textContent=
+  user.email || "";
+
+ document.getElementById("avatar").textContent=
+  name.charAt(0).toUpperCase();
+}
+
+load();
+</script>
+
+</body>
+</html>
