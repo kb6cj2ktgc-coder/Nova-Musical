@@ -1,772 +1,657 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  />
-
-  <title>Log In | Nova Musical</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #070909;
-      --panel: #101313;
-      --panel-2: #151919;
-      --border: #252b2b;
-      --text: #f4f7f6;
-      --muted: #8e9996;
-      --green: #55e6a5;
-      --danger: #ff7272;
-    }
-
-    html,
-    body {
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      justify-content: center;
-    }
-
-    .page {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      min-height: 100dvh;
-
-      padding:
-        max(30px, env(safe-area-inset-top))
-        22px
-        max(35px, env(safe-area-inset-bottom));
-
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand {
-      text-align: center;
-      margin-top: 18px;
-      margin-bottom: 42px;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 850;
-      letter-spacing: 2.5px;
-    }
-
-    .logo span {
-      color: var(--green);
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 6px 11px;
-
-      border: 1px solid rgba(85, 230, 165, 0.28);
-      border-radius: 999px;
-
-      color: var(--green);
-      background: rgba(85, 230, 165, 0.06);
-
-      font-size: 10px;
-      font-weight: 750;
-      letter-spacing: 1.4px;
-    }
-
-    .card {
-      width: 100%;
-
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-
-      padding: 29px 21px 25px;
-
-      box-shadow:
-        0 22px 60px rgba(0, 0, 0, 0.25);
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 30px;
-      line-height: 1.1;
-      margin-bottom: 9px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 28px;
-    }
-
-    .field {
-      margin-bottom: 18px;
-    }
-
-    label {
-      display: block;
-      margin: 0 0 8px 2px;
-
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    input {
-      width: 100%;
-      height: 52px;
-
-      padding: 0 15px;
-
-      border: 1px solid var(--border);
-      border-radius: 14px;
-
-      outline: none;
-
-      background: var(--panel-2);
-      color: var(--text);
-
-      font-size: 16px;
-
-      transition:
-        border-color 0.2s,
-        box-shadow 0.2s;
-    }
-
-    input::placeholder {
-      color: #697370;
-    }
-
-    input:focus {
-      border-color: var(--green);
-
-      box-shadow:
-        0 0 0 3px
-        rgba(85, 230, 165, 0.09);
-    }
-
-    .username-wrap,
-    .password-wrap {
-      position: relative;
-    }
-
-    .username-prefix {
-      position: absolute;
-
-      left: 15px;
-      top: 50%;
-
-      transform: translateY(-50%);
-
-      color: var(--muted);
-      font-size: 16px;
-
-      pointer-events: none;
-    }
-
-    #username {
-      padding-left: 32px;
-    }
-
-    #password {
-      padding-right: 65px;
-    }
-
-    .show-password {
-      position: absolute;
-
-      right: 13px;
-      top: 50%;
-
-      transform: translateY(-50%);
-
-      border: 0;
-      background: transparent;
-
-      color: var(--green);
-
-      font-size: 12px;
-      font-weight: 750;
-
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    .forgot {
-      text-align: right;
-      margin-top: -6px;
-      margin-bottom: 19px;
-    }
-
-    .forgot a {
-      color: var(--green);
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .submit {
-      width: 100%;
-      height: 54px;
-
-      border: 0;
-      border-radius: 15px;
-
-      background: var(--green);
-      color: #06110c;
-
-      font-size: 15px;
-      font-weight: 850;
-
-      cursor: pointer;
-
-      transition:
-        transform 0.15s,
-        opacity 0.15s;
-    }
-
-    .submit:active {
-      transform: scale(0.985);
-    }
-
-    .submit:disabled {
-      cursor: default;
-      opacity: 0.55;
-    }
-
-    .message {
-      display: none;
-
-      margin-top: 17px;
-      padding: 12px 14px;
-
-      border-radius: 12px;
-
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .message.error {
-      display: block;
-
-      color: #ffaaaa;
-
-      border:
-        1px solid
-        rgba(255, 114, 114, 0.22);
-
-      background:
-        rgba(255, 114, 114, 0.07);
-    }
-
-    .message.success {
-      display: block;
-
-      color: #9bf4ca;
-
-      border:
-        1px solid
-        rgba(85, 230, 165, 0.25);
-
-      background:
-        rgba(85, 230, 165, 0.07);
-    }
-
-    .signup {
-      text-align: center;
-
-      margin-top: 24px;
-
-      color: var(--muted);
-
-      font-size: 13px;
-    }
-
-    .signup a {
-      color: var(--green);
-      text-decoration: none;
-      font-weight: 750;
-    }
-
-    .footer {
-      margin-top: auto;
-
-      padding-top: 35px;
-
-      text-align: center;
-
-      color: #59625f;
-
-      font-size: 11px;
-    }
-
-    @media (min-width: 700px) {
-      .page {
-        justify-content: center;
-      }
-
-      .brand {
-        margin-top: 0;
-      }
-
-      .footer {
-        margin-top: 30px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070909">
+
+<title>Log In | Nova Musical</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#070909;
+  --panel:#101313;
+  --panel2:#151919;
+  --border:#252b2b;
+  --text:#f4f7f6;
+  --muted:#8e9996;
+  --green:#55e6a5;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+body{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  top:-220px;
+  left:50%;
+  transform:translateX(-50%);
+  width:480px;
+  height:480px;
+  border-radius:50%;
+  background:rgba(85,230,165,.09);
+  filter:blur(90px);
+  pointer-events:none;
+}
+
+.page{
+  position:relative;
+  width:100%;
+  max-width:520px;
+  min-height:100dvh;
+  padding:max(30px,env(safe-area-inset-top)) 22px max(35px,env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+}
+
+.brand{
+  text-align:center;
+  margin:18px 0 42px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.logo span{
+  color:var(--green);
+}
+
+.badge{
+  display:inline-block;
+  margin-top:10px;
+  padding:6px 11px;
+  border:1px solid rgba(85,230,165,.28);
+  border-radius:999px;
+  color:var(--green);
+  background:rgba(85,230,165,.06);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.2px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:29px 21px 25px;
+}
+
+h1{
+  text-align:center;
+  margin:0 0 9px;
+  font-size:30px;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:28px;
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+label{
+  display:block;
+  margin:0 0 8px 2px;
+  font-size:13px;
+  font-weight:700;
+}
+
+input{
+  width:100%;
+  height:52px;
+  padding:0 15px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  outline:none;
+  background:var(--panel2);
+  color:var(--text);
+  font-size:16px;
+}
+
+input:focus{
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgba(85,230,165,.09);
+}
+
+.username,
+.password{
+  position:relative;
+}
+
+.username span{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+}
+
+#username{
+  padding-left:32px;
+}
+
+#password{
+  padding-right:68px;
+}
+
+.show{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  color:var(--green);
+  font-size:12px;
+  font-weight:800;
+}
+
+.forgot{
+  text-align:right;
+  margin-top:-6px;
+  margin-bottom:19px;
+}
+
+.forgot a{
+  color:var(--green);
+  text-decoration:none;
+  font-size:12px;
+  font-weight:700;
+}
+
+.submit{
+  width:100%;
+  height:54px;
+  border:0;
+  border-radius:15px;
+  background:var(--green);
+  color:#06110c;
+  font-size:15px;
+  font-weight:900;
+}
+
+.submit:disabled{
+  opacity:.55;
+}
+
+.message{
+  display:none;
+  margin-top:17px;
+  padding:13px;
+  border-radius:13px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.message.error{
+  display:block;
+  color:#ffaaaa;
+  border:1px solid rgba(255,100,100,.2);
+  background:rgba(255,100,100,.06);
+}
+
+.message.success{
+  display:block;
+  color:#a0f4ce;
+  border:1px solid rgba(85,230,165,.23);
+  background:rgba(85,230,165,.06);
+}
+
+.signup{
+  text-align:center;
+  margin-top:24px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.signup a{
+  color:var(--green);
+  text-decoration:none;
+  font-weight:750;
+}
+
+.footer{
+  margin-top:auto;
+  padding-top:35px;
+  text-align:center;
+  color:#59625f;
+  font-size:10px;
+  line-height:1.7;
+}
+</style>
 </head>
 
 <body>
 
-  <main class="page">
+<main class="page">
 
-    <header class="brand">
+<header class="brand">
 
-      <div class="logo">
-        NOVA <span>MUSICAL</span>
-      </div>
+  <div class="logo">
+    NOVA <span>MUSICAL</span>
+  </div>
 
-      <div class="badge">
-        NOVA AI MUSIC LEARNING
-      </div>
+  <div class="badge">
+    NOVA AI MUSIC LEARNING
+  </div>
 
-    </header>
-
-
-    <section class="card">
-
-      <h1>Welcome back</h1>
-
-      <p class="subtitle">
-        Log in to continue your Nova journey.
-      </p>
+</header>
 
 
-      <form id="loginForm">
+<section class="card">
 
-        <div class="field">
+<h1>Welcome back</h1>
 
-          <label for="username">
-            Username
-          </label>
-
-          <div class="username-wrap">
-
-            <span class="username-prefix">
-              @
-            </span>
-
-            <input
-              id="username"
-              type="text"
-              placeholder="username"
-              autocomplete="username"
-              autocapitalize="none"
-              spellcheck="false"
-              maxlength="24"
-              required
-            />
-
-          </div>
-
-        </div>
+<p class="subtitle">
+  Log in to continue your Nova journey.
+</p>
 
 
-        <div class="field">
+<form id="loginForm">
 
-          <label for="password">
-            Password
-          </label>
+<div class="field">
 
-          <div class="password-wrap">
+  <label for="username">
+    Username
+  </label>
 
-            <input
-              id="password"
-              type="password"
-              placeholder="Your password"
-              autocomplete="current-password"
-              required
-            />
+  <div class="username">
 
-            <button
-              id="showPassword"
-              class="show-password"
-              type="button"
-            >
-              SHOW
-            </button>
+    <span>@</span>
 
-          </div>
+    <input
+      id="username"
+      type="text"
+      placeholder="username"
+      autocomplete="username"
+      autocapitalize="none"
+      spellcheck="false"
+      maxlength="24"
+      required
+    >
 
-        </div>
+  </div>
 
-
-        <div class="forgot">
-          <a href="forgot-password.html">
-            Forgot password?
-          </a>
-        </div>
+</div>
 
 
-        <button
-          id="submitButton"
-          class="submit"
-          type="submit"
-        >
-          LOG IN
-        </button>
+<div class="field">
+
+  <label for="password">
+    Password
+  </label>
+
+  <div class="password">
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Your password"
+      autocomplete="current-password"
+      required
+    >
+
+    <button
+      id="showPassword"
+      class="show"
+      type="button"
+    >
+      SHOW
+    </button>
+
+  </div>
+
+</div>
 
 
-        <div
-          id="message"
-          class="message"
-          role="status"
-          aria-live="polite"
-        ></div>
+<div class="forgot">
 
-      </form>
+  <a href="forgot-password.html">
+    Forgot password?
+  </a>
 
-
-      <div class="signup">
-        New to Nova?
-        <a href="signup.html">
-          Create account
-        </a>
-      </div>
-
-    </section>
+</div>
 
 
-    <footer class="footer">
-      © Nova Musical
-    </footer>
-
-  </main>
-
-
-  <script>
-
-    const SUPABASE_URL =
-      "https://docyfgbghwncylldlcfs.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk";
+<button
+  id="submitButton"
+  class="submit"
+  type="submit"
+>
+  LOG IN
+</button>
 
 
-    /*
-     * Username login needs a secure server-side
-     * username -> account lookup.
-     *
-     * We will create this endpoint next.
-     *
-     * Keeping that lookup on the server means Nova
-     * does NOT have to expose everybody's email
-     * address through the public profiles table.
-     */
+<div
+  id="message"
+  class="message"
+  role="status"
+  aria-live="polite"
+></div>
 
-    const USERNAME_LOGIN_ENDPOINT =
-      "https://nova-guitar-ai.kb6cj2ktgc.workers.dev/auth/login";
+</form>
 
 
-    const { createClient } = supabase;
+<div class="signup">
+
+  New to Nova?
+
+  <a href="signup.html">
+    Create account
+  </a>
+
+</div>
+
+</section>
 
 
-    const novaSupabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
+<footer class="footer">
+  © 2026 Nova Musical<br>
+  Andrea Fredy • Aryan Jude Fredy
+</footer>
+
+</main>
+
+
+<script>
+
+const SUPABASE_URL =
+  "https://docyfgbghwncylldlcfs.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk";
+
+const LOGIN_ENDPOINT =
+  "https://nova-guitar-ai.kb6cj2ktgc.workers.dev/auth/login";
+
+
+const novaSupabase =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
       }
+    }
+  );
+
+
+const form =
+  document.getElementById("loginForm");
+
+const usernameInput =
+  document.getElementById("username");
+
+const passwordInput =
+  document.getElementById("password");
+
+const submitButton =
+  document.getElementById("submitButton");
+
+const message =
+  document.getElementById("message");
+
+const showPassword =
+  document.getElementById("showPassword");
+
+
+usernameInput.addEventListener(
+  "input",
+  () => {
+
+    usernameInput.value =
+      usernameInput.value
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g,"");
+
+  }
+);
+
+
+showPassword.addEventListener(
+  "click",
+  () => {
+
+    const hidden =
+      passwordInput.type === "password";
+
+    passwordInput.type =
+      hidden ? "text" : "password";
+
+    showPassword.textContent =
+      hidden ? "HIDE" : "SHOW";
+
+  }
+);
+
+
+function showMessage(text,type){
+
+  message.textContent = text;
+
+  message.className =
+    "message " + type;
+
+}
+
+
+async function checkExistingSession(){
+
+  try{
+
+    const {
+      data:{session}
+    } =
+      await novaSupabase.auth.getSession();
+
+
+    if(session){
+
+      window.location.replace(
+        "instruments.html"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Nova session check:",
+      error
     );
 
-
-    const loginForm =
-      document.getElementById("loginForm");
-
-    const usernameInput =
-      document.getElementById("username");
-
-    const passwordInput =
-      document.getElementById("password");
-
-    const submitButton =
-      document.getElementById("submitButton");
-
-    const messageBox =
-      document.getElementById("message");
-
-    const showPasswordButton =
-      document.getElementById("showPassword");
+  }
+}
 
 
-    showPasswordButton.addEventListener(
-      "click",
-      () => {
-
-        const hidden =
-          passwordInput.type === "password";
-
-        passwordInput.type =
-          hidden ? "text" : "password";
-
-        showPasswordButton.textContent =
-          hidden ? "HIDE" : "SHOW";
-      }
-    );
+checkExistingSession();
 
 
-    usernameInput.addEventListener(
-      "input",
-      () => {
+form.addEventListener(
+  "submit",
+  async(event) => {
 
-        usernameInput.value =
-          usernameInput.value
-            .toLowerCase()
-            .replace(/[^a-z0-9_]/g, "");
-      }
-    );
+    event.preventDefault();
 
 
-    function showMessage(text, type) {
+    const username =
+      usernameInput.value
+        .trim()
+        .toLowerCase();
 
-      messageBox.textContent = text;
+    const password =
+      passwordInput.value;
 
-      messageBox.className =
-        "message " + type;
+
+    if(!username || !password){
+
+      showMessage(
+        "Enter your username and password.",
+        "error"
+      );
+
+      return;
     }
 
 
-    function clearMessage() {
+    submitButton.disabled = true;
 
-      messageBox.textContent = "";
-
-      messageBox.className =
-        "message";
-    }
+    submitButton.textContent =
+      "LOGGING IN...";
 
 
-    loginForm.addEventListener(
-      "submit",
-      async (event) => {
+    try{
 
-        event.preventDefault();
+      const response =
+        await fetch(
+          LOGIN_ENDPOINT,
+          {
+            method:"POST",
 
-        clearMessage();
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
 
-
-        const username =
-          usernameInput.value
-            .trim()
-            .toLowerCase();
-
-        const password =
-          passwordInput.value;
-
-
-        if (!username || !password) {
-
-          showMessage(
-            "Enter your username and password.",
-            "error"
-          );
-
-          return;
-        }
-
-
-        submitButton.disabled = true;
-
-        submitButton.textContent =
-          "LOGGING IN...";
-
-
-        try {
-
-          /*
-           * Ask Nova's secure backend to authenticate
-           * the username/password combination.
-           *
-           * The backend will return a Supabase
-           * access token + refresh token after
-           * successful authentication.
-           */
-
-          const response = await fetch(
-            USERNAME_LOGIN_ENDPOINT,
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                username: username,
-                password: password
-              })
-            }
-          );
-
-
-          let result = {};
-
-          try {
-            result =
-              await response.json();
-          } catch {
-            result = {};
+            body:JSON.stringify({
+              username,
+              password
+            })
           }
-
-
-          if (!response.ok) {
-
-            throw new Error(
-              result.error ||
-              "Incorrect username or password."
-            );
-          }
-
-
-          if (
-            !result.access_token ||
-            !result.refresh_token
-          ) {
-
-            throw new Error(
-              "Nova couldn't start your session."
-            );
-          }
-
-
-          /*
-           * Store the authenticated Supabase session.
-           * Supabase then keeps the person signed in
-           * across page visits.
-           */
-
-          const {
-            error: sessionError
-          } =
-            await novaSupabase.auth.setSession({
-
-              access_token:
-                result.access_token,
-
-              refresh_token:
-                result.refresh_token
-            });
-
-
-          if (sessionError) {
-            throw sessionError;
-          }
-
-
-          showMessage(
-            "Welcome back! Opening Nova...",
-            "success"
-          );
-
-
-          setTimeout(() => {
-
-            window.location.href =
-              "guitar.html";
-
-          }, 500);
-
-
-        } catch (error) {
-
-          console.error(
-            "Nova login error:",
-            error
-          );
-
-
-          showMessage(
-            error?.message ||
-            "Incorrect username or password.",
-            "error"
-          );
-
-
-        } finally {
-
-          submitButton.disabled = false;
-
-          submitButton.textContent =
-            "LOG IN";
-        }
-      }
-    );
-
-
-    /*
-     * If this browser already has a valid Nova
-     * session, don't make the person log in again.
-     */
-
-    async function checkExistingSession() {
-
-      try {
-
-        const {
-          data: { session }
-        } =
-          await novaSupabase.auth.getSession();
-
-
-        if (session) {
-
-          window.location.href =
-            "guitar.html";
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Session check error:",
-          error
         );
+
+
+      let result = {};
+
+      try{
+
+        result =
+          await response.json();
+
+      }catch(error){
+
+        throw new Error(
+          "Nova received an unreadable login response."
+        );
+
       }
+
+
+      if(!response.ok){
+
+        throw new Error(
+          result?.error ||
+          "Incorrect username or password."
+        );
+
+      }
+
+
+      if(
+        !result.access_token ||
+        !result.refresh_token
+      ){
+
+        throw new Error(
+          "Nova couldn't start your session."
+        );
+
+      }
+
+
+      const {
+        error:sessionError
+      } =
+        await novaSupabase.auth.setSession({
+
+          access_token:
+            result.access_token,
+
+          refresh_token:
+            result.refresh_token
+
+        });
+
+
+      if(sessionError){
+        throw sessionError;
+      }
+
+
+      showMessage(
+        "Welcome back. Let's choose your instrument...",
+        "success"
+      );
+
+
+      setTimeout(
+        () => {
+
+          window.location.replace(
+            "instruments.html"
+          );
+
+        },
+        450
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "Nova login error:",
+        error
+      );
+
+
+      showMessage(
+        error?.message ||
+        "Incorrect username or password.",
+        "error"
+      );
+
+
+    }finally{
+
+      submitButton.disabled = false;
+
+      submitButton.textContent =
+        "LOG IN";
+
     }
 
+  }
+);
 
-    checkExistingSession();
-
-  </script>
+</script>
 
 </body>
 </html>
