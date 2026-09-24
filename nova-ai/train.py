@@ -1,450 +1,1040 @@
 """
-NOVA AI v0.1
-Nova Musical
+NOVA AI — Language Model
+========================
 
-First trainable neural network for Nova Musical.
+Nova Musical's own decoder-only Transformer language model.
 
-This model is created and trained by Nova Musical.
-It does not download or use pretrained weights from
-OpenAI, Google, Meta, Qwen, Gemma, or another LLM.
+This is NOT a list of programmed answers.
+
+Nova learns statistical language patterns from training text
+and generates responses token-by-token.
+
+Architecture:
+    Token embeddings
+    Positional embeddings
+    Causal self-attention
+    Transformer blocks
+    Feed-forward networks
+    Layer normalization
+    Language-model output head
+
+The model weights are trained and saved by Nova.
 """
 
-import json
 import math
+import os
+import json
 import random
+import re
+from collections import Counter
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
-# ---------------------------------
-# TRAINING DATA
-# ---------------------------------
 
-# INPUT:
-# pitch error, accuracy, consistency, attempts
-#
-# OUTPUT:
-# coaching action
+# ============================================================
+# CONFIGURATION
+# ============================================================
 
-training_data = [
+DEVICE = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "cpu"
+)
 
-    [-45, 0.40, 0.30, 1, "tune_up"],
-    [-30, 0.50, 0.40, 2, "tune_up"],
-    [-20, 0.65, 0.55, 3, "tune_up"],
-    [-12, 0.75, 0.65, 3, "tune_up"],
+SEED = 42
 
-    [-4, 0.80, 0.75, 2, "correct"],
-    [-2, 0.90, 0.85, 3, "correct"],
-    [0, 0.95, 0.90, 4, "correct"],
-    [3, 0.88, 0.82, 3, "correct"],
-    [5, 0.85, 0.80, 2, "correct"],
+random.seed(SEED)
+torch.manual_seed(SEED)
 
-    [12, 0.75, 0.65, 3, "tune_down"],
-    [20, 0.65, 0.55, 3, "tune_down"],
-    [30, 0.50, 0.40, 2, "tune_down"],
-    [45, 0.40, 0.30, 1, "tune_down"],
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(SEED)
 
-    [-6, 0.35, 0.30, 5, "repeat"],
-    [7, 0.40, 0.35, 5, "repeat"],
-    [3, 0.45, 0.40, 6, "repeat"],
 
-    [1, 0.95, 0.95, 6, "advance"],
-    [-1, 0.96, 0.94, 7, "advance"],
-    [2, 0.98, 0.96, 8, "advance"]
+CONFIG = {
+    "model_name": "Nova AI",
+    "version": "0.2-language",
 
-]
+    # Small development model.
+    # We can scale these later.
+    "context_length": 256,
+    "embedding_size": 256,
+    "num_heads": 8,
+    "num_layers": 6,
+    "dropout": 0.1,
 
+    "batch_size": 16,
+    "learning_rate": 3e-4,
+    "training_steps": 5000,
 
-actions = [
-    "tune_up",
-    "correct",
-    "tune_down",
-    "repeat",
-    "advance"
-]
-
-
-# ---------------------------------
-# SIMPLE NEURAL NETWORK
-# ---------------------------------
-
-INPUTS = 4
-HIDDEN = 8
-OUTPUTS = len(actions)
-
-
-def random_weight():
-    return random.uniform(-0.5, 0.5)
-
-
-W1 = [
-    [random_weight() for _ in range(HIDDEN)]
-    for _ in range(INPUTS)
-]
-
-B1 = [
-    0.0 for _ in range(HIDDEN)
-]
-
-W2 = [
-    [random_weight() for _ in range(OUTPUTS)]
-    for _ in range(HIDDEN)
-]
-
-B2 = [
-    0.0 for _ in range(OUTPUTS)
-]
-
-
-def relu(x):
-    return max(0.0, x)
-
-
-def softmax(values):
-
-    maximum = max(values)
-
-    exps = [
-        math.exp(v - maximum)
-        for v in values
-    ]
-
-    total = sum(exps)
-
-    return [
-        value / total
-        for value in exps
-    ]
-
-
-def normalize(row):
-
-    cents = row[0] / 50
-    accuracy = row[1]
-    consistency = row[2]
-    attempts = row[3] / 10
-
-    return [
-        cents,
-        accuracy,
-        consistency,
-        attempts
-    ]
-
-
-def forward(inputs):
-
-    hidden_raw = []
-
-    for h in range(HIDDEN):
-
-        value = B1[h]
-
-        for i in range(INPUTS):
-            value += (
-                inputs[i] *
-                W1[i][h]
-            )
-
-        hidden_raw.append(value)
-
-
-    hidden = [
-        relu(v)
-        for v in hidden_raw
-    ]
-
-
-    output_raw = []
-
-    for o in range(OUTPUTS):
-
-        value = B2[o]
-
-        for h in range(HIDDEN):
-            value += (
-                hidden[h] *
-                W2[h][o]
-            )
-
-        output_raw.append(value)
-
-
-    probabilities = softmax(
-        output_raw
-    )
-
-    return (
-        hidden_raw,
-        hidden,
-        probabilities
-    )
-
-
-# ---------------------------------
-# TRAINING
-# ---------------------------------
-
-learning_rate = 0.03
-epochs = 8000
-
-
-for epoch in range(epochs):
-
-    random.shuffle(training_data)
-
-    total_loss = 0
-
-
-    for row in training_data:
-
-        x = normalize(row)
-
-        target_name = row[4]
-
-        target_index = (
-            actions.index(target_name)
-        )
-
-
-        (
-            hidden_raw,
-            hidden,
-            probabilities
-        ) = forward(x)
-
-
-        probability = max(
-            probabilities[target_index],
-            1e-12
-        )
-
-        total_loss += (
-            -math.log(probability)
-        )
-
-
-        # Softmax + cross entropy gradient
-
-        output_gradient = (
-            probabilities.copy()
-        )
-
-        output_gradient[target_index] -= 1
-
-
-        old_W2 = [
-            row.copy()
-            for row in W2
-        ]
-
-
-        # Update second layer
-
-        for h in range(HIDDEN):
-
-            for o in range(OUTPUTS):
-
-                W2[h][o] -= (
-                    learning_rate *
-                    hidden[h] *
-                    output_gradient[o]
-                )
-
-
-        for o in range(OUTPUTS):
-
-            B2[o] -= (
-                learning_rate *
-                output_gradient[o]
-            )
-
-
-        # Hidden gradient
-
-        hidden_gradient = [
-            0.0
-            for _ in range(HIDDEN)
-        ]
-
-
-        for h in range(HIDDEN):
-
-            gradient = 0.0
-
-            for o in range(OUTPUTS):
-
-                gradient += (
-                    old_W2[h][o] *
-                    output_gradient[o]
-                )
-
-
-            if hidden_raw[h] <= 0:
-                gradient = 0.0
-
-
-            hidden_gradient[h] = gradient
-
-
-        # Update first layer
-
-        for i in range(INPUTS):
-
-            for h in range(HIDDEN):
-
-                W1[i][h] -= (
-                    learning_rate *
-                    x[i] *
-                    hidden_gradient[h]
-                )
-
-
-        for h in range(HIDDEN):
-
-            B1[h] -= (
-                learning_rate *
-                hidden_gradient[h]
-            )
-
-
-    if epoch % 1000 == 0:
-
-        print(
-            "Epoch:",
-            epoch,
-            "Loss:",
-            round(total_loss, 4)
-        )
-
-
-# ---------------------------------
-# TEST NOVA
-# ---------------------------------
-
-def predict(
-    cents,
-    accuracy,
-    consistency,
-    attempts
-):
-
-    x = normalize([
-        cents,
-        accuracy,
-        consistency,
-        attempts
-    ])
-
-
-    _, _, probabilities = (
-        forward(x)
-    )
-
-
-    winner = max(
-        range(len(probabilities)),
-        key=lambda i:
-            probabilities[i]
-    )
-
-
-    return (
-        actions[winner],
-        probabilities[winner]
-    )
-
-
-tests = [
-
-    [-35, .60, .50, 2],
-
-    [0, .90, .90, 3],
-
-    [32, .60, .50, 2],
-
-    [2, .98, .96, 8]
-
-]
-
-
-print("\nNOVA AI TEST\n")
-
-
-for test in tests:
-
-    decision, confidence = (
-        predict(*test)
-    )
-
-    print(
-        test,
-        "=>",
-        decision,
-        round(confidence, 3)
-    )
-
-
-# ---------------------------------
-# SAVE NOVA'S LEARNED MODEL
-# ---------------------------------
-
-model = {
-
-    "name":
-        "Nova AI",
-
-    "version":
-        "0.1",
-
-    "architecture": {
-
-        "inputs":
-            INPUTS,
-
-        "hidden":
-            HIDDEN,
-
-        "outputs":
-            OUTPUTS
-
-    },
-
-    "actions":
-        actions,
-
-    "weights": {
-
-        "W1":
-            W1,
-
-        "B1":
-            B1,
-
-        "W2":
-            W2,
-
-        "B2":
-            B2
-
-    }
-
+    "minimum_token_frequency": 1
 }
 
 
+print()
+print("====================================")
+print("          NOVA AI TRAINING")
+print("====================================")
+print()
+print("Device:", DEVICE)
+print()
+
+
+# ============================================================
+# TRAINING DATA
+# ============================================================
+
+DATA_FILE = os.path.join(
+    os.path.dirname(__file__),
+    "training.txt"
+)
+
+
+if not os.path.exists(DATA_FILE):
+
+    starter = """<user>Hello</user>
+<assistant>Hello! I'm Nova. What would you like to work on today?</assistant>
+
+<user>I'm a beginner.</user>
+<assistant>Great. We can start from the beginning and take it one step at a time.</assistant>
+
+<user>What is Em?</user>
+<assistant>Em means E minor. On guitar, it is one of the simplest open chords to learn.</assistant>
+
+<user>How do I play it?</user>
+<assistant>Place two fingers on the second fret, one on the A string and one on the D string, then strum all six strings.</assistant>
+
+<user>idk</user>
+<assistant>That's okay. Tell me what part you're unsure about and I'll explain it differently.</assistant>
+"""
+
+    with open(
+        DATA_FILE,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        file.write(starter)
+
+
+    print(
+        "Created nova-ai/training.txt"
+    )
+
+
 with open(
-    "nova-model.json",
-    "w"
+    DATA_FILE,
+    "r",
+    encoding="utf-8"
 ) as file:
 
-    json.dump(
-        model,
-        file
+    TRAINING_TEXT = file.read()
+
+
+if len(TRAINING_TEXT.strip()) < 20:
+
+    raise ValueError(
+        "training.txt does not contain enough text."
     )
 
 
 print(
-    "\nNova AI training complete."
+    "Training characters:",
+    len(TRAINING_TEXT)
 )
 
+
+# ============================================================
+# TOKENIZER
+# ============================================================
+
+TOKEN_PATTERN = re.compile(
+    r"""
+    <user>|
+    </user>|
+    <assistant>|
+    </assistant>|
+    [A-Za-z]+(?:'[A-Za-z]+)?|
+    [0-9]+|
+    [^\w\s]
+    """,
+    re.VERBOSE
+)
+
+
+def tokenize(text):
+
+    return TOKEN_PATTERN.findall(text)
+
+
+tokens = tokenize(
+    TRAINING_TEXT
+)
+
+
+counter = Counter(tokens)
+
+
+SPECIAL_TOKENS = [
+    "<pad>",
+    "<unk>",
+    "<user>",
+    "</user>",
+    "<assistant>",
+    "</assistant>"
+]
+
+
+vocabulary = list(
+    SPECIAL_TOKENS
+)
+
+
+for token, frequency in sorted(
+    counter.items()
+):
+
+    if (
+        frequency >=
+        CONFIG["minimum_token_frequency"]
+        and
+        token not in vocabulary
+    ):
+
+        vocabulary.append(token)
+
+
+stoi = {
+    token: index
+    for index, token
+    in enumerate(vocabulary)
+}
+
+
+itos = {
+    index: token
+    for token, index
+    in stoi.items()
+}
+
+
+VOCAB_SIZE = len(vocabulary)
+
+
+CONFIG["vocab_size"] = VOCAB_SIZE
+
+
 print(
-    "Saved as nova-model.json"
+    "Vocabulary size:",
+    VOCAB_SIZE
+)
+
+
+def encode(text):
+
+    result = []
+
+    for token in tokenize(text):
+
+        result.append(
+            stoi.get(
+                token,
+                stoi["<unk>"]
+            )
+        )
+
+    return result
+
+
+def decode(ids):
+
+    pieces = []
+
+    punctuation = {
+        ".",
+        ",",
+        "!",
+        "?",
+        ":",
+        ";",
+        ")",
+        "]"
+    }
+
+    opening = {
+        "(",
+        "["
+    }
+
+    for token_id in ids:
+
+        token = itos.get(
+            int(token_id),
+            "<unk>"
+        )
+
+        if token in SPECIAL_TOKENS:
+            continue
+
+        if not pieces:
+
+            pieces.append(token)
+
+        elif token in punctuation:
+
+            pieces[-1] += token
+
+        elif pieces[-1] in opening:
+
+            pieces[-1] += token
+
+        else:
+
+            pieces.append(
+                " " + token
+            )
+
+    return "".join(pieces)
+
+
+encoded_training_data = torch.tensor(
+    encode(TRAINING_TEXT),
+    dtype=torch.long
+)
+
+
+# ============================================================
+# CAUSAL SELF ATTENTION
+# ============================================================
+
+class CausalSelfAttention(
+    nn.Module
+):
+
+    def __init__(self):
+
+        super().__init__()
+
+        size = CONFIG[
+            "embedding_size"
+        ]
+
+        heads = CONFIG[
+            "num_heads"
+        ]
+
+        if size % heads != 0:
+
+            raise ValueError(
+                "embedding_size must be divisible by num_heads"
+            )
+
+        self.heads = heads
+
+        self.head_size = (
+            size // heads
+        )
+
+        self.query = nn.Linear(
+            size,
+            size,
+            bias=False
+        )
+
+        self.key = nn.Linear(
+            size,
+            size,
+            bias=False
+        )
+
+        self.value = nn.Linear(
+            size,
+            size,
+            bias=False
+        )
+
+        self.output = nn.Linear(
+            size,
+            size
+        )
+
+        self.dropout = nn.Dropout(
+            CONFIG["dropout"]
+        )
+
+
+    def forward(self, x):
+
+        batch, time, channels = (
+            x.shape
+        )
+
+        q = self.query(x)
+        k = self.key(x)
+        v = self.value(x)
+
+        q = q.view(
+            batch,
+            time,
+            self.heads,
+            self.head_size
+        ).transpose(1, 2)
+
+        k = k.view(
+            batch,
+            time,
+            self.heads,
+            self.head_size
+        ).transpose(1, 2)
+
+        v = v.view(
+            batch,
+            time,
+            self.heads,
+            self.head_size
+        ).transpose(1, 2)
+
+
+        attention = (
+            q @ k.transpose(-2, -1)
+        ) / math.sqrt(
+            self.head_size
+        )
+
+
+        mask = torch.tril(
+            torch.ones(
+                time,
+                time,
+                device=x.device
+            )
+        )
+
+
+        attention = attention.masked_fill(
+            mask == 0,
+            float("-inf")
+        )
+
+
+        attention = F.softmax(
+            attention,
+            dim=-1
+        )
+
+
+        attention = self.dropout(
+            attention
+        )
+
+
+        result = (
+            attention @ v
+        )
+
+
+        result = result.transpose(
+            1,
+            2
+        ).contiguous()
+
+
+        result = result.view(
+            batch,
+            time,
+            channels
+        )
+
+
+        return self.output(
+            result
+        )
+
+
+# ============================================================
+# FEED FORWARD NETWORK
+# ============================================================
+
+class FeedForward(
+    nn.Module
+):
+
+    def __init__(self):
+
+        super().__init__()
+
+        size = CONFIG[
+            "embedding_size"
+        ]
+
+
+        self.network = nn.Sequential(
+
+            nn.Linear(
+                size,
+                size * 4
+            ),
+
+            nn.GELU(),
+
+            nn.Linear(
+                size * 4,
+                size
+            ),
+
+            nn.Dropout(
+                CONFIG["dropout"]
+            )
+        )
+
+
+    def forward(self, x):
+
+        return self.network(x)
+
+
+# ============================================================
+# TRANSFORMER BLOCK
+# ============================================================
+
+class TransformerBlock(
+    nn.Module
+):
+
+    def __init__(self):
+
+        super().__init__()
+
+        size = CONFIG[
+            "embedding_size"
+        ]
+
+
+        self.norm1 = nn.LayerNorm(
+            size
+        )
+
+        self.attention = (
+            CausalSelfAttention()
+        )
+
+        self.norm2 = nn.LayerNorm(
+            size
+        )
+
+        self.feed_forward = (
+            FeedForward()
+        )
+
+
+    def forward(self, x):
+
+        x = (
+            x +
+            self.attention(
+                self.norm1(x)
+            )
+        )
+
+        x = (
+            x +
+            self.feed_forward(
+                self.norm2(x)
+            )
+        )
+
+        return x
+
+
+# ============================================================
+# NOVA LANGUAGE MODEL
+# ============================================================
+
+class NovaLanguageModel(
+    nn.Module
+):
+
+    def __init__(self):
+
+        super().__init__()
+
+
+        size = CONFIG[
+            "embedding_size"
+        ]
+
+
+        self.token_embedding = (
+            nn.Embedding(
+                VOCAB_SIZE,
+                size
+            )
+        )
+
+
+        self.position_embedding = (
+            nn.Embedding(
+                CONFIG[
+                    "context_length"
+                ],
+                size
+            )
+        )
+
+
+        self.blocks = nn.Sequential(
+            *[
+                TransformerBlock()
+                for _ in range(
+                    CONFIG[
+                        "num_layers"
+                    ]
+                )
+            ]
+        )
+
+
+        self.final_norm = (
+            nn.LayerNorm(size)
+        )
+
+
+        self.language_head = (
+            nn.Linear(
+                size,
+                VOCAB_SIZE,
+                bias=False
+            )
+        )
+
+
+        self.language_head.weight = (
+            self.token_embedding.weight
+        )
+
+
+    def forward(
+        self,
+        tokens,
+        targets=None
+    ):
+
+        batch, time = (
+            tokens.shape
+        )
+
+
+        positions = torch.arange(
+            time,
+            device=tokens.device
+        )
+
+
+        x = (
+            self.token_embedding(
+                tokens
+            )
+            +
+            self.position_embedding(
+                positions
+            )
+        )
+
+
+        x = self.blocks(x)
+
+        x = self.final_norm(x)
+
+        logits = (
+            self.language_head(x)
+        )
+
+
+        loss = None
+
+
+        if targets is not None:
+
+            loss = F.cross_entropy(
+
+                logits.reshape(
+                    -1,
+                    VOCAB_SIZE
+                ),
+
+                targets.reshape(-1)
+            )
+
+
+        return logits, loss
+
+
+    @torch.no_grad()
+    def generate(
+        self,
+        tokens,
+        max_new_tokens=100,
+        temperature=0.8,
+        top_k=40
+    ):
+
+        self.eval()
+
+
+        for _ in range(
+            max_new_tokens
+        ):
+
+            context = tokens[
+                :,
+                -CONFIG[
+                    "context_length"
+                ]:
+            ]
+
+
+            logits, _ = self(
+                context
+            )
+
+
+            logits = (
+                logits[:, -1, :]
+                /
+                max(
+                    temperature,
+                    0.01
+                )
+            )
+
+
+            if top_k:
+
+                values, _ = (
+                    torch.topk(
+                        logits,
+                        min(
+                            top_k,
+                            logits.size(-1)
+                        )
+                    )
+                )
+
+
+                logits[
+                    logits <
+                    values[:, [-1]]
+                ] = float(
+                    "-inf"
+                )
+
+
+            probabilities = (
+                F.softmax(
+                    logits,
+                    dim=-1
+                )
+            )
+
+
+            next_token = (
+                torch.multinomial(
+                    probabilities,
+                    num_samples=1
+                )
+            )
+
+
+            tokens = torch.cat(
+                (
+                    tokens,
+                    next_token
+                ),
+                dim=1
+            )
+
+
+        return tokens
+
+
+# ============================================================
+# TRAINING BATCHES
+# ============================================================
+
+def get_batch():
+
+    context_length = min(
+        CONFIG[
+            "context_length"
+        ],
+        len(
+            encoded_training_data
+        ) - 2
+    )
+
+
+    maximum_start = (
+        len(
+            encoded_training_data
+        )
+        -
+        context_length
+        -
+        1
+    )
+
+
+    starts = torch.randint(
+        0,
+        maximum_start + 1,
+        (
+            CONFIG[
+                "batch_size"
+            ],
+        )
+    )
+
+
+    x = torch.stack(
+        [
+            encoded_training_data[
+                start:
+                start +
+                context_length
+            ]
+
+            for start in starts
+        ]
+    )
+
+
+    y = torch.stack(
+        [
+            encoded_training_data[
+                start + 1:
+                start +
+                context_length +
+                1
+            ]
+
+            for start in starts
+        ]
+    )
+
+
+    return (
+        x.to(DEVICE),
+        y.to(DEVICE)
+    )
+
+
+# ============================================================
+# CREATE NOVA
+# ============================================================
+
+model = (
+    NovaLanguageModel()
+    .to(DEVICE)
+)
+
+
+parameter_count = sum(
+    parameter.numel()
+    for parameter
+    in model.parameters()
+)
+
+
+print(
+    "Nova parameters:",
+    f"{parameter_count:,}"
+)
+
+
+optimizer = torch.optim.AdamW(
+    model.parameters(),
+    lr=CONFIG[
+        "learning_rate"
+    ],
+    weight_decay=0.1
+)
+
+
+# ============================================================
+# TRAIN
+# ============================================================
+
+print()
+print(
+    "Training Nova..."
+)
+print()
+
+
+model.train()
+
+
+for step in range(
+    1,
+    CONFIG[
+        "training_steps"
+    ] + 1
+):
+
+    x, y = get_batch()
+
+
+    _, loss = model(
+        x,
+        y
+    )
+
+
+    optimizer.zero_grad(
+        set_to_none=True
+    )
+
+
+    loss.backward()
+
+
+    torch.nn.utils.clip_grad_norm_(
+        model.parameters(),
+        1.0
+    )
+
+
+    optimizer.step()
+
+
+    if (
+        step == 1
+        or
+        step % 100 == 0
+    ):
+
+        print(
+            f"Step {step:5d} | "
+            f"Loss {loss.item():.4f}"
+        )
+
+
+# ============================================================
+# SAVE NOVA
+# ============================================================
+
+BASE_DIRECTORY = (
+    os.path.dirname(__file__)
+)
+
+
+MODEL_FILE = os.path.join(
+    BASE_DIRECTORY,
+    "nova-language-model.pt"
+)
+
+
+TOKENIZER_FILE = os.path.join(
+    BASE_DIRECTORY,
+    "nova-tokenizer.json"
+)
+
+
+CONFIG_FILE = os.path.join(
+    BASE_DIRECTORY,
+    "nova-language-config.json"
+)
+
+
+torch.save(
+    model.state_dict(),
+    MODEL_FILE
+)
+
+
+with open(
+    TOKENIZER_FILE,
+    "w",
+    encoding="utf-8"
+) as file:
+
+    json.dump(
+        {
+            "stoi":stoi,
+            "itos":{
+                str(key):value
+                for key,value
+                in itos.items()
+            }
+        },
+        file,
+        indent=2,
+        ensure_ascii=False
+    )
+
+
+with open(
+    CONFIG_FILE,
+    "w",
+    encoding="utf-8"
+) as file:
+
+    json.dump(
+        CONFIG,
+        file,
+        indent=2
+    )
+
+
+print()
+print(
+    "Nova model saved:"
+)
+print(
+    MODEL_FILE
+)
+
+
+# ============================================================
+# QUICK GENERATION TEST
+# ============================================================
+
+prompt = (
+    "<user>Hello</user>"
+    "<assistant>"
+)
+
+
+prompt_tokens = torch.tensor(
+    [encode(prompt)],
+    dtype=torch.long,
+    device=DEVICE
+)
+
+
+generated = model.generate(
+    prompt_tokens,
+    max_new_tokens=50,
+    temperature=0.8
+)
+
+
+print()
+print(
+    "Generation test:"
+)
+print()
+
+
+print(
+    decode(
+        generated[0].tolist()
+    )
+)
+
+
+print()
+print(
+    "Nova AI training complete."
 )
