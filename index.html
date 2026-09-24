@@ -4,286 +4,1230 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Nova Musical</title>
+  <title>Nova Musical — Learn Music with Nova AI</title>
 
   <style>
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
       color: white;
+
       background:
-        radial-gradient(circle at top, #272153 0%, #111426 40%, #080a12 75%);
+        radial-gradient(
+          circle at top,
+          #292056 0%,
+          #121526 38%,
+          #080a12 75%
+        );
+    }
+
+    button {
+      font-family: inherit;
     }
 
     nav {
+      max-width: 1150px;
+      margin: auto;
       padding: 24px;
-      font-size: 22px;
-      font-weight: 800;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .nova {
-      color: #a68cff;
+    .brand {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .brand-nova {
+      color: #a78cff;
+    }
+
+    .alpha {
+      border: 1px solid #ffffff20;
+      border-radius: 30px;
+
+      padding: 8px 13px;
+
+      color: #aeb2c1;
+      font-size: 12px;
     }
 
     main {
-      max-width: 1050px;
+      width: min(1100px, calc(100% - 36px));
       margin: auto;
-      padding: 65px 22px;
+
+      padding:
+        70px
+        0
+        70px;
+    }
+
+    .hero {
       text-align: center;
     }
 
-    .tag {
-      color: #9d8cff;
+    .eyebrow {
+      color: #a68cff;
+
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
+
       letter-spacing: 3px;
+
+      margin-bottom: 18px;
     }
 
     h1 {
-      font-size: clamp(42px, 8vw, 76px);
+      max-width: 900px;
+
+      margin:
+        0
+        auto
+        20px;
+
+      font-size:
+        clamp(44px, 8vw, 78px);
+
       line-height: 1;
-      margin: 18px 0;
+
+      letter-spacing: -3px;
     }
 
     h1 span {
-      background: linear-gradient(90deg, #a17cff, #27e0cc);
+      background:
+        linear-gradient(
+          90deg,
+          #a47dff,
+          #25e2cd
+        );
+
       background-clip: text;
+      -webkit-background-clip: text;
+
       color: transparent;
     }
 
     .subtitle {
-      color: #aaaebe;
+      max-width: 650px;
+
+      margin:
+        0
+        auto
+        48px;
+
+      color: #a7abba;
+
       font-size: 18px;
-      margin-bottom: 45px;
+      line-height: 1.6;
     }
 
-    .instruments {
+
+    /* INSTRUMENTS */
+
+    .instrument-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
       gap: 16px;
     }
 
     .instrument {
-      border: 1px solid #ffffff1f;
-      border-radius: 25px;
-      padding: 28px 12px;
-      min-height: 190px;
+      min-height: 205px;
 
-      background: #121624;
+      padding:
+        30px
+        16px;
+
+      border:
+        1px solid
+        #ffffff18;
+
+      border-radius: 25px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #151927,
+          #10131f
+        );
+
       color: white;
 
       cursor: pointer;
 
-      transition: .2s;
+      transition:
+        transform .2s,
+        border .2s,
+        background .2s;
     }
 
     .instrument:hover,
     .instrument.active {
-      transform: translateY(-5px);
-      border-color: #9277ff;
-      background: #19182d;
+      transform:
+        translateY(-5px);
+
+      border-color:
+        #9277ff;
+
+      background:
+        #1a1930;
     }
 
-    .icon {
+    .instrument-icon {
       display: block;
-      font-size: 43px;
-      margin-bottom: 14px;
+
+      font-size: 45px;
+
+      margin-bottom: 15px;
     }
 
     .instrument strong {
       display: block;
+
       font-size: 21px;
     }
 
     .instrument small {
       display: block;
-      color: #858a9b;
-      margin-top: 8px;
+
+      margin-top: 9px;
+
+      color: #898e9e;
     }
 
-    #novaCoach {
+
+    /* NOVA COACH */
+
+    .nova-coach {
       display: none;
 
-      max-width: 620px;
-      margin: 30px auto;
+      max-width: 650px;
+
+      margin:
+        30px
+        auto
+        0;
+
+      padding: 21px;
 
       text-align: left;
 
-      border: 1px solid #ffffff1f;
+      border:
+        1px solid
+        #ffffff18;
+
       border-radius: 22px;
 
-      background: #121624;
-
-      padding: 20px;
+      background:
+        #111522;
     }
 
-    .ai-name {
-      font-weight: 800;
-      color: #a68cff;
+    .nova-title {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      color: #aa91ff;
+
+      font-weight: 900;
     }
 
-    #message {
-      color: #c4c7d2;
+    .nova-orb {
+      width: 38px;
+      height: 38px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #8b67ff,
+          #20d9c5
+        );
+
+      color: white;
+    }
+
+    #novaMessage {
+      margin-bottom: 0;
+
+      color: #bec1ce;
+
       line-height: 1.6;
     }
 
-    @media (max-width: 700px) {
-      .instruments {
-        grid-template-columns: repeat(2, 1fr);
-      }
+
+    /* TUNER */
+
+    .tuner {
+      display: none;
+
+      max-width: 650px;
+
+      margin:
+        28px
+        auto
+        0;
+
+      padding:
+        30px
+        22px;
+
+      text-align: center;
+
+      border:
+        1px solid
+        #ffffff18;
+
+      border-radius: 28px;
+
+      background:
+        #10141f;
+    }
+
+    .tuner h2 {
+      margin-top: 0;
+
+      font-size: 30px;
+    }
+
+    .tuner-description {
+      color: #989dac;
+
+      line-height: 1.5;
+    }
+
+    .listen-button {
+      margin-top: 10px;
+
+      border: 0;
+
+      border-radius: 30px;
+
+      padding:
+        16px
+        27px;
+
+      font-size: 16px;
+      font-weight: 800;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          90deg,
+          #9673ff,
+          #22dcca
+        );
+
+      cursor: pointer;
+    }
+
+    .pitch-display {
+      display: none;
+
+      margin:
+        28px
+        auto
+        0;
+
+      padding:
+        30px
+        20px;
+
+      max-width: 380px;
+
+      border:
+        1px solid
+        #ffffff17;
+
+      border-radius: 25px;
+
+      background:
+        #171b29;
+    }
+
+    .detected-note {
+      font-size: 72px;
+      font-weight: 900;
+
+      letter-spacing: -3px;
+    }
+
+    .frequency {
+      color: #8f94a5;
+
+      margin-top: 4px;
+    }
+
+    .tuning-state {
+      margin-top: 20px;
+
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .cents {
+      margin-top: 7px;
+
+      color: #898e9f;
+
+      font-size: 13px;
+    }
+
+    .feedback {
+      margin-top: 15px;
+
+      color: #c0c3cf;
+
+      line-height: 1.5;
+    }
+
+
+    /* COMING SOON */
+
+    .coming-soon {
+      display: none;
+
+      max-width: 650px;
+
+      margin:
+        28px
+        auto
+        0;
+
+      padding: 25px;
+
+      border:
+        1px solid
+        #ffffff18;
+
+      border-radius: 22px;
+
+      background:
+        #111522;
+
+      text-align: center;
+
+      color: #aeb2c1;
+    }
+
+
+    footer {
+      padding:
+        30px
+        20px
+        45px;
+
+      text-align: center;
+
+      color: #5f6474;
+
+      font-size: 12px;
+    }
+
+
+    /* MOBILE */
+
+    @media (
+      max-width: 750px
+    ) {
 
       main {
         padding-top: 40px;
       }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .instrument-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .instrument {
+        min-height: 170px;
+
+        padding:
+          23px
+          10px;
+      }
+
+      .instrument-icon {
+        font-size: 38px;
+      }
+
+      .alpha {
+        display: none;
+      }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
+
 <nav>
-  <span class="nova">NOVA</span> MUSICAL
+
+  <div class="brand">
+    <span class="brand-nova">
+      NOVA
+    </span>
+    MUSICAL
+  </div>
+
+  <div class="alpha">
+    Nova AI • Alpha
+  </div>
+
 </nav>
+
 
 <main>
 
-  <div class="tag">
-    MEET NOVA AI
+
+<section class="hero">
+
+
+  <div class="eyebrow">
+    YOUR PERSONAL MUSIC COACH
   </div>
+
 
   <h1>
     What do you want to
-    <span>play?</span>
+    <span>
+      play?
+    </span>
   </h1>
 
+
   <p class="subtitle">
-    Choose your instrument and Nova will begin building
+
+    Choose your instrument.
+
+    Nova will listen,
+    learn how you play,
+    and begin building
     your personal music journey.
+
   </p>
 
-  <div class="instruments">
 
-    <button class="instrument" onclick="chooseInstrument('guitar', this)">
-      <span class="icon">🎸</span>
-      <strong>Guitar</strong>
-      <small>Listen • Tune • Learn</small>
+
+  <div class="instrument-grid">
+
+
+    <button
+      class="instrument"
+      onclick="
+        chooseInstrument(
+          'guitar',
+          this
+        )
+      "
+    >
+
+      <span class="instrument-icon">
+        🎸
+      </span>
+
+      <strong>
+        Guitar
+      </strong>
+
+      <small>
+        Listen • Tune • Learn
+      </small>
+
     </button>
 
-    <button class="instrument" onclick="chooseInstrument('piano', this)">
-      <span class="icon">🎹</span>
-      <strong>Piano</strong>
-      <small>Notes • Chords • Songs</small>
+
+
+    <button
+      class="instrument"
+      onclick="
+        chooseInstrument(
+          'piano',
+          this
+        )
+      "
+    >
+
+      <span class="instrument-icon">
+        🎹
+      </span>
+
+      <strong>
+        Piano
+      </strong>
+
+      <small>
+        Notes • Chords • Songs
+      </small>
+
     </button>
 
-    <button class="instrument" onclick="chooseInstrument('singing', this)">
-      <span class="icon">🎤</span>
-      <strong>Singing</strong>
-      <small>Pitch • Voice • Songs</small>
+
+
+    <button
+      class="instrument"
+      onclick="
+        chooseInstrument(
+          'singing',
+          this
+        )
+      "
+    >
+
+      <span class="instrument-icon">
+        🎤
+      </span>
+
+      <strong>
+        Singing
+      </strong>
+
+      <small>
+        Pitch • Voice • Songs
+      </small>
+
     </button>
 
-    <button class="instrument" onclick="chooseInstrument('bass', this)">
-      <span class="icon">🎸</span>
-      <strong>Bass</strong>
-      <small>Timing • Groove • Songs</small>
+
+
+    <button
+      class="instrument"
+      onclick="
+        chooseInstrument(
+          'bass',
+          this
+        )
+      "
+    >
+
+      <span class="instrument-icon">
+        🎸
+      </span>
+
+      <strong>
+        Bass
+      </strong>
+
+      <small>
+        Timing • Groove • Songs
+      </small>
+
     </button>
+
 
   </div>
 
-  <section id="novaCoach">
 
-    <div class="ai-name">
-      ✦ Nova AI
+
+  <section
+    id="novaCoach"
+    class="nova-coach"
+  >
+
+    <div class="nova-title">
+
+      <div class="nova-orb">
+        ✦
+      </div>
+
+      Nova AI
+
     </div>
 
-    <p id="message"></p>
+
+    <p id="novaMessage">
+    </p>
 
   </section>
 
+
+
+  <section
+    id="tuner"
+    class="tuner"
+  >
+
+
+    <h2>
+      Nova Guitar Tuner
+    </h2>
+
+
+    <p class="tuner-description">
+
+      Play one string at a time.
+
+      Nova will listen
+      through your microphone.
+
+    </p>
+
+
+    <button
+      id="listenButton"
+      class="listen-button"
+      onclick="startNovaListening()"
+    >
+
+      🎙 Start Listening
+
+    </button>
+
+
+
+    <div
+      id="pitchDisplay"
+      class="pitch-display"
+    >
+
+
+      <div
+        id="detectedNote"
+        class="detected-note"
+      >
+        —
+      </div>
+
+
+      <div
+        id="detectedFrequency"
+        class="frequency"
+      >
+
+        Waiting for a note...
+
+      </div>
+
+
+      <div
+        id="tuningState"
+        class="tuning-state"
+      >
+
+        Play a string
+
+      </div>
+
+
+      <div
+        id="centsDisplay"
+        class="cents"
+      >
+      </div>
+
+
+      <div
+        id="novaFeedback"
+        class="feedback"
+      >
+
+        Nova is ready.
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+
+  <section
+    id="comingSoon"
+    class="coming-soon"
+  >
+
+    <strong id="comingSoonTitle">
+    </strong>
+
+    <p>
+
+      Nova is learning this
+      instrument next.
+
+      Guitar is being built first.
+
+    </p>
+
+  </section>
+
+
+</section>
+
+
 </main>
+
+
+
+<footer>
+
+  Nova Musical •
+  Powered by Nova AI
+
+</footer>
+
+
+
+<!--
+     This loads the audio engine
+     you already created.
+-->
+
+<script src="audio-engine.js"></script>
+
+
 
 <script>
 
+
+/*
+====================================
+NOVA AI — CORE v0.1
+====================================
+*/
+
+
 const NovaAI = {
 
+
   learner: {
+
     instrument: null,
-    level: null
+
+    level: "new",
+
+    sessions: 0
+
   },
+
 
   begin(instrument) {
 
-    this.learner.instrument = instrument;
+
+    this.learner.instrument =
+      instrument;
+
 
     const responses = {
 
+
       guitar:
-        "Great choice. I'm Nova. First I'll learn how you play, then we'll check your tuning and start building your guitar path.",
+
+        "Great choice. I'm Nova. First I'll learn how you play. Then we'll check your tuning and begin building your guitar path.",
+
 
       piano:
+
         "Let's find your starting point. I'll build your piano journey around your notes, chords and songs.",
 
+
       singing:
+
         "Let's discover your comfortable vocal range first. Then we'll work on pitch, control and songs.",
 
+
       bass:
+
         "Let's build your timing, fretboard knowledge and groove step by step."
+
 
     };
 
-    return responses[instrument];
+
+    return (
+      responses[instrument] ||
+      "Let's start making music."
+    );
 
   },
 
 
-  evaluatePitch(frequency, targetFrequency) {
+  pitchFeedback(result) {
 
-    if (!frequency || !targetFrequency) {
-      return "Play a clear note for me.";
+
+    if (!result) {
+
+      return (
+        "Play a clear note for me."
+      );
+
     }
 
-    const cents =
-      1200 * Math.log2(frequency / targetFrequency);
 
-    if (Math.abs(cents) <= 5) {
-      return "Perfect. You're in tune.";
+    if (
+      result.tuning ===
+      "IN TUNE"
+    ) {
+
+      return (
+        "Perfect — you're in tune. Hold that."
+      );
+
     }
 
-    if (cents < 0) {
-      return "You're a little flat. Tune up slowly.";
+
+    if (
+      result.tuning ===
+      "FLAT"
+    ) {
+
+      return (
+        "You're a little flat. Tune up slowly."
+      );
+
     }
 
-    return "You're a little sharp. Tune down slowly.";
+
+    return (
+      "You're a little sharp. Tune down slowly."
+    );
 
   }
+
 
 };
 
 
-function chooseInstrument(instrument, button) {
+
+/*
+====================================
+INSTRUMENT SELECTION
+====================================
+*/
+
+
+function chooseInstrument(
+  instrument,
+  button
+) {
+
 
   document
-    .querySelectorAll(".instrument")
-    .forEach(item => item.classList.remove("active"));
+    .querySelectorAll(
+      ".instrument"
+    )
+    .forEach(
+      item =>
+        item.classList.remove(
+          "active"
+        )
+    );
 
-  button.classList.add("active");
 
-  const reply =
-    NovaAI.begin(instrument);
+  button.classList.add(
+    "active"
+  );
 
-  document.getElementById("message").textContent =
-    reply;
 
-  document.getElementById("novaCoach").style.display =
+  const message =
+    NovaAI.begin(
+      instrument
+    );
+
+
+  document.getElementById(
+    "novaMessage"
+  ).textContent =
+    message;
+
+
+  document.getElementById(
+    "novaCoach"
+  ).style.display =
     "block";
+
+
+  const tuner =
+    document.getElementById(
+      "tuner"
+    );
+
+
+  const comingSoon =
+    document.getElementById(
+      "comingSoon"
+    );
+
+
+  if (
+    instrument ===
+    "guitar"
+  ) {
+
+
+    tuner.style.display =
+      "block";
+
+
+    comingSoon.style.display =
+      "none";
+
+
+  }
+
+
+  else {
+
+
+    tuner.style.display =
+      "none";
+
+
+    comingSoon.style.display =
+      "block";
+
+
+    const name =
+      instrument
+        .charAt(0)
+        .toUpperCase() +
+      instrument.slice(1);
+
+
+    document.getElementById(
+      "comingSoonTitle"
+    ).textContent =
+      name +
+      " with Nova AI";
+
+
+  }
+
 
 }
 
+
+
+/*
+====================================
+NOVA AUDIO ENGINE
+====================================
+*/
+
+
+let novaAudio = null;
+
+let novaListening =
+  false;
+
+
+
+async function
+startNovaListening() {
+
+
+  const feedback =
+    document.getElementById(
+      "novaFeedback"
+    );
+
+
+  const pitchDisplay =
+    document.getElementById(
+      "pitchDisplay"
+    );
+
+
+  pitchDisplay.style.display =
+    "block";
+
+
+  /*
+  Check whether the browser
+  loaded our audio engine.
+  */
+
+
+  if (
+    typeof NovaAudioEngine ===
+    "undefined"
+  ) {
+
+
+    feedback.textContent =
+
+      "Nova's audio engine could not load. Check that audio-engine.js is in the same folder as index.html.";
+
+
+    return;
+
+  }
+
+
+  if (novaListening) {
+
+    return;
+
+  }
+
+
+  try {
+
+
+    novaAudio =
+      new NovaAudioEngine();
+
+
+    await novaAudio.start();
+
+
+    novaListening =
+      true;
+
+
+    document.getElementById(
+      "listenButton"
+    ).textContent =
+      "● Nova is listening";
+
+
+    feedback.textContent =
+
+      "I'm listening. Play one guitar string clearly.";
+
+
+    listenForPitch();
+
+
+  }
+
+
+  catch (error) {
+
+
+    feedback.textContent =
+
+      "I need microphone permission before I can hear your guitar. Allow microphone access and try again.";
+
+
+    console.error(
+      error
+    );
+
+
+  }
+
+
+}
+
+
+
+/*
+====================================
+LIVE PITCH LOOP
+====================================
+*/
+
+
+function listenForPitch() {
+
+
+  if (
+    !novaListening ||
+    !novaAudio
+  ) {
+
+    return;
+
+  }
+
+
+  const result =
+    novaAudio.detectPitch();
+
+
+  if (result) {
+
+
+    document.getElementById(
+      "detectedNote"
+    ).textContent =
+
+      result.note +
+      result.octave;
+
+
+    document.getElementById(
+      "detectedFrequency"
+    ).textContent =
+
+      result.frequency +
+      " Hz";
+
+
+    document.getElementById(
+      "tuningState"
+    ).textContent =
+
+      result.tuning;
+
+
+    document.getElementById(
+      "centsDisplay"
+    ).textContent =
+
+      result.cents +
+      " cents";
+
+
+    document.getElementById(
+      "novaFeedback"
+    ).textContent =
+
+      NovaAI.pitchFeedback(
+        result
+      );
+
+
+  }
+
+
+  requestAnimationFrame(
+    listenForPitch
+  );
+
+
+}
+
+
 </script>
-<script src="audio-engine.js"></script>
+
+
 </body>
 </html>
