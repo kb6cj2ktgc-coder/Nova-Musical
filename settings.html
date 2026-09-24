@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Settings | Nova Musical</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#080c0e;
+ --panel:#111719;
+ --border:rgba(255,255,255,.09);
+ --text:#f5f8f7;
+ --muted:#929d99;
+ --accent:#55e6a5;
+}
+html,body{
+ margin:0;min-height:100%;
+ background:var(--bg);color:var(--text);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.page{
+ width:min(100%,600px);
+ margin:auto;
+ padding:max(25px,env(safe-area-inset-top)) 20px 40px;
+}
+a{color:var(--accent);text-decoration:none}
+.back{font-size:13px;font-weight:800}
+h1{margin:35px 0 7px;font-size:34px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:28px}
+.section-title{
+ margin:27px 0 10px;
+ color:var(--muted);
+ font-size:11px;
+ font-weight:900;
+ letter-spacing:1px;
+ text-transform:uppercase;
+}
+.row{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ padding:18px;
+ margin-bottom:10px;
+ border:1px solid var(--border);
+ border-radius:17px;
+ background:var(--panel);
+}
+.row-title{font-weight:800}
+.row-sub{
+ margin-top:4px;
+ color:var(--muted);
+ font-size:11px;
+}
+.arrow{color:var(--accent);font-size:20px}
+.colors{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+ margin-top:10px;
+}
+.color{
+ min-height:55px;
+ border:1px solid var(--border);
+ border-radius:14px;
+ background:var(--panel);
+ color:var(--text);
+ font-weight:800;
+}
+.color.selected{
+ border-color:var(--accent);
+}
+.logout{
+ width:100%;
+ min-height:53px;
+ margin-top:30px;
+ border:1px solid rgba(255,100,100,.25);
+ border-radius:15px;
+ background:rgba(255,100,100,.05);
+ color:#ff8d8d;
+ font-weight:900;
+}
+.footer{
+ margin-top:40px;
+ text-align:center;
+ color:#58625f;
+ font-size:10px;
+ line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+<a class="back" href="guitar.html">← Back to Nova</a>
+
+<h1>Settings</h1>
+<div class="sub">Make Nova feel like yours.</div>
+
+<div class="section-title">Account</div>
+
+<a class="row" href="profile.html">
+ <div>
+  <div class="row-title">Profile</div>
+  <div class="row-sub">View your Nova account</div>
+ </div>
+ <div class="arrow">›</div>
+</a>
+
+<div class="section-title">Customize</div>
+
+<div class="row">
+ <div>
+  <div class="row-title">Appearance</div>
+  <div class="row-sub">Dark mode is the current Nova default</div>
+ </div>
+</div>
+
+<div class="colors">
+ <button class="color" data-color="#55e6a5">Green</button>
+ <button class="color" data-color="#4da3ff">Blue</button>
+ <button class="color" data-color="#ff5c68">Red</button>
+ <button class="color" data-color="#a879ff">Purple</button>
+ <button class="color" data-color="#ff8f4d">Orange</button>
+ <button class="color" data-color="#ff6fb5">Pink</button>
+</div>
+
+<button id="logout" class="logout">
+LOG OUT
+</button>
+
+<div class="footer">
+© 2026 Nova Musical<br>
+Andrea Fredy • Aryan Jude Fredy
+</div>
+
+</main>
+
+<script>
+const client=supabase.createClient(
+ "https://docyfgbghwncylldlcfs.supabase.co",
+ "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk"
+);
+
+async function protect(){
+ const {data:{user}}=
+  await client.auth.getUser();
+
+ if(!user){
+  window.location.replace("login.html");
+ }
+}
+
+protect();
+
+const saved=
+ localStorage.getItem("nova_accent") ||
+ "#55e6a5";
+
+document.documentElement.style
+ .setProperty("--accent",saved);
+
+document.querySelectorAll(".color")
+.forEach(button=>{
+
+ if(button.dataset.color===saved){
+  button.classList.add("selected");
+ }
+
+ button.addEventListener("click",()=>{
+
+  const color=button.dataset.color;
+
+  localStorage.setItem(
+   "nova_accent",
+   color
+  );
+
+  document.documentElement.style
+   .setProperty("--accent",color);
+
+  document.querySelectorAll(".color")
+   .forEach(x=>x.classList.remove("selected"));
+
+  button.classList.add("selected");
+ });
+});
+
+document.getElementById("logout")
+.addEventListener("click",async()=>{
+
+ await client.auth.signOut({
+  scope:"local"
+ });
+
+ window.location.replace("index.html");
+});
+</script>
+
+</body>
+</html>
