@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#070909">
 
 <title>Create Account | Nova Musical</title>
@@ -10,9 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 :root{
   --bg:#070909;
@@ -57,8 +55,7 @@ body:before{
   position:relative;
   width:100%;
   max-width:520px;
-  padding:max(30px,env(safe-area-inset-top)) 22px
-          max(35px,env(safe-area-inset-bottom));
+  padding:max(30px,env(safe-area-inset-top)) 22px max(35px,env(safe-area-inset-bottom));
 }
 
 .brand{
@@ -72,9 +69,7 @@ body:before{
   letter-spacing:2px;
 }
 
-.logo span{
-  color:var(--green);
-}
+.logo span{color:var(--green)}
 
 .badge{
   display:inline-block;
@@ -110,9 +105,7 @@ h1{
   margin-bottom:27px;
 }
 
-.field{
-  margin-bottom:17px;
-}
+.field{margin-bottom:17px}
 
 label{
   display:block;
@@ -150,9 +143,7 @@ input:focus{
   color:var(--muted);
 }
 
-#username{
-  padding-left:32px;
-}
+#username{padding-left:32px}
 
 .hint{
   margin:7px 2px 0;
@@ -160,7 +151,7 @@ input:focus{
   font-size:11px;
 }
 
-button{
+.submit{
   width:100%;
   min-height:54px;
   border:0;
@@ -172,9 +163,7 @@ button{
   cursor:pointer;
 }
 
-button:disabled{
-  opacity:.55;
-}
+.submit:disabled{opacity:.55}
 
 .message{
   display:none;
@@ -188,7 +177,7 @@ button:disabled{
 .message.error{
   display:block;
   color:#ffaaaa;
-  border:1px solid rgba(255,100,100,.20);
+  border:1px solid rgba(255,100,100,.2);
   background:rgba(255,100,100,.06);
 }
 
@@ -238,87 +227,105 @@ a{
 
 <section class="card">
 
-  <h1>Create your account</h1>
+<h1>Create your account</h1>
 
-  <p class="subtitle">
-    Join Nova Musical and begin your learning journey.
-  </p>
+<p class="subtitle">
+  Join Nova Musical and begin your learning journey.
+</p>
 
-  <form id="form">
+<form id="signupForm">
 
-    <div class="field">
-      <label for="name">Name</label>
-      <input
-        id="name"
-        type="text"
-        autocomplete="name"
-        placeholder="Your name"
-        maxlength="60"
-        required
-      >
-    </div>
+<div class="field">
+  <label for="name">Name</label>
 
-    <div class="field">
-      <label for="username">Username</label>
+  <input
+    id="name"
+    type="text"
+    autocomplete="name"
+    placeholder="Your name"
+    maxlength="60"
+    required
+  >
+</div>
 
-      <div class="username">
-        <span>@</span>
+<div class="field">
 
-        <input
-          id="username"
-          type="text"
-          autocomplete="username"
-          placeholder="username"
-          maxlength="24"
-          autocapitalize="none"
-          spellcheck="false"
-          required
-        >
-      </div>
+  <label for="username">Username</label>
 
-      <div class="hint">
-        3–24 characters. Letters, numbers and underscores.
-      </div>
-    </div>
+  <div class="username">
 
-    <div class="field">
-      <label for="email">Email</label>
+    <span>@</span>
 
-      <input
-        id="email"
-        type="email"
-        autocomplete="email"
-        placeholder="you@example.com"
-        autocapitalize="none"
-        required
-      >
-    </div>
+    <input
+      id="username"
+      type="text"
+      autocomplete="username"
+      placeholder="username"
+      maxlength="24"
+      autocapitalize="none"
+      spellcheck="false"
+      required
+    >
 
-    <div class="field">
-      <label for="password">Password</label>
-
-      <input
-        id="password"
-        type="password"
-        autocomplete="new-password"
-        placeholder="At least 8 characters"
-        minlength="8"
-        required
-      >
-    </div>
-
-    <button id="submit" type="submit">
-      CREATE ACCOUNT
-    </button>
-
-    <div id="message" class="message"></div>
-
-  </form>
-
-  <div class="login">
-    Already have an account?
-    <a href="login.html">Log in</a>
   </div>
+
+  <div class="hint">
+    3–24 characters. Letters, numbers and underscores.
+  </div>
+
+</div>
+
+<div class="field">
+
+  <label for="email">Email</label>
+
+  <input
+    id="email"
+    type="email"
+    autocomplete="email"
+    placeholder="you@example.com"
+    autocapitalize="none"
+    required
+  >
+
+</div>
+
+<div class="field">
+
+  <label for="password">Password</label>
+
+  <input
+    id="password"
+    type="password"
+    autocomplete="new-password"
+    placeholder="At least 8 characters"
+    minlength="8"
+    required
+  >
+
+</div>
+
+<button
+  id="submitButton"
+  class="submit"
+  type="submit"
+>
+  CREATE ACCOUNT
+</button>
+
+<div
+  id="message"
+  class="message"
+  role="status"
+  aria-live="polite"
+></div>
+
+</form>
+
+<div class="login">
+  Already have an account?
+  <a href="login.html">Log in</a>
+</div>
 
 </section>
 
@@ -350,9 +357,8 @@ const novaSupabase =
     }
   );
 
-
 const form =
-  document.getElementById("form");
+  document.getElementById("signupForm");
 
 const usernameInput =
   document.getElementById("username");
@@ -360,20 +366,21 @@ const usernameInput =
 const message =
   document.getElementById("message");
 
-const submit =
-  document.getElementById("submit");
+const submitButton =
+  document.getElementById("submitButton");
 
 
-/* Keep usernames clean */
+usernameInput.addEventListener(
+  "input",
+  () => {
 
-usernameInput.addEventListener("input",()=>{
+    usernameInput.value =
+      usernameInput.value
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g,"");
 
-  usernameInput.value =
-    usernameInput.value
-      .toLowerCase()
-      .replace(/[^a-z0-9_]/g,"");
-
-});
+  }
+);
 
 
 function showMessage(text,type){
@@ -382,11 +389,8 @@ function showMessage(text,type){
 
   message.className =
     "message " + type;
-
 }
 
-
-/* If already signed in, go straight to Nova */
 
 async function checkExistingSession(){
 
@@ -398,21 +402,18 @@ async function checkExistingSession(){
   if(session){
 
     window.location.replace(
-      "guitar.html"
+      "instruments.html"
     );
 
   }
-
 }
 
 checkExistingSession();
 
 
-/* CREATE ACCOUNT */
-
 form.addEventListener(
   "submit",
-  async(event)=>{
+  async(event) => {
 
     event.preventDefault();
 
@@ -423,8 +424,7 @@ form.addEventListener(
         .trim();
 
     const username =
-      usernameInput
-        .value
+      usernameInput.value
         .trim()
         .toLowerCase();
 
@@ -449,13 +449,10 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
-    if(
-      !/^[a-z0-9_]{3,24}$/.test(username)
-    ){
+    if(!/^[a-z0-9_]{3,24}$/.test(username)){
 
       showMessage(
         "Username must be 3–24 characters using letters, numbers or underscores.",
@@ -463,7 +460,6 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -475,13 +471,12 @@ form.addEventListener(
       );
 
       return;
-
     }
 
 
-    submit.disabled = true;
+    submitButton.disabled = true;
 
-    submit.textContent =
+    submitButton.textContent =
       "CREATING ACCOUNT...";
 
 
@@ -521,43 +516,40 @@ form.addEventListener(
       }
 
 
-      /*
-       Confirm Email should be OFF.
-
-       That means Supabase should give us
-       an authenticated session immediately.
-      */
-
       if(!data.session){
 
-        showMessage(
-          "Your account was created, but Nova could not sign you in automatically. Please go to Log In.",
-          "error"
+        throw new Error(
+          "Your account was created, but Nova couldn't sign you in automatically."
         );
-
-        return;
 
       }
 
 
       showMessage(
-        "Account created. Opening Nova...",
+        "Account created. Let's choose your instrument...",
         "success"
       );
 
 
-      setTimeout(()=>{
+      setTimeout(
+        () => {
 
-        window.location.replace(
-          "guitar.html"
-        );
+          window.location.replace(
+            "instruments.html"
+          );
 
-      },500);
+        },
+        500
+      );
 
 
     }catch(error){
 
-      console.error(error);
+      console.error(
+        "Nova signup error:",
+        error
+      );
+
 
       let text =
         error?.message ||
@@ -598,9 +590,9 @@ form.addEventListener(
 
     }finally{
 
-      submit.disabled = false;
+      submitButton.disabled = false;
 
-      submit.textContent =
+      submitButton.textContent =
         "CREATE ACCOUNT";
 
     }
