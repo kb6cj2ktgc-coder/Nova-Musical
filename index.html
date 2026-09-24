@@ -2,20 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#090b10">
 
-<title>Nova Musical — Learn with Nova AI</title>
+<title>Nova Musical — Guitar Tuner</title>
 
 <style>
+:root{
+  --bg:#090b10;
+  --panel:#12151c;
+  --panel2:#191d26;
+  --text:#f7f7fb;
+  --muted:#9298a8;
+  --purple:#9b7cff;
+  --cyan:#27dfc4;
 
-* {
-  box-sizing: border-box;
+  --red:#ff4359;
+  --orange:#ff8b3d;
+  --yellow:#f2d64b;
+  --green:#2ee68a;
+  --grey:#4c5260;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
+*{
+  box-sizing:border-box;
+}
 
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -24,533 +40,667 @@ body {
     Arial,
     sans-serif;
 
-  color: white;
+  background:
+    radial-gradient(circle at 50% -10%, #2b2251 0%, #12141e 36%, #090b10 72%);
+}
+
+button{
+  font:inherit;
+}
+
+.app{
+  width:min(100%,760px);
+  margin:auto;
+  padding:18px 15px 50px;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+
+.logo span{
+  color:var(--purple);
+}
+
+.ai{
+  padding:7px 11px;
+  border:1px solid #ffffff18;
+  border-radius:999px;
+  color:#aeb4c2;
+  font-size:11px;
+}
+
+.intro{
+  margin:12px 2px 22px;
+}
+
+.intro small{
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.intro h1{
+  margin:7px 0 6px;
+  font-size:36px;
+  line-height:1.05;
+}
+
+.intro p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+
+/* MAIN TUNER */
+
+.tuner{
+  overflow:hidden;
+  border:1px solid #ffffff17;
+  border-radius:28px;
+  background:rgba(15,18,25,.97);
+  box-shadow:0 25px 70px #0008;
+}
+
+.tuner-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:19px 19px 15px;
+}
+
+.tuner-header strong{
+  display:block;
+  font-size:18px;
+}
+
+.tuner-header small{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+}
+
+.auto{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+
+/* TUNING SCALE */
+
+.meter{
+  position:relative;
+  height:255px;
+  overflow:hidden;
+  border-top:1px solid #ffffff0b;
+  border-bottom:1px solid #ffffff0b;
 
   background:
-    radial-gradient(
-      circle at top,
-      #2a2058 0%,
-      #121526 40%,
-      #080a12 78%
-    );
+    linear-gradient(#ffffff08 1px,transparent 1px),
+    linear-gradient(90deg,#ffffff08 1px,transparent 1px);
+
+  background-size:34px 34px;
 }
 
-button {
-  font-family: inherit;
+.center-line{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:2px;
+  transform:translateX(-50%);
+  background:#ffffff1e;
 }
 
-nav {
-  max-width: 1150px;
-  margin: auto;
-
-  padding: 24px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.flat,
+.sharp{
+  position:absolute;
+  top:31px;
+  color:#bec3ce;
+  font-size:43px;
 }
 
-.brand {
-  font-size: 21px;
-  font-weight: 900;
-  letter-spacing: 1px;
+.flat{
+  left:21px;
 }
 
-.brand span {
-  color: #a88cff;
+.sharp{
+  right:21px;
 }
 
-.status {
-  padding: 8px 13px;
-
-  border-radius: 30px;
-  border: 1px solid #ffffff20;
-
-  color: #aeb2c1;
-
-  font-size: 12px;
+.marker{
+  position:absolute;
+  left:50%;
+  top:65px;
+  transform:translateX(-50%);
+  transition:left .12s ease-out;
 }
 
-main {
-  width: min(
-    1100px,
-    calc(100% - 36px)
-  );
+.cents{
+  width:72px;
+  height:72px;
 
-  margin: auto;
+  display:grid;
+  place-items:center;
 
-  padding:
-    65px
-    0
-    80px;
-}
+  border:4px solid var(--grey);
+  border-radius:50%;
 
-.hero {
-  text-align: center;
-}
+  background:#151820;
 
-.eyebrow {
-  margin-bottom: 18px;
-
-  color: #a88cff;
-
-  font-size: 12px;
-  font-weight: 900;
-
-  letter-spacing: 3px;
-}
-
-h1 {
-  max-width: 900px;
-
-  margin:
-    0
-    auto
-    20px;
-
-  font-size:
-    clamp(
-      44px,
-      8vw,
-      78px
-    );
-
-  line-height: 1;
-
-  letter-spacing: -3px;
-}
-
-h1 span {
-  background:
-    linear-gradient(
-      90deg,
-      #a47dff,
-      #24e0cb
-    );
-
-  background-clip: text;
-  -webkit-background-clip: text;
-
-  color: transparent;
-}
-
-.subtitle {
-  max-width: 650px;
-
-  margin:
-    0
-    auto
-    48px;
-
-  color: #a7abba;
-
-  font-size: 18px;
-
-  line-height: 1.6;
-}
-
-
-/* INSTRUMENT CARDS */
-
-.instrument-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      1fr
-    );
-
-  gap: 16px;
-}
-
-.instrument {
-
-  min-height: 205px;
-
-  padding:
-    30px
-    16px;
-
-  border:
-    1px solid
-    #ffffff18;
-
-  border-radius: 25px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #151927,
-      #10131f
-    );
-
-  color: white;
-
-  cursor: pointer;
+  font-size:24px;
+  font-weight:900;
 
   transition:
-    .2s;
+    border-color .15s,
+    box-shadow .15s,
+    color .15s;
 }
 
-.instrument:hover,
-.instrument.active {
+.arrow{
+  width:0;
+  height:0;
 
-  transform:
-    translateY(-5px);
+  margin:-2px auto 0;
 
-  border-color:
-    #9477ff;
-
-  background:
-    #1a1930;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:14px solid var(--grey);
 }
 
-.instrument-icon {
+.target-note{
+  position:absolute;
 
-  display: block;
+  top:158px;
+  left:50%;
 
-  margin-bottom: 15px;
+  transform:translateX(-50%);
 
-  font-size: 45px;
+  width:64px;
+  height:64px;
+
+  display:grid;
+  place-items:center;
+
+  border:3px solid #303541;
+  border-radius:50%;
+
+  background:#12151c;
+
+  font-size:25px;
+  font-weight:900;
 }
 
-.instrument strong {
+.direction{
+  position:absolute;
 
-  display: block;
+  top:170px;
+  left:calc(50% + 43px);
 
-  font-size: 21px;
+  padding:8px 12px;
+
+  border-radius:13px;
+
+  background:#292e38;
+
+  font-size:14px;
+
+  white-space:nowrap;
 }
 
-.instrument small {
+.start-text{
+  position:absolute;
 
-  display: block;
+  left:50%;
+  top:165px;
 
-  margin-top: 9px;
+  transform:translate(-50%,-50%);
 
-  color: #898e9e;
-}
+  width:max-content;
+  max-width:85%;
 
+  padding:13px 20px;
 
-/* NOVA COACH */
+  border-radius:999px;
 
-.card {
+  background:#292e38;
 
-  display: none;
+  color:#f1f2f5;
 
-  max-width: 650px;
-
-  margin:
-    30px
-    auto
-    0;
-
-  padding: 24px;
-
-  border:
-    1px solid
-    #ffffff18;
-
-  border-radius: 24px;
-
-  background:
-    #111522;
-
-  text-align: left;
-}
-
-.nova-title {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  color: #aa91ff;
-
-  font-weight: 900;
-}
-
-.nova-orb {
-
-  width: 38px;
-  height: 38px;
-
-  display: grid;
-
-  place-items: center;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8b67ff,
-      #20d9c5
-    );
-
-  color: white;
-}
-
-#novaMessage {
-
-  margin-bottom: 0;
-
-  color: #bec1ce;
-
-  line-height: 1.6;
+  text-align:center;
 }
 
 
-/* MODEL STATUS */
+/* GUITAR */
 
-.model-box {
-
-  margin-top: 17px;
-
-  padding: 13px;
-
-  border-radius: 14px;
-
-  background: #0c101a;
-
-  color: #898f9f;
-
-  font-size: 12px;
-
-  line-height: 1.5;
+.guitar-section{
+  padding:25px 13px 28px;
 }
 
-.model-ready {
-  color: #66e4c9;
+.guitar{
+  position:relative;
+
+  width:min(100%,430px);
+  height:410px;
+
+  margin:auto;
 }
 
-.model-error {
-  color: #ff9e9e;
-}
+.headstock{
+  position:absolute;
 
+  left:50%;
+  top:5px;
 
-/* TUNER */
+  transform:translateX(-50%);
 
-#tuner {
+  width:170px;
+  height:335px;
 
-  text-align: center;
-}
+  border:3px solid #5d4638;
 
-#tuner h2 {
-
-  margin:
-    5px
-    0
-    8px;
-
-  font-size: 30px;
-}
-
-.tuner-description {
-
-  color: #989dac;
-
-  line-height: 1.5;
-}
-
-.listen-button {
-
-  margin-top: 10px;
-
-  padding:
-    16px
-    27px;
-
-  border: 0;
-
-  border-radius: 30px;
+  border-radius:
+    65px 65px
+    32px 32px;
 
   background:
     linear-gradient(
       90deg,
-      #9673ff,
-      #22dcca
+      #583626,
+      #89583b 48%,
+      #573324
     );
 
-  color: white;
-
-  font-size: 16px;
-  font-weight: 800;
-
-  cursor: pointer;
+  box-shadow:
+    inset 0 0 30px #0006,
+    0 10px 35px #0006;
 }
 
-.pitch-display {
+.headstock::after{
+  content:"NOVA";
 
-  display: none;
+  position:absolute;
 
-  max-width: 390px;
+  top:112px;
+  left:50%;
 
-  margin:
-    28px
-    auto
-    0;
+  transform:
+    translateX(-50%)
+    rotate(-90deg);
 
-  padding:
-    30px
-    20px;
+  color:#ffffff55;
 
-  border:
-    1px solid
-    #ffffff17;
+  font-size:19px;
+  font-weight:900;
 
-  border-radius: 25px;
+  letter-spacing:5px;
+}
+
+.neck{
+  position:absolute;
+
+  left:50%;
+  bottom:0;
+
+  transform:translateX(-50%);
+
+  width:83px;
+  height:112px;
+
+  border-left:3px solid #5d4638;
+  border-right:3px solid #5d4638;
 
   background:
-    #171b29;
+    linear-gradient(
+      90deg,
+      #39261e,
+      #69442f,
+      #39261e
+    );
 }
 
-.note {
+.neck::before{
+  content:"";
 
-  font-size: 72px;
-
-  font-weight: 900;
-
-  letter-spacing: -3px;
-}
-
-.frequency {
-
-  margin-top: 4px;
-
-  color: #8f94a5;
-}
-
-.tuning-state {
-
-  margin-top: 20px;
-
-  font-size: 23px;
-
-  font-weight: 900;
-}
-
-.cents {
-
-  margin-top: 7px;
-
-  color: #898e9f;
-
-  font-size: 13px;
-}
-
-.ai-decision {
-
-  margin-top: 20px;
-
-  padding: 14px;
-
-  border-radius: 15px;
+  position:absolute;
+  left:8px;
+  right:8px;
+  top:0;
+  bottom:0;
 
   background:
-    #0c101a;
-}
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 8px,
+      #c7c7c7 9px,
+      transparent 10px
+    );
 
-.ai-label {
-
-  color: #858b9c;
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-  letter-spacing: 2px;
-}
-
-#novaDecision {
-
-  margin-top: 7px;
-
-  color: #b49dff;
-
-  font-weight: 800;
-}
-
-#novaFeedback {
-
-  margin-top: 14px;
-
-  color: #c0c3cf;
-
-  line-height: 1.5;
+  opacity:.8;
 }
 
 
-/* COMING SOON */
+/* STRING BUTTONS */
 
-#comingSoon {
+.string{
+  position:absolute;
 
-  text-align: center;
+  width:62px;
+  height:62px;
 
-  color: #aeb2c1;
+  border:2px solid #343946;
+  border-radius:50%;
+
+  background:#252a34;
+
+  color:white;
+
+  font-size:24px;
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:
+    background .18s,
+    border-color .18s,
+    box-shadow .18s,
+    transform .18s;
+}
+
+.string:active{
+  transform:scale(.94);
+}
+
+.string.active{
+  border-color:#ffffff;
+  box-shadow:0 0 18px #ffffff33;
+}
+
+.string.tuned{
+  background:var(--green) !important;
+  border-color:var(--green) !important;
+  color:#06150d;
+  box-shadow:0 0 23px #2ee68a66;
+}
+
+.string.red{
+  border-color:var(--red);
+  background:#421a22;
+}
+
+.string.orange{
+  border-color:var(--orange);
+  background:#422b1a;
+}
+
+.string.yellow{
+  border-color:var(--yellow);
+  background:#403b1a;
 }
 
 
-footer {
+/* POSITIONS LIKE A REAL HEADSTOCK */
 
-  padding:
-    30px
-    20px
-    45px;
+#D{
+  left:7px;
+  top:48px;
+}
 
-  text-align: center;
+#G{
+  right:7px;
+  top:48px;
+}
 
-  color: #606575;
+#A{
+  left:7px;
+  top:150px;
+}
 
-  font-size: 12px;
+#B{
+  right:7px;
+  top:150px;
+}
+
+#E2{
+  left:7px;
+  top:252px;
+}
+
+#E4{
+  right:7px;
+  top:252px;
 }
 
 
-/* MOBILE */
+/* PEGS */
 
-@media (
-  max-width: 750px
-) {
+.peg{
+  position:absolute;
 
-  main {
-    padding-top: 40px;
+  width:37px;
+  height:48px;
+
+  border:2px solid #858b94;
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #777,
+      #e2e5e7,
+      #777
+    );
+
+  transition:
+    background .18s,
+    box-shadow .18s;
+}
+
+.peg.tuned{
+  background:var(--green);
+  border-color:#7affb6;
+  box-shadow:0 0 18px #2ee68a88;
+}
+
+.peg.bad{
+  animation:pulseBad .75s infinite;
+}
+
+@keyframes pulseBad{
+
+  0%,100%{
+    background:#555b65;
+    box-shadow:none;
   }
 
-  h1 {
-    letter-spacing: -2px;
+  50%{
+    background:var(--red);
+    box-shadow:0 0 17px #ff435988;
+  }
+}
+
+#pegD{
+  left:86px;
+  top:55px;
+}
+
+#pegG{
+  right:86px;
+  top:55px;
+}
+
+#pegA{
+  left:86px;
+  top:157px;
+}
+
+#pegB{
+  right:86px;
+  top:157px;
+}
+
+#pegE2{
+  left:86px;
+  top:259px;
+}
+
+#pegE4{
+  right:86px;
+  top:259px;
+}
+
+
+/* CONTROLS */
+
+.controls{
+  padding:0 18px 22px;
+}
+
+.listen{
+  width:100%;
+
+  border:0;
+  border-radius:18px;
+
+  padding:16px;
+
+  color:#08110e;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--purple),
+      var(--cyan)
+    );
+
+  font-weight:900;
+  font-size:16px;
+
+  cursor:pointer;
+}
+
+.listen.listening{
+  color:white;
+  background:#252a34;
+  border:1px solid #3a404d;
+}
+
+.frequency{
+  margin-top:13px;
+
+  min-height:20px;
+
+  color:var(--muted);
+
+  font-size:13px;
+
+  text-align:center;
+}
+
+.progress{
+  margin-top:15px;
+
+  display:flex;
+  justify-content:center;
+  gap:7px;
+}
+
+.progress i{
+  width:9px;
+  height:9px;
+
+  border-radius:50%;
+
+  background:#3b404b;
+}
+
+.progress i.done{
+  background:var(--green);
+  box-shadow:0 0 8px #2ee68a66;
+}
+
+.complete{
+  display:none;
+
+  margin-top:16px;
+
+  padding:14px;
+
+  border:1px solid #2ee68a55;
+  border-radius:15px;
+
+  background:#2ee68a13;
+
+  color:var(--green);
+
+  font-weight:900;
+
+  text-align:center;
+}
+
+.tip{
+  margin-top:18px;
+
+  color:#7e8492;
+
+  font-size:12px;
+
+  line-height:1.5;
+
+  text-align:center;
+}
+
+
+@media(max-width:500px){
+
+  .app{
+    padding-left:10px;
+    padding-right:10px;
   }
 
-  .instrument-grid {
-
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
+  .guitar{
+    height:390px;
   }
 
-  .instrument {
-
-    min-height: 170px;
-
-    padding:
-      23px
-      10px;
+  .headstock{
+    width:145px;
+    height:320px;
   }
 
-  .instrument-icon {
-
-    font-size: 38px;
+  .string{
+    width:57px;
+    height:57px;
   }
 
-  .status {
-
-    display: none;
+  #pegD,
+  #pegA,
+  #pegE2{
+    left:75px;
   }
 
+  #pegG,
+  #pegB,
+  #pegE4{
+    right:75px;
+  }
+
+  .direction{
+    font-size:13px;
+  }
 }
 
 </style>
@@ -559,1368 +709,1582 @@ footer {
 
 <body>
 
+<div class="app">
 
-<nav>
+<header>
+  <div class="logo">
+    NOVA <span>MUSICAL</span>
+  </div>
 
-  <div class="brand">
+  <div class="ai">
+    NOVA AI • TUNER
+  </div>
+</header>
 
-    <span>NOVA</span>
-    MUSICAL
+
+<section class="intro">
+
+  <small>GUITAR • STANDARD TUNING</small>
+
+  <h1>Tune your guitar.</h1>
+
+  <p>
+    Play any open string. Nova will detect the string
+    and guide you toward the centre.
+  </p>
+
+</section>
+
+
+<section class="tuner">
+
+  <div class="tuner-header">
+
+    <div>
+      <strong>Guitar 6-string</strong>
+      <small>E A D G B E • Standard</small>
+    </div>
+
+    <div class="auto">
+      AUTO
+    </div>
 
   </div>
 
 
-  <div class="status">
+  <div class="meter">
 
-    Nova AI • v0.1
+    <div class="center-line"></div>
+
+    <div class="flat">♭</div>
+    <div class="sharp">♯</div>
+
+    <div
+      class="marker"
+      id="marker"
+      style="display:none"
+    >
+      <div
+        class="cents"
+        id="cents"
+      >
+        0
+      </div>
+
+      <div
+        class="arrow"
+        id="arrow"
+      ></div>
+    </div>
+
+
+    <div
+      class="target-note"
+      id="targetNote"
+      style="display:none"
+    >
+      E
+    </div>
+
+
+    <div
+      class="direction"
+      id="direction"
+      style="display:none"
+    >
+      In tune
+    </div>
+
+
+    <div
+      class="start-text"
+      id="startText"
+    >
+      Tap Start Tuning, then play any string
+    </div>
 
   </div>
 
-</nav>
+
+  <div class="guitar-section">
+
+    <div class="guitar">
+
+      <div class="headstock"></div>
+
+      <div class="neck"></div>
 
 
+      <button
+        class="string"
+        id="D"
+        data-key="D3"
+      >
+        D
+      </button>
 
-<main>
+      <button
+        class="string"
+        id="G"
+        data-key="G3"
+      >
+        G
+      </button>
 
+      <button
+        class="string"
+        id="A"
+        data-key="A2"
+      >
+        A
+      </button>
 
-<section class="hero">
+      <button
+        class="string"
+        id="B"
+        data-key="B3"
+      >
+        B
+      </button>
 
+      <button
+        class="string"
+        id="E2"
+        data-key="E2"
+      >
+        E
+      </button>
 
-<div class="eyebrow">
-
-  YOUR PERSONAL MUSIC COACH
-
-</div>
-
-
-<h1>
-
-  What do you want to
-
-  <span>
-    play?
-  </span>
-
-</h1>
-
-
-<p class="subtitle">
-
-  Choose your instrument.
-
-  Nova will listen,
-  analyse your playing,
-  and begin building
-  your personal learning path.
-
-</p>
-
-
-
-<div class="instrument-grid">
-
-
-<button
-  class="instrument"
-  onclick="
-    chooseInstrument(
-      'guitar',
-      this
-    )
-  "
->
-
-  <span class="instrument-icon">
-    🎸
-  </span>
-
-  <strong>
-    Guitar
-  </strong>
-
-  <small>
-    Listen • Tune • Learn
-  </small>
-
-</button>
+      <button
+        class="string"
+        id="E4"
+        data-key="E4"
+      >
+        E
+      </button>
 
 
+      <div
+        class="peg"
+        id="pegD"
+      ></div>
 
-<button
-  class="instrument"
-  onclick="
-    chooseInstrument(
-      'piano',
-      this
-    )
-  "
->
+      <div
+        class="peg"
+        id="pegG"
+      ></div>
 
-  <span class="instrument-icon">
-    🎹
-  </span>
+      <div
+        class="peg"
+        id="pegA"
+      ></div>
 
-  <strong>
-    Piano
-  </strong>
+      <div
+        class="peg"
+        id="pegB"
+      ></div>
 
-  <small>
-    Notes • Chords • Songs
-  </small>
+      <div
+        class="peg"
+        id="pegE2"
+      ></div>
 
-</button>
+      <div
+        class="peg"
+        id="pegE4"
+      ></div>
 
+    </div>
 
-
-<button
-  class="instrument"
-  onclick="
-    chooseInstrument(
-      'singing',
-      this
-    )
-  "
->
-
-  <span class="instrument-icon">
-    🎤
-  </span>
-
-  <strong>
-    Singing
-  </strong>
-
-  <small>
-    Pitch • Voice • Songs
-  </small>
-
-</button>
-
-
-
-<button
-  class="instrument"
-  onclick="
-    chooseInstrument(
-      'bass',
-      this
-    )
-  "
->
-
-  <span class="instrument-icon">
-    🎸
-  </span>
-
-  <strong>
-    Bass
-  </strong>
-
-  <small>
-    Timing • Groove • Songs
-  </small>
-
-</button>
-
-
-</div>
-
-
-
-<section
-  id="novaCoach"
-  class="card"
->
-
-
-<div class="nova-title">
-
-  <div class="nova-orb">
-    ✦
   </div>
 
-  Nova AI
 
-</div>
+  <div class="controls">
 
-
-<p id="novaMessage">
-</p>
-
-
-<div
-  id="modelStatus"
-  class="model-box"
->
-
-  Loading Nova's trained model...
-
-</div>
+    <button
+      class="listen"
+      id="listen"
+    >
+      🎙 Start Tuning
+    </button>
 
 
-</section>
+    <div
+      class="frequency"
+      id="frequency"
+    >
+      Microphone is off
+    </div>
 
 
-
-<section
-  id="tuner"
-  class="card"
->
-
-
-<h2>
-  Nova Guitar Tuner
-</h2>
-
-
-<p class="tuner-description">
-
-  Play one string at a time.
-
-  Nova will listen
-  and analyse your pitch.
-
-</p>
+    <div
+      class="progress"
+      id="progress"
+    >
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+    </div>
 
 
-<button
-  id="listenButton"
-  class="listen-button"
-  onclick="
-    startNovaListening()
-  "
->
-
-  🎙 Start Listening
-
-</button>
+    <div
+      class="complete"
+      id="complete"
+    >
+      ✓ Guitar tuned
+    </div>
 
 
+    <div class="tip">
+      Tune using open strings. Green strings stay completed
+      until you leave or reload this tuner.
+    </div>
 
-<div
-  id="pitchDisplay"
-  class="pitch-display"
->
-
-
-<div
-  id="detectedNote"
-  class="note"
->
-
-  —
-
-</div>
-
-
-<div
-  id="detectedFrequency"
-  class="frequency"
->
-
-  Waiting for a note...
-
-</div>
-
-
-<div
-  id="tuningState"
-  class="tuning-state"
->
-
-  Play a string
-
-</div>
-
-
-<div
-  id="centsDisplay"
-  class="cents"
->
-</div>
-
-
-
-<div class="ai-decision">
-
-
-<div class="ai-label">
-
-  NOVA AI DECISION
-
-</div>
-
-
-<div id="novaDecision">
-
-  Waiting...
-
-</div>
-
-
-</div>
-
-
-
-<div id="novaFeedback">
-
-  Nova is ready.
-
-</div>
-
-
-</div>
-
+  </div>
 
 </section>
 
-
-
-<section
-  id="comingSoon"
-  class="card"
->
-
-
-<strong id="comingSoonTitle">
-</strong>
-
-
-<p>
-
-  Nova is learning this
-  instrument next.
-
-  Guitar is being developed first.
-
-</p>
-
-
-</section>
-
-
-</section>
-
-
-</main>
-
-
-
-<footer>
-
-  Nova Musical •
-  Nova AI v0.1
-
-</footer>
-
-
-
-<script src="audio-engine.js"></script>
-
+</div>
 
 
 <script>
 
-/*
-==================================================
-NOVA AI MODEL RUNTIME
-==================================================
+/* =============================================
+   NOVA MUSICAL TUNER
+   Standard Guitar:
+   E2 A2 D3 G3 B3 E4
+============================================= */
 
-This loads the weights produced by our Python
-training program.
+const STRINGS = [
 
-The browser performs the neural-network
-forward pass locally.
-*/
+  {
+    key:"E2",
+    note:"E",
+    label:"Low E",
+    frequency:82.4069,
+    button:"E2",
+    peg:"pegE2"
+  },
+
+  {
+    key:"A2",
+    note:"A",
+    label:"A",
+    frequency:110.0000,
+    button:"A",
+    peg:"pegA"
+  },
+
+  {
+    key:"D3",
+    note:"D",
+    label:"D",
+    frequency:146.8324,
+    button:"D",
+    peg:"pegD"
+  },
+
+  {
+    key:"G3",
+    note:"G",
+    label:"G",
+    frequency:195.9977,
+    button:"G",
+    peg:"pegG"
+  },
+
+  {
+    key:"B3",
+    note:"B",
+    label:"B",
+    frequency:246.9417,
+    button:"B",
+    peg:"pegB"
+  },
+
+  {
+    key:"E4",
+    note:"E",
+    label:"High E",
+    frequency:329.6276,
+    button:"E4",
+    peg:"pegE4"
+  }
+
+];
 
 
-class NovaModel {
+const listenButton =
+  document.getElementById("listen");
+
+const marker =
+  document.getElementById("marker");
+
+const centsDisplay =
+  document.getElementById("cents");
+
+const arrow =
+  document.getElementById("arrow");
+
+const targetNote =
+  document.getElementById("targetNote");
+
+const direction =
+  document.getElementById("direction");
+
+const startText =
+  document.getElementById("startText");
+
+const frequencyDisplay =
+  document.getElementById("frequency");
+
+const complete =
+  document.getElementById("complete");
+
+const progressDots =
+  [...document.querySelectorAll("#progress i")];
 
 
-constructor() {
+let audioContext = null;
+let analyser = null;
+let stream = null;
+let buffer = null;
+let running = false;
 
-  this.model = null;
+let history = [];
 
-  this.loaded = false;
+let currentString = null;
 
-}
+const tunedStrings =
+  new Set();
 
+const stableCounts = {};
 
-async load() {
-
-
-  const response =
-    await fetch(
-      "nova-ai/nova-model.json"
-    );
+STRINGS.forEach(
+  s => stableCounts[s.key] = 0
+);
 
 
-  if (!response.ok) {
+/* =============================================
+   START / STOP
+============================================= */
 
-    throw new Error(
-      "Could not load Nova model."
-    );
+listenButton.addEventListener(
+  "click",
+  async () => {
+
+    if(running){
+      stopTuner();
+      return;
+    }
+
+    try{
+
+      stream =
+        await navigator.mediaDevices.getUserMedia({
+          audio:{
+            echoCancellation:false,
+            noiseSuppression:false,
+            autoGainControl:false
+          }
+        });
+
+
+      audioContext =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+
+      await audioContext.resume();
+
+
+      const source =
+        audioContext.createMediaStreamSource(
+          stream
+        );
+
+
+      analyser =
+        audioContext.createAnalyser();
+
+
+      /*
+       Larger buffer gives us better resolution
+       for low guitar notes such as E2.
+      */
+
+      analyser.fftSize = 8192;
+
+      analyser.smoothingTimeConstant = 0;
+
+
+      buffer =
+        new Float32Array(
+          analyser.fftSize
+        );
+
+
+      source.connect(
+        analyser
+      );
+
+
+      running = true;
+
+      history = [];
+
+
+      listenButton.textContent =
+        "■ Stop Tuning";
+
+      listenButton.classList.add(
+        "listening"
+      );
+
+
+      frequencyDisplay.textContent =
+        "Listening… play one open string";
+
+
+      startText.style.display =
+        "none";
+
+
+      marker.style.display =
+        "block";
+
+      targetNote.style.display =
+        "grid";
+
+      direction.style.display =
+        "block";
+
+
+      update();
+
+    }
+
+    catch(error){
+
+      frequencyDisplay.textContent =
+        "Microphone permission is needed to tune.";
+
+      console.error(error);
+
+    }
+
+  }
+);
+
+
+function stopTuner(){
+
+  running = false;
+
+  if(stream){
+
+    stream
+      .getTracks()
+      .forEach(
+        track => track.stop()
+      );
+
+  }
+
+  if(audioContext){
+
+    audioContext.close();
 
   }
 
 
-  this.model =
-    await response.json();
+  listenButton.textContent =
+    "🎙 Start Tuning";
+
+  listenButton.classList.remove(
+    "listening"
+  );
 
 
-  this.loaded = true;
-
-
-  return this.model;
+  frequencyDisplay.textContent =
+    "Microphone is off";
 
 }
 
 
+/* =============================================
+   MAIN LOOP
+============================================= */
 
-/*
-ReLU activation
-*/
+function update(){
 
-relu(value) {
+  if(!running){
+    return;
+  }
 
-  return Math.max(
-    0,
-    value
+
+  analyser.getFloatTimeDomainData(
+    buffer
+  );
+
+
+  const detected =
+    detectPitch(
+      buffer,
+      audioContext.sampleRate
+    );
+
+
+  if(detected){
+
+    const smoothed =
+      smoothFrequency(
+        detected
+      );
+
+
+    const guitarString =
+      findNearestString(
+        smoothed
+      );
+
+
+    if(guitarString){
+
+      const cents =
+        centsDifference(
+          smoothed,
+          guitarString.frequency
+        );
+
+
+      /*
+       Reject readings too far away from
+       any open guitar string.
+
+       This helps prevent random room noise
+       from lighting up strings.
+      */
+
+      if(
+        Math.abs(cents) <= 55
+      ){
+
+        currentString =
+          guitarString;
+
+        renderReading(
+          guitarString,
+          smoothed,
+          cents
+        );
+
+      }
+
+    }
+
+  }
+
+
+  requestAnimationFrame(
+    update
   );
 
 }
 
 
+/* =============================================
+   PITCH DETECTOR
+   YIN-inspired difference algorithm
+============================================= */
 
-/*
-Softmax converts output values
-into probabilities.
-*/
+function detectPitch(
+  data,
+  sampleRate
+){
 
-softmax(values) {
-
-
-  const maximum =
-    Math.max(...values);
+  const size =
+    data.length;
 
 
-  const exponentials =
-    values.map(
-      value =>
-        Math.exp(
-          value -
-          maximum
-        )
+  let rms = 0;
+
+
+  for(
+    let i=0;
+    i<size;
+    i++
+  ){
+
+    rms +=
+      data[i] *
+      data[i];
+
+  }
+
+
+  rms =
+    Math.sqrt(
+      rms / size
     );
 
 
-  const total =
-    exponentials.reduce(
-      (sum, value) =>
-        sum + value,
-      0
+  if(rms < 0.008){
+    return null;
+  }
+
+
+  /*
+   Remove DC offset.
+  */
+
+  let mean = 0;
+
+
+  for(
+    let i=0;
+    i<size;
+    i++
+  ){
+
+    mean += data[i];
+
+  }
+
+
+  mean /= size;
+
+
+  const clean =
+    new Float32Array(
+      size
     );
 
 
-  return exponentials.map(
-    value =>
-      value / total
-  );
+  for(
+    let i=0;
+    i<size;
+    i++
+  ){
 
-}
+    clean[i] =
+      data[i] - mean;
 
-
-
-/*
-Prepare inputs exactly the same
-way train.py prepared them.
-*/
-
-normalize(
-  cents,
-  accuracy,
-  consistency,
-  attempts
-) {
+  }
 
 
-  return [
+  /*
+   Guitar pitch range.
 
-    cents / 50,
+   Slightly wider than standard strings
+   so substantially mistuned guitars
+   can still be detected.
+  */
 
-    accuracy,
-
-    consistency,
-
-    attempts / 10
-
-  ];
-
-}
+  const minimumFrequency = 65;
+  const maximumFrequency = 380;
 
 
-
-/*
-Run Nova's trained neural network.
-*/
-
-predict(
-  cents,
-  accuracy,
-  consistency,
-  attempts
-) {
+  const minimumTau =
+    Math.floor(
+      sampleRate /
+      maximumFrequency
+    );
 
 
-  if (
-    !this.loaded ||
-    !this.model
-  ) {
+  const maximumTau =
+    Math.min(
+      Math.floor(
+        sampleRate /
+        minimumFrequency
+      ),
+      Math.floor(size / 2)
+    );
+
+
+  const difference =
+    new Float32Array(
+      maximumTau + 1
+    );
+
+
+  for(
+    let tau=1;
+    tau<=maximumTau;
+    tau++
+  ){
+
+    let sum = 0;
+
+
+    for(
+      let i=0;
+      i<size-tau;
+      i++
+    ){
+
+      const delta =
+        clean[i] -
+        clean[i+tau];
+
+
+      sum +=
+        delta *
+        delta;
+
+    }
+
+
+    difference[tau] =
+      sum;
+
+  }
+
+
+  const cmnd =
+    new Float32Array(
+      maximumTau + 1
+    );
+
+
+  cmnd[0] = 1;
+
+
+  let runningSum = 0;
+
+
+  for(
+    let tau=1;
+    tau<=maximumTau;
+    tau++
+  ){
+
+    runningSum +=
+      difference[tau];
+
+
+    cmnd[tau] =
+      runningSum === 0
+        ? 1
+        : difference[tau] *
+          tau /
+          runningSum;
+
+  }
+
+
+  const threshold =
+    0.12;
+
+
+  let tauEstimate =
+    -1;
+
+
+  for(
+    let tau=minimumTau;
+    tau<=maximumTau;
+    tau++
+  ){
+
+    if(
+      cmnd[tau] <
+      threshold
+    ){
+
+      while(
+        tau + 1 <= maximumTau &&
+        cmnd[tau + 1] <
+        cmnd[tau]
+      ){
+
+        tau++;
+
+      }
+
+
+      tauEstimate =
+        tau;
+
+      break;
+
+    }
+
+  }
+
+
+  /*
+   If threshold did not find a clean candidate,
+   find the strongest minimum.
+  */
+
+  if(
+    tauEstimate === -1
+  ){
+
+    let bestValue =
+      Infinity;
+
+
+    for(
+      let tau=minimumTau;
+      tau<=maximumTau;
+      tau++
+    ){
+
+      if(
+        cmnd[tau] <
+        bestValue
+      ){
+
+        bestValue =
+          cmnd[tau];
+
+        tauEstimate =
+          tau;
+
+      }
+
+    }
+
+
+    if(
+      bestValue > .28
+    ){
+
+      return null;
+
+    }
+
+  }
+
+
+  /*
+   Parabolic interpolation.
+  */
+
+  let betterTau =
+    tauEstimate;
+
+
+  if(
+    tauEstimate > 1 &&
+    tauEstimate < maximumTau
+  ){
+
+    const left =
+      cmnd[tauEstimate - 1];
+
+    const center =
+      cmnd[tauEstimate];
+
+    const right =
+      cmnd[tauEstimate + 1];
+
+
+    const divisor =
+      2 *
+      (
+        2 * center -
+        right -
+        left
+      );
+
+
+    if(
+      Math.abs(divisor) >
+      0.000001
+    ){
+
+      betterTau =
+        tauEstimate +
+        (
+          right -
+          left
+        ) /
+        divisor;
+
+    }
+
+  }
+
+
+  const frequency =
+    sampleRate /
+    betterTau;
+
+
+  if(
+    !Number.isFinite(frequency) ||
+    frequency <
+      minimumFrequency ||
+    frequency >
+      maximumFrequency
+  ){
 
     return null;
 
   }
 
 
-  const input =
-    this.normalize(
-      cents,
-      accuracy,
-      consistency,
-      attempts
-    );
+  return frequency;
+
+}
 
 
-  const weights =
-    this.model.weights;
+/* =============================================
+   SMOOTH PITCH
+============================================= */
 
-
-  const W1 =
-    weights.W1;
-
-  const B1 =
-    weights.B1;
-
-  const W2 =
-    weights.W2;
-
-  const B2 =
-    weights.B2;
-
-
+function smoothFrequency(
+  frequency
+){
 
   /*
-  Hidden layer
+   Ignore wild octave jumps against the
+   recent reading where possible.
   */
 
+  if(
+    history.length
+  ){
 
-  const hidden = [];
-
-
-  for (
-    let h = 0;
-    h < B1.length;
-    h++
-  ) {
-
-
-    let value =
-      B1[h];
+    const previous =
+      history[
+        history.length - 1
+      ];
 
 
-    for (
-      let i = 0;
-      i < input.length;
-      i++
-    ) {
+    const ratio =
+      frequency /
+      previous;
 
 
-      value +=
-        input[i] *
-        W1[i][h];
+    if(
+      ratio > 1.85 &&
+      ratio < 2.15
+    ){
 
+      frequency /=
+        2;
 
     }
 
+    else if(
+      ratio > .46 &&
+      ratio < .54
+    ){
 
-    hidden.push(
-      this.relu(
-        value
+      frequency *=
+        2;
+
+    }
+
+  }
+
+
+  history.push(
+    frequency
+  );
+
+
+  if(
+    history.length > 7
+  ){
+
+    history.shift();
+
+  }
+
+
+  const sorted =
+    [...history]
+      .sort(
+        (a,b) => a-b
+      );
+
+
+  return sorted[
+    Math.floor(
+      sorted.length /
+      2
+    )
+  ];
+
+}
+
+
+/* =============================================
+   GUITAR STRING MATCHING
+============================================= */
+
+function centsDifference(
+  frequency,
+  target
+){
+
+  return (
+    1200 *
+    Math.log2(
+      frequency /
+      target
+    )
+  );
+
+}
+
+
+function findNearestString(
+  frequency
+){
+
+  let winner = null;
+  let smallestDifference =
+    Infinity;
+
+
+  STRINGS.forEach(
+    string => {
+
+      const cents =
+        Math.abs(
+          centsDifference(
+            frequency,
+            string.frequency
+          )
+        );
+
+
+      if(
+        cents <
+        smallestDifference
+      ){
+
+        smallestDifference =
+          cents;
+
+        winner =
+          string;
+
+      }
+
+    }
+  );
+
+
+  return winner;
+
+}
+
+
+/* =============================================
+   COLOUR
+============================================= */
+
+function tuningColour(
+  absoluteCents
+){
+
+  if(
+    absoluteCents <= 4
+  ){
+
+    return "var(--green)";
+
+  }
+
+
+  if(
+    absoluteCents <= 10
+  ){
+
+    return "var(--yellow)";
+
+  }
+
+
+  if(
+    absoluteCents <= 22
+  ){
+
+    return "var(--orange)";
+
+  }
+
+
+  return "var(--red)";
+
+}
+
+
+/* =============================================
+   DISPLAY
+============================================= */
+
+function renderReading(
+  string,
+  frequency,
+  cents
+){
+
+  const rounded =
+    Math.round(
+      cents
+    );
+
+
+  const absolute =
+    Math.abs(
+      cents
+    );
+
+
+  /*
+   Meter range = ±50 cents.
+  */
+
+  const limited =
+    Math.max(
+      -50,
+      Math.min(
+        50,
+        cents
       )
     );
 
 
-  }
-
-
-
   /*
-  Output layer
+   Keep marker away from the absolute
+   edge of the screen.
   */
 
-
-  const rawOutput = [];
-
-
-  for (
-    let o = 0;
-    o < B2.length;
-    o++
-  ) {
-
-
-    let value =
-      B2[o];
-
-
-    for (
-      let h = 0;
-      h < hidden.length;
-      h++
-    ) {
-
-
-      value +=
-        hidden[h] *
-        W2[h][o];
-
-
-    }
-
-
-    rawOutput.push(
-      value
-    );
-
-
-  }
-
-
-
-  const probabilities =
-    this.softmax(
-      rawOutput
-    );
-
-
-  let winner = 0;
-
-
-  for (
-    let i = 1;
-    i < probabilities.length;
-    i++
-  ) {
-
-
-    if (
-      probabilities[i] >
-      probabilities[winner]
-    ) {
-
-      winner = i;
-
-    }
-
-
-  }
-
-
-  return {
-
-    action:
-      this.model
-        .actions[winner],
-
-    confidence:
-      probabilities[winner],
-
-    probabilities:
-      probabilities
-
-  };
-
-
-}
-
-
-}
-
-
-
-/*
-==================================================
-START NOVA MODEL
-==================================================
-*/
-
-
-const novaModel =
-  new NovaModel();
-
-
-async function
-loadNovaModel() {
-
-
-  const status =
-    document.getElementById(
-      "modelStatus"
-    );
-
-
-  try {
-
-
-    const model =
-      await novaModel.load();
-
-
-    status.className =
-      "model-box model-ready";
-
-
-    status.textContent =
-
-      "✓ " +
-      model.name +
-      " " +
-      model.version +
-      " trained model loaded";
-
-
-  }
-
-
-  catch (error) {
-
-
-    status.className =
-      "model-box model-error";
-
-
-    status.textContent =
-
-      "Nova's trained model could not be loaded.";
-
-
-    console.error(
-      error
-    );
-
-
-  }
-
-
-}
-
-
-loadNovaModel();
-
-
-
-/*
-==================================================
-NOVA COACH
-==================================================
-*/
-
-
-const NovaCoach = {
-
-
-instrumentMessage(
-  instrument
-) {
-
-
-  const messages = {
-
-
-    guitar:
-
-      "Great choice. I'm Nova. I'll listen to your playing and use my trained model to help decide what you should do next.",
-
-
-    piano:
-
-      "Piano training is coming next. Guitar is Nova's first active learning instrument.",
-
-
-    singing:
-
-      "Voice training is coming next. Nova's first active learning instrument is guitar.",
-
-
-    bass:
-
-      "Bass training is coming next. Guitar is Nova's first active learning instrument."
-
-
-  };
-
-
-  return (
-    messages[instrument] ||
-    "Let's make music."
-  );
-
-
-},
-
-
-
-messageForDecision(
-  decision
-) {
-
-
-  const messages = {
-
-
-    tune_up:
-
-      "You're below the target pitch. Bring the pitch up slowly.",
-
-
-    correct:
-
-      "Nice — Nova considers that pitch correct.",
-
-
-    tune_down:
-
-      "You're above the target pitch. Bring the pitch down slowly.",
-
-
-    repeat:
-
-      "Let's repeat that note. Nova wants another clean attempt before moving on.",
-
-
-    advance:
-
-      "Excellent consistency. Nova says you're ready to move forward."
-
-
-  };
-
-
-  return (
-    messages[decision] ||
-    "Keep going."
-  );
-
-
-}
-
-
-};
-
-
-
-/*
-==================================================
-INSTRUMENT SELECTION
-==================================================
-*/
-
-
-function chooseInstrument(
-  instrument,
-  button
-) {
-
-
-  document
-    .querySelectorAll(
-      ".instrument"
-    )
-    .forEach(
-      item =>
-        item.classList.remove(
-          "active"
-        )
-    );
-
-
-  button.classList.add(
-    "active"
-  );
-
-
-  document.getElementById(
-    "novaCoach"
-  ).style.display =
-    "block";
-
-
-  document.getElementById(
-    "novaMessage"
-  ).textContent =
-
-    NovaCoach
-      .instrumentMessage(
-        instrument
-      );
-
-
-  const tuner =
-    document.getElementById(
-      "tuner"
-    );
-
-
-  const comingSoon =
-    document.getElementById(
-      "comingSoon"
-    );
-
-
-  if (
-    instrument ===
-    "guitar"
-  ) {
-
-
-    tuner.style.display =
-      "block";
-
-
-    comingSoon.style.display =
-      "none";
-
-
-  }
-
-
-  else {
-
-
-    tuner.style.display =
-      "none";
-
-
-    comingSoon.style.display =
-      "block";
-
-
-    const title =
-      instrument
-        .charAt(0)
-        .toUpperCase() +
-      instrument.slice(1);
-
-
-    document.getElementById(
-      "comingSoonTitle"
-    ).textContent =
-
-      title +
-      " with Nova AI";
-
-
-  }
-
-
-}
-
-
-
-/*
-==================================================
-AUDIO + LEARNING SESSION
-==================================================
-*/
-
-
-let novaAudio =
-  null;
-
-
-let novaListening =
-  false;
-
-
-let attemptCount =
-  0;
-
-
-/*
-These values will eventually be calculated
-from a learner's real session history.
-
-For v0.1 they begin conservatively and
-change as Nova receives attempts.
-*/
-
-let sessionAccuracy =
-  0.70;
-
-
-let sessionConsistency =
-  0.65;
-
-
-
-async function
-startNovaListening() {
-
-
-  const feedback =
-    document.getElementById(
-      "novaFeedback"
-    );
-
-
-  const pitchDisplay =
-    document.getElementById(
-      "pitchDisplay"
-    );
-
-
-  pitchDisplay.style.display =
-    "block";
-
-
-  if (
-    typeof NovaAudioEngine ===
-    "undefined"
-  ) {
-
-
-    feedback.textContent =
-
-      "Nova's audio engine could not load.";
-
-
-    return;
-
-  }
-
-
-  if (novaListening) {
-
-    return;
-
-  }
-
-
-  try {
-
-
-    novaAudio =
-      new NovaAudioEngine();
-
-
-    await novaAudio.start();
-
-
-    novaListening =
-      true;
-
-
-    document.getElementById(
-      "listenButton"
-    ).textContent =
-
-      "● Nova is listening";
-
-
-    feedback.textContent =
-
-      "I'm listening. Play one guitar string clearly.";
-
-
-    listenForPitch();
-
-
-  }
-
-
-  catch (error) {
-
-
-    feedback.textContent =
-
-      "Nova needs microphone permission to hear your guitar. Allow microphone access and try again.";
-
-
-    console.error(
-      error
-    );
-
-
-  }
-
-
-}
-
-
-
-/*
-==================================================
-LIVE ANALYSIS
-==================================================
-*/
-
-
-let lastProcessed =
-  0;
-
-
-function listenForPitch(
-  timestamp = 0
-) {
-
-
-  if (
-    !novaListening ||
-    !novaAudio
-  ) {
-
-    return;
-
-  }
-
-
-  /*
-  Don't ask the neural model thousands
-  of times per second.
-
-  Analyse approximately five times
-  each second.
-  */
-
-
-  if (
-    timestamp -
-    lastProcessed >
-    200
-  ) {
-
-
-    lastProcessed =
-      timestamp;
-
-
-    const result =
-      novaAudio.detectPitch();
-
-
-    if (result) {
-
-
-      processPitch(
-        result
-      );
-
-
-    }
-
-
-  }
-
-
-  requestAnimationFrame(
-    listenForPitch
-  );
-
-
-}
-
-
-
-/*
-==================================================
-PROCESS NOTE
-==================================================
-*/
-
-
-function processPitch(
-  result
-) {
-
-
-  attemptCount++;
-
-
-  document.getElementById(
-    "detectedNote"
-  ).textContent =
-
-    result.note +
-    result.octave;
-
-
-  document.getElementById(
-    "detectedFrequency"
-  ).textContent =
-
-    result.frequency +
-    " Hz";
-
-
-  document.getElementById(
-    "tuningState"
-  ).textContent =
-
-    result.tuning;
-
-
-  document.getElementById(
-    "centsDisplay"
-  ).textContent =
-
-    result.cents +
+  const percentage =
+    50 +
+    (
+      limited /
+      50
+    ) *
+    39;
+
+
+  marker.style.left =
+    percentage + "%";
+
+
+  centsDisplay.textContent =
+    rounded > 0
+      ? "+" + rounded
+      : rounded;
+
+
+  targetNote.textContent =
+    string.note;
+
+
+  frequencyDisplay.textContent =
+    string.label +
+    " • " +
+    frequency.toFixed(1) +
+    " Hz • " +
+    (
+      rounded > 0
+        ? "+" + rounded
+        : rounded
+    ) +
     " cents";
 
 
-  /*
-  Update simple session measurements.
-  These become more sophisticated
-  in later Nova versions.
-  */
+  const colour =
+    tuningColour(
+      absolute
+    );
 
 
-  const pitchAccuracy =
+  centsDisplay.style.borderColor =
+    colour;
 
-    Math.max(
-      0,
-      1 -
-      (
-        Math.abs(
-          result.cents
-        ) /
-        50
+  centsDisplay.style.color =
+    colour;
+
+  arrow.style.borderTopColor =
+    colour;
+
+
+  if(
+    absolute <= 4
+  ){
+
+    direction.textContent =
+      "In tune ✓";
+
+    direction.style.color =
+      "var(--green)";
+
+
+    stableCounts[
+      string.key
+    ]++;
+
+
+    /*
+     Require repeated correct readings
+     instead of turning green from
+     one accidental microphone sample.
+    */
+
+    if(
+      stableCounts[
+        string.key
+      ] >= 10
+    ){
+
+      tunedStrings.add(
+        string.key
+      );
+
+
+      document
+        .getElementById(
+          string.button
+        )
+        .classList
+        .add(
+          "tuned"
+        );
+
+
+      const peg =
+        document.getElementById(
+          string.peg
+        );
+
+
+      peg.classList.remove(
+        "bad"
+      );
+
+
+      peg.classList.add(
+        "tuned"
+      );
+
+
+      updateProgress();
+
+    }
+
+  }
+
+  else{
+
+    stableCounts[
+      string.key
+    ] = 0;
+
+
+    if(
+      cents < 0
+    ){
+
+      direction.textContent =
+        "Tune up";
+
+    }
+
+    else{
+
+      direction.textContent =
+        "Tune down";
+
+    }
+
+
+    direction.style.color =
+      colour;
+
+
+    if(
+      !tunedStrings.has(
+        string.key
       )
-    );
+    ){
+
+      const peg =
+        document.getElementById(
+          string.peg
+        );
 
 
-  sessionAccuracy =
+      peg.classList.add(
+        "bad"
+      );
 
-    (
-      sessionAccuracy *
-      0.8
-    ) +
-
-    (
-      pitchAccuracy *
-      0.2
-    );
-
-
-  const stable =
-
-    Math.abs(
-      result.cents
-    ) <= 10
-
-      ? 1
-
-      : 0;
-
-
-  sessionConsistency =
-
-    (
-      sessionConsistency *
-      0.8
-    ) +
-
-    (
-      stable *
-      0.2
-    );
-
-
-
-  /*
-  Ask the trained Nova model
-  what action to take.
-  */
-
-
-  const prediction =
-
-    novaModel.predict(
-
-      result.cents,
-
-      sessionAccuracy,
-
-      sessionConsistency,
-
-      Math.min(
-        attemptCount,
-        10
-      )
-
-    );
-
-
-
-  if (!prediction) {
-
-
-    document.getElementById(
-      "novaDecision"
-    ).textContent =
-
-      "Model loading...";
-
-
-    return;
+    }
 
   }
 
 
-
-  const confidencePercent =
-
-    Math.round(
-      prediction.confidence *
-      100
-    );
-
-
-  const readableAction =
-
-    prediction.action
-      .replace(
-        "_",
-        " "
-      )
-      .toUpperCase();
-
-
-
-  document.getElementById(
-    "novaDecision"
-  ).textContent =
-
-    readableAction +
-    " • " +
-    confidencePercent +
-    "%";
-
-
-  document.getElementById(
-    "novaFeedback"
-  ).textContent =
-
-    NovaCoach
-      .messageForDecision(
-        prediction.action
-      );
-
+  updateStringButtons(
+    string,
+    absolute
+  );
 
 }
 
 
-</script>
+/* =============================================
+   STRING STATES
+============================================= */
 
+function updateStringButtons(
+  activeString,
+  absoluteCents
+){
+
+  STRINGS.forEach(
+    string => {
+
+      const button =
+        document.getElementById(
+          string.button
+        );
+
+
+      button.classList.remove(
+        "active",
+        "red",
+        "orange",
+        "yellow"
+      );
+
+
+      /*
+       Never remove green once completed.
+      */
+
+      if(
+        tunedStrings.has(
+          string.key
+        )
+      ){
+
+        button.classList.add(
+          "tuned"
+        );
+
+        return;
+
+      }
+
+
+      if(
+        string.key !==
+        activeString.key
+      ){
+
+        return;
+
+      }
+
+
+      button.classList.add(
+        "active"
+      );
+
+
+      if(
+        absoluteCents <= 4
+      ){
+
+        /*
+         It is close enough to green,
+         but waits for stable confirmation.
+        */
+
+        button.style.borderColor =
+          "var(--green)";
+
+      }
+
+      else if(
+        absoluteCents <= 10
+      ){
+
+        button.classList.add(
+          "yellow"
+        );
+
+      }
+
+      else if(
+        absoluteCents <= 22
+      ){
+
+        button.classList.add(
+          "orange"
+        );
+
+      }
+
+      else{
+
+        button.classList.add(
+          "red"
+        );
+
+      }
+
+  });
+
+}
+
+
+/* =============================================
+   PROGRESS
+============================================= */
+
+function updateProgress(){
+
+  progressDots.forEach(
+    (
+      dot,
+      index
+    ) => {
+
+      if(
+        index <
+        tunedStrings.size
+      ){
+
+        dot.classList.add(
+          "done"
+        );
+
+      }
+
+    }
+  );
+
+
+  if(
+    tunedStrings.size === 6
+  ){
+
+    complete.style.display =
+      "block";
+
+
+    direction.textContent =
+      "Perfect ✓";
+
+
+    direction.style.color =
+      "var(--green)";
+
+  }
+
+}
+
+
+/* =============================================
+   MANUAL STRING SELECTION
+   Tapping a string tells Nova which
+   target the player wants to tune.
+============================================= */
+
+document
+  .querySelectorAll(
+    ".string"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const key =
+            button.dataset.key;
+
+
+          const string =
+            STRINGS.find(
+              item =>
+                item.key ===
+                key
+            );
+
+
+          if(
+            !string
+          ){
+            return;
+          }
+
+
+          currentString =
+            string;
+
+
+          targetNote.textContent =
+            string.note;
+
+
+          startText.style.display =
+            "none";
+
+          marker.style.display =
+            "block";
+
+          targetNote.style.display =
+            "grid";
+
+          direction.style.display =
+            "block";
+
+
+          direction.textContent =
+            "Play " +
+            string.label;
+
+
+          document
+            .querySelectorAll(
+              ".string"
+            )
+            .forEach(
+              item =>
+                item.classList.remove(
+                  "active"
+                )
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/*
+ Session state intentionally is NOT
+ stored in localStorage.
+
+ Reloading/leaving the tuner therefore
+ resets all six strings, as requested.
+*/
+
+</script>
 
 </body>
 </html>
