@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101416">
-
 <title>Nova Musical — Guitar Tuner</title>
 
 <style>
@@ -14,7 +13,7 @@
   --white:#f7f7f7;
   --muted:#8c9297;
   --green:#16d59a;
-  --yellow:#e5d84c;
+  --yellow:#e6d94d;
   --red:#ff4c5d;
   --grey:#777d81;
 }
@@ -39,14 +38,14 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:14px;
+  gap:12px;
   margin-bottom:22px;
 }
 
 .back{
-  color:#c9ced1;
+  color:#d0d4d6;
   text-decoration:none;
-  font-size:25px;
+  font-size:27px;
   font-weight:800;
 }
 
@@ -74,6 +73,7 @@ body{
   background:#252a2d;
   display:grid;
   place-items:center;
+  cursor:pointer;
 }
 
 .auto-box.on{
@@ -159,7 +159,7 @@ h1{
   left:0;
   right:0;
   bottom:0;
-  height:0;
+  height:0%;
   background:var(--green);
   transition:height .12s linear;
 }
@@ -171,7 +171,7 @@ h1{
   width:3px;
   height:78px;
   transform:translateX(-50%);
-  background:#fff;
+  background:white;
   z-index:4;
 }
 
@@ -186,13 +186,10 @@ h1{
   background:var(--grey);
   z-index:5;
 
-  /*
-    Smooth physical movement rather
-    than jumping between readings.
-  */
+  /* visual smoothing only */
   transition:
-    left .18s cubic-bezier(.22,.61,.36,1),
-    background .14s ease;
+    left .22s cubic-bezier(.22,.61,.36,1),
+    background .15s ease;
 }
 
 .number{
@@ -231,16 +228,8 @@ h1{
   height:230px;
 
   clip-path:polygon(
-    0 22%,
-    8% 5%,
-    64% 8%,
-    80% 17%,
-    100% 28%,
-    100% 72%,
-    80% 83%,
-    64% 92%,
-    8% 95%,
-    0 78%
+    0 22%,8% 5%,64% 8%,80% 17%,100% 28%,
+    100% 72%,80% 83%,64% 92%,8% 95%,0 78%
   );
 
   background:
@@ -325,14 +314,14 @@ h1{
   stroke-width:1.6;
   stroke-linecap:round;
   stroke-linejoin:round;
-  transition:stroke .15s,filter .15s;
+  transition:stroke .14s,filter .14s;
 }
 
-.guitar-string.s2{stroke-width:1.9}
-.guitar-string.s3{stroke-width:2.2}
-.guitar-string.s4{stroke-width:2.5}
-.guitar-string.s5{stroke-width:2.8}
-.guitar-string.s6{stroke-width:3.2}
+.s2{stroke-width:1.9}
+.s3{stroke-width:2.2}
+.s4{stroke-width:2.5}
+.s5{stroke-width:2.8}
+.s6{stroke-width:3.2}
 
 .guitar-string.bad{
   stroke:var(--red);
@@ -389,15 +378,15 @@ h1{
 
 .peg.bad{
   border-color:var(--red);
-  box-shadow:0 0 18px var(--red);
+  box-shadow:0 0 16px var(--red);
 }
 
 .peg.good{
   border-color:var(--green);
-  box-shadow:0 0 18px var(--green);
+  box-shadow:0 0 17px var(--green);
 }
 
-/* BUTTONS */
+/* STRING BUTTONS */
 
 .string-choice{
   position:absolute;
@@ -406,7 +395,7 @@ h1{
   border:2px solid #e3e5e6;
   border-radius:17px;
   background:#171c1f;
-  color:#fff;
+  color:white;
   font-size:20px;
   font-weight:900;
   z-index:12;
@@ -421,7 +410,7 @@ h1{
 .c6{left:60.2%;top:293px}
 
 .string-choice.active{
-  background:#fff;
+  background:white;
   color:#14181a;
 }
 
@@ -434,7 +423,7 @@ h1{
   background:var(--green);
   border-color:var(--green);
   color:#061a12;
-  box-shadow:0 0 19px #16d59a99;
+  box-shadow:0 0 18px #16d59a99;
 }
 
 .controls{
@@ -553,46 +542,44 @@ Start tuning and play any string
 <div class="fret fret2"></div>
 
 <!--
-  STRINGS MOVED DOWN.
-
-  The first string now begins at y=146
-  and the lowest is at y=231.
+  All six strings moved slightly DOWN.
+  Neck = y126 through y236.
 -->
 
 <svg
-  class="string-svg"
-  viewBox="0 0 650 370"
-  preserveAspectRatio="none">
+class="string-svg"
+viewBox="0 0 650 370"
+preserveAspectRatio="none">
 
 <path
-  id="string1"
-  class="guitar-string s1"
-  d="M419 105 L490 146 L650 146"/>
+id="string1"
+class="guitar-string s1"
+d="M419 105 L490 150 L650 150"/>
 
 <path
-  id="string2"
-  class="guitar-string s2"
-  d="M315 105 L490 163 L650 163"/>
+id="string2"
+class="guitar-string s2"
+d="M315 105 L490 167 L650 167"/>
 
 <path
-  id="string3"
-  class="guitar-string s3"
-  d="M211 105 L490 180 L650 180"/>
+id="string3"
+class="guitar-string s3"
+d="M211 105 L490 184 L650 184"/>
 
 <path
-  id="string4"
-  class="guitar-string s4"
-  d="M211 257 L490 197 L650 197"/>
+id="string4"
+class="guitar-string s4"
+d="M211 257 L490 201 L650 201"/>
 
 <path
-  id="string5"
-  class="guitar-string s5"
-  d="M315 257 L490 214 L650 214"/>
+id="string5"
+class="guitar-string s5"
+d="M315 257 L490 218 L650 218"/>
 
 <path
-  id="string6"
-  class="guitar-string s6"
-  d="M419 257 L490 231 L650 231"/>
+id="string6"
+class="guitar-string s6"
+d="M419 257 L490 234 L650 234"/>
 
 </svg>
 
@@ -635,9 +622,10 @@ Automatic detection is on.
 
 <script>
 
-/* ========================================
-   NOVA PRECISION TUNER
-======================================== */
+/* ======================================
+   NOVA MUSICAL PRECISION TUNER
+   McLeod-style pitch detector
+====================================== */
 
 const GUITAR=[
  {number:6,label:"E",name:"Low E",hz:82.4069},
@@ -671,23 +659,25 @@ let stream=null;
 let buffer=null;
 let running=false;
 
-let pitchHistory=[];
-let differenceHistory=[];
-let autoHistory=[];
+let currentCandidate=null;
+let candidateCount=0;
 
-let displayedNeedle=0;
+let recentCents=[];
+let recentPitch=[];
 
 let stableStart=null;
 let stableString=null;
 
+let displayedNeedle=0;
+
 let lastAnalysis=0;
-let silenceFrames=0;
+let lastPitchTime=0;
 
 const tuned=new Set();
 
-/* ========================================
-   AUTO TOGGLE
-======================================== */
+/* ======================================
+   MODE
+====================================== */
 
 function toggleAutomatic(){
 
@@ -697,12 +687,12 @@ function toggleAutomatic(){
 
  autoBox.setAttribute(
    "aria-checked",
-   automatic ? "true":"false"
+   automatic?"true":"false"
  );
 
  selectedString=null;
 
- resetHistories();
+ resetTracking();
  resetConfirmation();
  clearActive();
 
@@ -733,9 +723,9 @@ autoBox.addEventListener(
  toggleAutomatic
 );
 
-/* ========================================
-   MANUAL BUTTONS
-======================================== */
+/* ======================================
+   MANUAL SELECTION
+====================================== */
 
 choiceButtons.forEach(button=>{
 
@@ -758,7 +748,7 @@ choiceButtons.forEach(button=>{
      "false"
    );
 
-   resetHistories();
+   resetTracking();
    resetConfirmation();
    clearActive();
 
@@ -777,9 +767,9 @@ choiceButtons.forEach(button=>{
  });
 });
 
-/* ========================================
+/* ======================================
    MICROPHONE
-======================================== */
+====================================== */
 
 startButton.addEventListener(
  "click",
@@ -819,15 +809,12 @@ startButton.addEventListener(
      audioContext.createAnalyser();
 
    /*
-     16384 is deliberate.
-
-     Low E is ~82 Hz, so this gives
-     enough waveform cycles to make
-     its fundamental much more stable.
+     16384 samples gives Low E
+     substantially more waveform cycles
+     than a tiny tuner buffer.
    */
 
    analyser.fftSize=16384;
-
    analyser.smoothingTimeConstant=0;
 
    buffer=
@@ -842,8 +829,7 @@ startButton.addEventListener(
    startButton.textContent=
      "Stop tuning";
 
-   status.textContent=
-     "Listening…";
+   status.textContent="Listening…";
 
    instruction.textContent=
      automatic
@@ -885,80 +871,72 @@ function stopTuner(){
    "Microphone is off.";
 }
 
-/* ========================================
-   MAIN ANALYSIS LOOP
-======================================== */
+/* ======================================
+   ANALYSIS LOOP
+====================================== */
 
 function listen(timestamp){
 
  if(!running)return;
 
  /*
-   Around 12 measurements per second.
-
-   Faster isn't automatically more
-   accurate. Guitar strings vibrate
-   and the attack of a pluck is messy.
+   14-ish analyses per second.
+   Fast enough to feel live without
+   reacting to every tiny waveform
+   disturbance.
  */
 
- if(timestamp-lastAnalysis>=80){
+ if(timestamp-lastAnalysis>=70){
 
    lastAnalysis=timestamp;
 
    analyser.getFloatTimeDomainData(buffer);
 
-   const volume=rms(buffer);
+   const level=rms(buffer);
 
-   if(volume>.0035){
-
-     silenceFrames=0;
+   if(level>.004){
 
      const result=
-       precisionPitch(
+       mcleodPitch(
          buffer,
          audioContext.sampleRate
        );
 
-     if(result){
+     if(
+       result &&
+       result.clarity>=.86
+     ){
 
-       const stable=
-         stabilisePitch(
-           result.frequency,
-           result.confidence
-         );
+       lastPitchTime=timestamp;
 
-       if(stable){
-
-         if(automatic){
-           processAutomatic(stable);
-         }else if(selectedString){
-           processManual(stable);
-         }
+       if(automatic){
+         processAutomatic(result);
+       }else if(selectedString){
+         processManual(result);
        }
      }
 
-   }else{
-
-     silenceFrames++;
+   }else if(
+     timestamp-lastPitchTime>500
+   ){
 
      /*
-       Don't instantly destroy a good
-       reading just because the string
-       becomes quieter for one frame.
+       A new pluck should start fresh.
+       Don't let the previous Low E
+       contaminate the next G/A/D etc.
      */
 
-     if(silenceFrames>5){
-       resetConfirmation();
-     }
+     resetTracking();
+     resetConfirmation();
    }
  }
 
  requestAnimationFrame(listen);
 }
 
-/* ========================================
-   RMS
-======================================== */
+/* ======================================
+   LEVEL
+====================================== */
 
 function rms(data){
 
@@ -973,366 +951,242 @@ function rms(data){
  );
 }
 
-/* ========================================
-   PRECISION PITCH
+/* ======================================
+   McLEOD PITCH METHOD
 
-   We run several YIN measurements
-   over overlapping parts of the
-   waveform.
+   Normalized Square Difference Function
+   + key maximum selection.
 
-   One bad estimate is discarded
-   rather than becoming the answer.
-======================================== */
+   The pitch is discovered independently.
+   It is NOT told which guitar string
+   we want.
+====================================== */
 
-function precisionPitch(data,sampleRate){
-
- const measurements=[];
-
- const windows=[
-   {start:0,length:8192},
-   {start:2048,length:8192},
-   {start:4096,length:8192},
-   {start:6144,length:8192}
- ];
-
- for(const window of windows){
-
-   if(
-     window.start+
-     window.length>
-     data.length
-   ){
-     continue;
-   }
-
-   const result=
-     yinWindow(
-       data,
-       sampleRate,
-       window.start,
-       window.length
-     );
-
-   if(
-     result &&
-     result.confidence>.72
-   ){
-     measurements.push(result);
-   }
- }
-
- if(measurements.length<2){
-   return null;
- }
-
- /*
-   Sort by frequency.
- */
-
- measurements.sort(
-   (a,b)=>a.frequency-b.frequency
- );
-
- /*
-   Median pitch rejects a single
-   crazy +100 / -100 reading.
- */
-
- const middle=
-   measurements[
-     Math.floor(
-       measurements.length/2
-     )
-   ];
-
- /*
-   Check how closely the independent
-   measurements agree.
-
-   We compare them in musical pitch
-   distance rather than raw Hz.
- */
-
- const close=
-   measurements.filter(result=>{
-
-     const difference=
-       Math.abs(
-         1200*
-         Math.log2(
-           result.frequency/
-           middle.frequency
-         )
-       );
-
-     return difference<12;
-   });
-
- /*
-   Require at least two windows to
-   agree closely.
- */
-
- if(close.length<2){
-   return null;
- }
-
- let weightedFrequency=0;
- let totalWeight=0;
-
- for(const result of close){
-
-   const weight=
-     result.confidence*
-     result.confidence;
-
-   weightedFrequency+=
-     result.frequency*weight;
-
-   totalWeight+=weight;
- }
-
- return{
-   frequency:
-     weightedFrequency/
-     totalWeight,
-
-   confidence:
-     close.reduce(
-       (sum,r)=>sum+r.confidence,
-       0
-     )/close.length
- };
-}
-
-/* ========================================
-   YIN WINDOW
-======================================== */
-
-function yinWindow(
- data,
- sampleRate,
- start,
- length
+function mcleodPitch(
+ samples,
+ sampleRate
 ){
-
- /*
-   Wide enough to identify the wrong
-   octave correctly too.
- */
 
  const minFrequency=65;
  const maxFrequency=400;
 
- const minTau=
+ const minLag=
    Math.floor(
      sampleRate/maxFrequency
    );
 
- const maxTau=
+ const maxLag=
    Math.ceil(
      sampleRate/minFrequency
    );
 
- if(length<=maxTau*2){
+ /*
+   Use a long central section but keep
+   the computation reasonable on iPhone.
+ */
+
+ const N=Math.min(
+   8192,
+   samples.length-maxLag-1
+ );
+
+ if(N<3000){
    return null;
  }
 
  /*
-   DC removal.
+   Remove DC offset.
  */
 
  let mean=0;
 
- for(
-   let i=start;
-   i<start+length;
-   i++
- ){
-   mean+=data[i];
+ for(let i=0;i<N+maxLag;i++){
+   mean+=samples[i];
  }
 
- mean/=length;
-
- const usable=
-   length-maxTau-1;
-
- const difference=
-   new Float64Array(
-     maxTau+1
-   );
+ mean/=(N+maxLag);
 
  /*
-   Difference function.
+   Normalized Square Difference Function.
 
-   Step 2 keeps it practical on
-   mobile while the large window
-   maintains low-E resolution.
+   NSDF =
+   2 * correlation /
+   (energy1 + energy2)
  */
 
+ const nsdf=
+   new Float64Array(
+     maxLag+2
+   );
+
  for(
-   let tau=1;
-   tau<=maxTau;
-   tau++
+   let lag=minLag;
+   lag<=maxLag;
+   lag++
  ){
 
-   let sum=0;
+   let acf=0;
+   let divisor=0;
+
+   /*
+     Step 2 is enough for the waveform
+     comparison while making this much
+     more practical on a phone.
+   */
 
    for(
      let i=0;
-     i<usable;
+     i<N;
      i+=2
    ){
 
      const a=
-       data[start+i]-mean;
+       samples[i]-mean;
 
      const b=
-       data[start+i+tau]-mean;
+       samples[i+lag]-mean;
 
-     const delta=a-b;
+     acf+=a*b;
 
-     sum+=delta*delta;
+     divisor+=
+       a*a+
+       b*b;
    }
 
-   difference[tau]=sum;
+   nsdf[lag]=
+     divisor>0
+     ?2*acf/divisor
+     :0;
  }
 
  /*
-   Cumulative mean normalisation.
+   Find positive local maxima.
  */
 
- const cmnd=
-   new Float64Array(
-     maxTau+1
-   );
+ const peaks=[];
 
- cmnd[0]=1;
-
- let runningSum=0;
+ let positive=false;
 
  for(
-   let tau=1;
-   tau<=maxTau;
-   tau++
+   let lag=minLag+1;
+   lag<maxLag;
+   lag++
  ){
 
-   runningSum+=difference[tau];
+   if(nsdf[lag]>0){
+     positive=true;
+   }
 
-   cmnd[tau]=
-     runningSum===0
-     ?1
-     :difference[tau]*
-      tau/
-      runningSum;
+   if(
+     positive &&
+     nsdf[lag]>=nsdf[lag-1] &&
+     nsdf[lag]>nsdf[lag+1]
+   ){
+
+     peaks.push({
+       lag,
+       value:nsdf[lag]
+     });
+   }
+
+   if(nsdf[lag]<0){
+     positive=false;
+   }
+ }
+
+ if(!peaks.length){
+   return null;
  }
 
  /*
-   First strong valley is important:
-   this prevents high E being folded
-   down into low E.
+   Strongest peak establishes the
+   reference quality.
  */
 
- let tau=-1;
+ let strongest=peaks[0];
 
- const threshold=.12;
+ for(const peak of peaks){
 
- for(
-   let t=minTau;
-   t<=maxTau;
-   t++
- ){
+   if(peak.value>strongest.value){
+     strongest=peak;
+   }
+ }
 
-   if(cmnd[t]<threshold){
+ if(strongest.value<.72){
+   return null;
+ }
 
-     while(
-       t+1<=maxTau &&
-       cmnd[t+1]<cmnd[t]
-     ){
-       t++;
-     }
+ /*
+   McLeod-style peak picking:
 
-     tau=t;
+   Take the FIRST important peak whose
+   strength is close to the strongest
+   peak.
+
+   This is what helps distinguish the
+   real fundamental from later period
+   multiples.
+ */
+
+ const cutoff=
+   strongest.value*.90;
+
+ let chosen=null;
+
+ for(const peak of peaks){
+
+   if(peak.value>=cutoff){
+
+     chosen=peak;
      break;
    }
  }
 
- /*
-   Fallback for quieter strings.
- */
-
- if(tau<0){
-
-   let bestValue=1;
-   let bestTau=-1;
-
-   for(
-     let t=minTau;
-     t<=maxTau;
-     t++
-   ){
-
-     if(cmnd[t]<bestValue){
-
-       bestValue=cmnd[t];
-       bestTau=t;
-     }
-   }
-
-   if(
-     bestTau<0 ||
-     bestValue>.25
-   ){
-     return null;
-   }
-
-   tau=bestTau;
+ if(!chosen){
+   chosen=strongest;
  }
 
+ let lag=chosen.lag;
+
  /*
-   Sub-sample interpolation.
+   Parabolic interpolation.
+
+   Gives fractional-lag resolution
+   instead of forcing the frequency
+   onto whole sample positions.
  */
 
- let refinedTau=tau;
+ const y1=nsdf[lag-1];
+ const y2=nsdf[lag];
+ const y3=nsdf[lag+1];
+
+ const denominator=
+   y1-
+   2*y2+
+   y3;
+
+ let refinedLag=lag;
 
  if(
-   tau>minTau &&
-   tau<maxTau
+   Math.abs(denominator)>
+   .0000001
  ){
 
-   const left=cmnd[tau-1];
-   const center=cmnd[tau];
-   const right=cmnd[tau+1];
-
-   const denominator=
-     left-
-     2*center+
-     right;
+   const adjustment=
+     .5*
+     (y1-y3)/
+     denominator;
 
    if(
-     Math.abs(denominator)>
-     0.0000001
+     Number.isFinite(adjustment) &&
+     Math.abs(adjustment)<=1
    ){
-
-     const shift=
-       .5*
-       (left-right)/
-       denominator;
-
-     if(
-       Number.isFinite(shift) &&
-       Math.abs(shift)<=1
-     ){
-       refinedTau+=shift;
-     }
+     refinedLag+=adjustment;
    }
  }
 
  const frequency=
-   sampleRate/refinedTau;
-
- const confidence=
-   1-cmnd[tau];
+   sampleRate/refinedLag;
 
  if(
    !Number.isFinite(frequency) ||
@@ -1344,105 +1198,15 @@ function yinWindow(
 
  return{
    frequency,
-   confidence
+   clarity:chosen.value
  };
 }
 
-/* ========================================
-   TEMPORAL STABILITY
-
-   Reject sudden isolated jumps.
-======================================== */
-
-function stabilisePitch(
- frequency,
- confidence
-){
-
- if(confidence<.70){
-   return null;
- }
-
- pitchHistory.push({
-   frequency,
-   confidence
- });
-
- if(pitchHistory.length>7){
-   pitchHistory.shift();
- }
-
- if(pitchHistory.length<3){
-   return null;
- }
-
- /*
-   Use median of the latest pitches.
- */
-
- const sorted=[
-   ...pitchHistory
- ].sort(
-   (a,b)=>
-     a.frequency-b.frequency
- );
-
- const median=
-   sorted[
-     Math.floor(
-       sorted.length/2
-     )
-   ].frequency;
-
- /*
-   Keep readings within 10 of
-   the median.
-
-   This is the outlier filter.
- */
-
- const accepted=
-   pitchHistory.filter(item=>{
-
-     const distance=
-       Math.abs(
-         1200*
-         Math.log2(
-           item.frequency/
-           median
-         )
-       );
-
-     return distance<=10;
-   });
-
- if(accepted.length<3){
-   return null;
- }
-
- let weighted=0;
- let weights=0;
-
- for(const item of accepted){
-
-   const w=
-     item.confidence*
-     item.confidence;
-
-   weighted+=
-     item.frequency*w;
-
-   weights+=w;
- }
-
- return weighted/weights;
-}
-
-/* ========================================
+/* ======================================
    DIFFERENCE
-======================================== */
+====================================== */
 
-function pitchDifference(
+function centsBetween(
  frequency,
  target
 ){
@@ -1455,142 +1219,211 @@ function pitchDifference(
  );
 }
 
-/* ========================================
-   MANUAL MODE
-======================================== */
-
-function processManual(pitch){
-
- const difference=
-   pitchDifference(
-     pitch,
-     selectedString.hz
-   );
-
- /*
-   Wrong strings remain wrong.
-
-   No octave folding.
- */
-
- const wrongPitch=
-   Math.abs(difference)>100;
-
- showReading(
-   selectedString,
-   difference,
-   wrongPitch
- );
-}
-
-/* ========================================
+/* ======================================
    AUTOMATIC
-======================================== */
 
-function processAutomatic(pitch){
+   IMPORTANT CHANGE:
+   If candidate changes from E to G,
+   history is cleared immediately.
+   G is NOT averaged with the old E.
+====================================== */
+
+function processAutomatic(result){
+
+ const pitch=result.frequency;
 
  let best=null;
  let smallest=Infinity;
 
  for(const string of GUITAR){
 
-   const difference=
+   const distance=
      Math.abs(
-       pitchDifference(
+       centsBetween(
          pitch,
          string.hz
        )
      );
 
-   if(difference<smallest){
+   if(distance<smallest){
 
-     smallest=difference;
+     smallest=distance;
      best=string;
    }
  }
 
- if(!best || smallest>55){
+ /*
+   Open string detection window.
+
+   If the note is nowhere near an open
+   string, don't pretend it is one.
+ */
+
+ if(!best || smallest>70){
+
+   currentCandidate=null;
+   candidateCount=0;
+   recentCents=[];
+   recentPitch=[];
 
    resetConfirmation();
+
+   instruction.textContent=
+     "Play an open string";
+
+   instruction.style.color=
+     "var(--muted)";
+
    return;
  }
 
- autoHistory.push(best.number);
+ /*
+   THIS fixes the sticky Low-E problem.
 
- if(autoHistory.length>6){
-   autoHistory.shift();
+   The moment a different plausible
+   string appears, previous pitch
+   smoothing is discarded.
+ */
+
+ if(
+   currentCandidate!==
+   best.number
+ ){
+
+   currentCandidate=
+     best.number;
+
+   candidateCount=1;
+
+   recentCents=[];
+   recentPitch=[];
+
+   resetConfirmation();
+
+   return;
+
+ }else{
+
+   candidateCount++;
  }
 
- const agreement=
-   autoHistory.filter(
-     n=>n===best.number
-   ).length;
+ /*
+   Only two consecutive detections
+   required.
 
- if(agreement<4){
+   It should switch strings quickly
+   without one random harmonic doing it.
+ */
+
+ if(candidateCount<2){
    return;
  }
+
+ const difference=
+   centsBetween(
+     pitch,
+     best.hz
+   );
 
  showReading(
    best,
-   pitchDifference(
-     pitch,
-     best.hz
-   ),
+   difference,
    false
  );
 }
 
-/* ========================================
+/* ======================================
+   MANUAL
+
+   Actual detected pitch is compared
+   directly with the selected target.
+
+   Low E + High E remains ~+2400.
+====================================== */
+
+function processManual(result){
+
+ const pitch=result.frequency;
+
+ const difference=
+   centsBetween(
+     pitch,
+     selectedString.hz
+   );
+
+ const wrongString=
+   Math.abs(difference)>120;
+
+ showReading(
+   selectedString,
+   difference,
+   wrongString
+ );
+}
+
+/* ======================================
+   ROBUST FILTER
+
+   We use a short MEDIAN.
+
+   A median ignores one crazy reading
+   rather than dragging the display
+   toward it.
+====================================== */
+
+function filteredDifference(value){
+
+ recentCents.push(value);
+
+ if(recentCents.length>5){
+   recentCents.shift();
+ }
+
+ if(recentCents.length<3){
+   return value;
+ }
+
+ const sorted=[
+   ...recentCents
+ ].sort((a,b)=>a-b);
+
+ return sorted[
+   Math.floor(
+     sorted.length/2
+   )
+ ];
+}
+
+/* ======================================
    DISPLAY
-======================================== */
+====================================== */
 
 function showReading(
  target,
  rawDifference,
- wrongPitch
+ wrongString
 ){
 
- let difference=rawDifference;
+ let difference;
 
- /*
-   Only smooth readings belonging to
-   the correct string.
-
-   Wrong strings must not contaminate
-   the next correct reading.
- */
-
- if(!wrongPitch){
-
-   differenceHistory.push(
-     rawDifference
-   );
-
-   if(differenceHistory.length>7){
-     differenceHistory.shift();
-   }
-
-   const sorted=[
-     ...differenceHistory
-   ].sort((a,b)=>a-b);
+ if(wrongString){
 
    /*
-     Median is more resistant to
-     occasional pitch spikes than
-     a normal average.
+     Never average a wrong string
+     together with a correct one.
    */
 
-   difference=
-     sorted[
-       Math.floor(
-         sorted.length/2
-       )
-     ];
+   recentCents=[];
+   difference=rawDifference;
+
+   resetConfirmation();
 
  }else{
 
-   differenceHistory=[];
-   resetConfirmation();
+   difference=
+     filteredDifference(
+       rawDifference
+     );
  }
 
  const rounded=
@@ -1602,13 +1435,11 @@ function showReading(
    :String(rounded);
 
  /*
-   Smooth needle independently.
-
-   Actual pitch number remains based
-   on the filtered measurement.
+   Visual meter is ±50.
+   Actual number is NOT limited.
  */
 
- const needleTarget=
+ const visualTarget=
    Math.max(
      -50,
      Math.min(
@@ -1617,12 +1448,21 @@ function showReading(
      )
    );
 
- displayedNeedle=
-   displayedNeedle+
+ /*
+   Extra visual interpolation.
+
+   This changes only how smoothly
+   the needle travels.
+
+   It does NOT alter the measured
+   tuning number.
+ */
+
+ displayedNeedle+=
    (
-     needleTarget-
+     visualTarget-
      displayedNeedle
-   )*.32;
+   )*.42;
 
  needle.style.left=
    (
@@ -1642,16 +1482,9 @@ function showReading(
    button.classList.add("active");
  }
 
- if(wrongPitch){
+ if(wrongString){
 
-   needle.style.background=
-     "var(--red)";
-
-   numberDisplay.style.color=
-     "var(--red)";
-
-   instruction.style.color=
-     "var(--red)";
+   setColour("red");
 
    instruction.textContent=
      difference<0
@@ -1669,23 +1502,18 @@ function showReading(
    Math.abs(difference);
 
  /*
-   PRECISION ZONES
+   Accurate tuning zones.
 
-   0–2 = green
-   3–4 = yellow
-   5+  = red
+   ±2 = green
+   ±4 = yellow
+   >4 = red
+
+   We don't pretend +6 is tuned.
  */
 
  if(amount<=2){
 
-   needle.style.background=
-     "var(--green)";
-
-   numberDisplay.style.color=
-     "var(--green)";
-
-   instruction.style.color=
-     "var(--green)";
+   setColour("green");
 
    instruction.textContent=
      "Hold steady";
@@ -1699,14 +1527,7 @@ function showReading(
 
    resetConfirmation();
 
-   needle.style.background=
-     "var(--yellow)";
-
-   numberDisplay.style.color=
-     "var(--yellow)";
-
-   instruction.style.color=
-     "var(--yellow)";
+   setColour("yellow");
 
    instruction.textContent=
      difference<0
@@ -1717,14 +1538,7 @@ function showReading(
 
    resetConfirmation();
 
-   needle.style.background=
-     "var(--red)";
-
-   numberDisplay.style.color=
-     "var(--red)";
-
-   instruction.style.color=
-     "var(--red)";
+   setColour("red");
 
    instruction.textContent=
      difference<0
@@ -1733,9 +1547,37 @@ function showReading(
  }
 }
 
-/* ========================================
-   CONFIRMATION
-======================================== */
+/* ======================================
+   COLOURS
+====================================== */
+
+function setColour(type){
+
+ let colour;
+
+ if(type==="green"){
+   colour="var(--green)";
+ }
+
+ if(type==="yellow"){
+   colour="var(--yellow)";
+ }
+
+ if(type==="red"){
+   colour="var(--red)";
+ }
+
+ needle.style.background=colour;
+ numberDisplay.style.color=colour;
+ instruction.style.color=colour;
+}
+
+/* ======================================
+   CONFIRM TUNED
+
+   We require stability, not one
+   accidental zero crossing.
+====================================== */
 
 function confirmTuning(
  target,
@@ -1760,11 +1602,8 @@ function confirmTuning(
 
  if(stableString!==target.number){
 
-   stableString=
-     target.number;
-
-   stableStart=
-     performance.now();
+   stableString=target.number;
+   stableStart=performance.now();
 
    fill.style.height="0%";
  }
@@ -1773,14 +1612,10 @@ function confirmTuning(
    performance.now()-
    stableStart;
 
- /*
-   2 seconds of stable pitch.
- */
-
  const progress=
    Math.min(
      1,
-     elapsed/2000
+     elapsed/1800
    );
 
  fill.style.height=
@@ -1803,9 +1638,9 @@ function resetConfirmation(){
  fill.style.height="0%";
 }
 
-/* ========================================
+/* ======================================
    MARK TUNED
-======================================== */
+====================================== */
 
 function markTuned(target){
 
@@ -1840,14 +1675,10 @@ function markTuned(target){
 
  numberDisplay.textContent="0";
 
- numberDisplay.style.color=
-   "var(--green)";
+ setColour("green");
 
  instruction.textContent=
    "In tune ✓";
-
- instruction.style.color=
-   "var(--green)";
 
  status.textContent=
    target.name+" is tuned.";
@@ -1861,9 +1692,9 @@ function markTuned(target){
  }
 }
 
-/* ========================================
-   VISUAL STATES
-======================================== */
+/* ======================================
+   VISUAL STRING STATES
+====================================== */
 
 function setBad(number){
 
@@ -1935,21 +1766,20 @@ function clearActive(){
  });
 }
 
-function resetHistories(){
+function resetTracking(){
 
- pitchHistory=[];
- differenceHistory=[];
- autoHistory=[];
+ currentCandidate=null;
+ candidateCount=0;
+
+ recentCents=[];
+ recentPitch=[];
 
  displayedNeedle=0;
 }
 
 /*
-  Nothing is saved.
-
-  Refreshing or leaving the page
-  starts a completely new tuning
-  session.
+  Session state deliberately disappears
+  on refresh/exit.
 */
 
 </script>
