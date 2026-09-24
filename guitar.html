@@ -35,10 +35,7 @@ html,body{
 
 body{overflow:hidden}
 
-button,textarea,input{
-  font:inherit;
-}
-
+button,textarea,input{font:inherit}
 button{cursor:pointer}
 
 .app{
@@ -49,7 +46,6 @@ button{cursor:pointer}
   flex-direction:column;
   position:relative;
   overflow:hidden;
-
   background:
     radial-gradient(circle at 18% 0%,rgba(80,80,255,.22),transparent 27%),
     radial-gradient(circle at 86% 0%,rgba(0,225,165,.15),transparent 25%),
@@ -86,22 +82,14 @@ button{cursor:pointer}
   font-size:23px;
 }
 
-.backButton{
-  text-decoration:none;
-}
-
-.brand{
-  text-align:center;
-}
+.brand{text-align:center}
 
 .brandName{
   font-size:17px;
   font-weight:900;
 }
 
-.brandName span{
-  color:var(--green);
-}
+.brandName span{color:var(--green)}
 
 .online{
   margin-top:3px;
@@ -129,9 +117,7 @@ button{cursor:pointer}
   scroll-behavior:smooth;
 }
 
-.chat::-webkit-scrollbar{
-  display:none;
-}
+.chat::-webkit-scrollbar{display:none}
 
 .intro{
   padding:8px 5px 20px;
@@ -174,9 +160,7 @@ button{cursor:pointer}
   letter-spacing:-1.4px;
 }
 
-.intro h1 span{
-  color:var(--green);
-}
+.intro h1 span{color:var(--green)}
 
 .introText{
   margin-top:13px;
@@ -199,13 +183,8 @@ button{cursor:pointer}
   to{opacity:1;transform:translateY(0)}
 }
 
-.messageRow.user{
-  justify-content:flex-end;
-}
-
-.messageRow.nova{
-  justify-content:flex-start;
-}
+.messageRow.user{justify-content:flex-end}
+.messageRow.nova{justify-content:flex-start}
 
 .message{
   max-width:88%;
@@ -248,9 +227,7 @@ button{cursor:pointer}
   padding:5px 2px 12px;
 }
 
-.suggestions::-webkit-scrollbar{
-  display:none;
-}
+.suggestions::-webkit-scrollbar{display:none}
 
 .suggestion{
   flex:0 0 auto;
@@ -328,9 +305,7 @@ textarea{
   font-size:16px;
 }
 
-textarea::placeholder{
-  color:#69778b;
-}
+textarea::placeholder{color:#69778b}
 
 .composerButton{
   width:46px;
@@ -355,11 +330,9 @@ textarea::placeholder{
   font-weight:950;
 }
 
-.send:disabled{
-  opacity:.35;
-}
+.send:disabled{opacity:.35}
 
-/* HISTORY DRAWER */
+/* HISTORY */
 
 .overlay{
   position:absolute;
@@ -391,9 +364,7 @@ textarea::placeholder{
   overflow-y:auto;
 }
 
-.drawer.open{
-  transform:translateX(0);
-}
+.drawer.open{transform:translateX(0)}
 
 .drawerTop{
   display:flex;
@@ -480,223 +451,152 @@ textarea::placeholder{
 
 <div class="app">
 
-  <header class="header">
-    <div class="headerRow">
+<header class="header">
+  <div class="headerRow">
 
-      <button
-        class="iconButton"
-        id="historyButton"
-        aria-label="Chat history"
-      >
-        ☰
-      </button>
+    <button class="iconButton" id="historyButton" aria-label="Chat history">
+      ☰
+    </button>
 
-      <div class="brand">
-        <div class="brandName">
-          NOVA <span>GUITAR AI</span>
-        </div>
-
-        <div class="online">
-          <span class="onlineDot"></span>
-          Ready to play
-        </div>
+    <div class="brand">
+      <div class="brandName">
+        NOVA <span>GUITAR AI</span>
       </div>
 
-      <button
-        class="iconButton"
-        id="newChatButton"
-        aria-label="New chat"
-      >
-        +
-      </button>
-
-    </div>
-  </header>
-
-
-  <main class="chat" id="chat">
-
-    <section class="intro" id="intro">
-
-      <div class="aiIdentity">
-
-        <div class="avatar">♪</div>
-
-        <div>
-          <div class="aiTitle">Nova</div>
-          <div class="aiSubtitle">
-            Your personal guitar AI
-          </div>
-        </div>
-
+      <div class="online">
+        <span class="onlineDot"></span>
+        AI online
       </div>
-
-      <h1>
-        What do you want to
-        <span>play?</span>
-      </h1>
-
-      <div class="introText">
-        Talk naturally with Nova.
-        Ask about chords, songs, technique,
-        theory, practice or anything you're
-        trying to understand.
-      </div>
-
-    </section>
-
-
-    <div id="conversation"></div>
-
-
-    <div
-      class="suggestions"
-      id="suggestions"
-    >
-
-      <button
-        class="suggestion"
-        data-prompt="I'm a complete beginner"
-      >
-        I'm a beginner
-      </button>
-
-      <button
-        class="suggestion"
-        data-prompt="Teach me a guitar chord"
-      >
-        Learn a chord
-      </button>
-
-      <button
-        class="suggestion"
-        data-prompt="Give me a practice session"
-      >
-        Start practice
-      </button>
-
-      <button
-        class="suggestion"
-        data-prompt="Help me learn a song"
-      >
-        Learn a song
-      </button>
-
     </div>
 
-  </main>
+    <button class="iconButton" id="newChatButton" aria-label="New chat">
+      +
+    </button>
+
+  </div>
+</header>
 
 
-  <div class="composerArea">
+<main class="chat" id="chat">
 
-    <div class="composer">
+<section class="intro" id="intro">
 
-      <button
-        class="composerButton mic"
-        id="micButton"
-        aria-label="Voice"
-      >
-        🎙
-      </button>
+  <div class="aiIdentity">
 
-      <textarea
-        id="input"
-        rows="1"
-        placeholder="Message Nova..."
-      ></textarea>
+    <div class="avatar">♪</div>
 
-      <button
-        class="composerButton send"
-        id="sendButton"
-        disabled
-      >
-        ↑
-      </button>
-
+    <div>
+      <div class="aiTitle">Nova</div>
+      <div class="aiSubtitle">
+        Your personal guitar AI
+      </div>
     </div>
 
   </div>
 
+  <h1>
+    What do you want to
+    <span>play?</span>
+  </h1>
 
-  <div
-    class="overlay"
-    id="overlay"
-  ></div>
+  <div class="introText">
+    Talk naturally with Nova.
+    Ask about chords, songs, technique,
+    theory, practice or anything you're
+    trying to understand.
+  </div>
+
+</section>
+
+<div id="conversation"></div>
+
+<div class="suggestions" id="suggestions">
+
+  <button class="suggestion" data-prompt="I'm a complete beginner">
+    I'm a beginner
+  </button>
+
+  <button class="suggestion" data-prompt="Teach me a guitar chord">
+    Learn a chord
+  </button>
+
+  <button class="suggestion" data-prompt="Give me a practice session">
+    Start practice
+  </button>
+
+  <button class="suggestion" data-prompt="Help me learn a song">
+    Learn a song
+  </button>
+
+</div>
+
+</main>
 
 
-  <aside
-    class="drawer"
-    id="drawer"
-  >
+<div class="composerArea">
 
-    <div class="drawerTop">
+  <div class="composer">
 
-      <div class="drawerTitle">
-        Chats
-      </div>
-
-      <button
-        class="closeDrawer"
-        id="closeDrawer"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <button
-      class="newChatLarge"
-      id="drawerNewChat"
-    >
-      + New chat
+    <button class="composerButton mic" id="micButton" aria-label="Voice">
+      🎙
     </button>
 
+    <textarea
+      id="input"
+      rows="1"
+      placeholder="Message Nova..."
+    ></textarea>
 
-    <div class="historyHeading">
-      Recent
+    <button class="composerButton send" id="sendButton" disabled>
+      ↑
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="overlay" id="overlay"></div>
+
+
+<aside class="drawer" id="drawer">
+
+  <div class="drawerTop">
+
+    <div class="drawerTitle">
+      Chats
     </div>
 
+    <button class="closeDrawer" id="closeDrawer">
+      ×
+    </button>
 
-    <div id="historyList"></div>
+  </div>
 
-  </aside>
+  <button class="newChatLarge" id="drawerNewChat">
+    + New chat
+  </button>
+
+  <div class="historyHeading">
+    Recent
+  </div>
+
+  <div id="historyList"></div>
+
+</aside>
 
 </div>
 
 
 <script>
 
-/*
-=========================================================
-NOVA GUITAR AI
-Conversation + History Prototype
+/* =====================================================
+   NOVA GUITAR AI
+   Cloudflare Workers AI connected version
+===================================================== */
 
-This version provides:
-
-✓ multi-message conversations
-✓ previous-message context
-✓ saved chats
-✓ chat history
-✓ reopening old conversations
-✓ automatic titles
-✓ casual abbreviation normalization
-✓ basic typo interpretation
-✓ persistent local browser storage
-
-IMPORTANT:
-
-The response generator below is still a temporary
-local brain.
-
-It is NOT the final Nova generative language model.
-
-The conversation architecture is deliberately designed
-so that the final Nova model can later receive the
-entire conversation array.
-=========================================================
-*/
-
+const NOVA_API =
+  "https://nova-guitar-ai.kb6cj2ktgc.workers.dev";
 
 const STORAGE_KEY =
   "nova_guitar_chats_v2";
@@ -745,178 +645,9 @@ const micButton =
 let chats =
   loadChats();
 
-
 let currentChatId = null;
 
-
-/* =====================================================
-   ABBREVIATIONS
-
-   These are INPUT NORMALIZATION.
-
-   The user's original message is still displayed and
-   saved exactly as typed.
-
-   Nova receives the interpreted form.
-===================================================== */
-
-const abbreviations = {
-
-  "idk":"i don't know",
-  "idc":"i don't care",
-  "imo":"in my opinion",
-  "imho":"in my humble opinion",
-  "btw":"by the way",
-  "rn":"right now",
-  "bc":"because",
-  "bcs":"because",
-  "cuz":"because",
-  "coz":"because",
-  "pls":"please",
-  "plz":"please",
-  "thx":"thanks",
-  "ty":"thank you",
-  "np":"no problem",
-  "nvm":"never mind",
-  "omg":"oh my god",
-  "tbh":"to be honest",
-  "asap":"as soon as possible",
-  "wym":"what do you mean",
-  "wdym":"what do you mean",
-  "ikr":"i know right",
-  "irl":"in real life",
-  "brb":"be right back",
-  "gtg":"got to go",
-  "g2g":"got to go",
-  "lol":"laughing",
-  "lmao":"laughing",
-  "k":"okay",
-  "kk":"okay",
-  "yep":"yes",
-  "yup":"yes",
-  "yeah":"yes",
-  "nah":"no",
-  "nope":"no"
-};
-
-
-/* =====================================================
-   COMMON GUITAR / CASUAL TYPOS
-
-   This is intentionally conservative.
-
-   We don't want Nova nagging the user about every
-   informal spelling.
-===================================================== */
-
-const commonTypos = {
-
-  "gutar":"guitar",
-  "guiter":"guitar",
-  "guitor":"guitar",
-
-  "chrod":"chord",
-  "cord":"chord",
-  "chrods":"chords",
-  "cords":"chords",
-
-  "strng":"string",
-  "stirng":"string",
-  "strngs":"strings",
-
-  "struming":"strumming",
-  "struming":"strumming",
-
-  "fretbord":"fretboard",
-  "fretbaord":"fretboard",
-
-  "begginer":"beginner",
-  "beginer":"beginner",
-  "begginner":"beginner",
-
-  "practiseing":"practising",
-  "practicingg":"practising",
-
-  "wht":"what",
-  "wat":"what",
-
-  "dont":"don't",
-  "cant":"can't",
-  "wont":"won't",
-
-  "im":"i'm",
-
-  "whats":"what's",
-
-  "doesnt":"doesn't",
-
-  "didnt":"didn't",
-
-  "isnt":"isn't",
-
-  "arent":"aren't"
-};
-
-
-/* =====================================================
-   NORMALIZE TEXT
-===================================================== */
-
-function understandText(text){
-
-  const original =
-    text.trim();
-
-
-  let words =
-    original
-      .toLowerCase()
-      .split(/(\s+|[.,!?;:]+)/);
-
-
-  let corrections = [];
-
-
-  words =
-    words.map(part => {
-
-      const key =
-        part.toLowerCase();
-
-
-      if(abbreviations[key]){
-
-        return abbreviations[key];
-      }
-
-
-      if(commonTypos[key]){
-
-        corrections.push({
-          from:part,
-          to:commonTypos[key]
-        });
-
-
-        return commonTypos[key];
-      }
-
-
-      return part;
-    });
-
-
-  return {
-
-    original,
-
-    understood:
-      words.join("").trim(),
-
-    corrections
-
-  };
-}
+let waitingForNova = false;
 
 
 /* =====================================================
@@ -928,19 +659,14 @@ function loadChats(){
   try{
 
     const saved =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
-
+      localStorage.getItem(STORAGE_KEY);
 
     if(!saved){
       return [];
     }
 
-
     const parsed =
       JSON.parse(saved);
-
 
     return Array.isArray(parsed)
       ? parsed
@@ -969,7 +695,6 @@ function saveChats(){
       error
     );
   }
-
 
   renderHistory();
 }
@@ -1003,15 +728,10 @@ function createChat(){
     messages:[]
   };
 
-
-  chats.unshift(
-    chatObject
-  );
-
+  chats.unshift(chatObject);
 
   currentChatId =
     chatObject.id;
-
 
   saveChats();
 
@@ -1031,14 +751,13 @@ function getCurrentChat(){
 
   return chats.find(
     item =>
-      item.id ===
-      currentChatId
+      item.id === currentChatId
   );
 }
 
 
 /* =====================================================
-   AUTO TITLE
+   TITLE
 ===================================================== */
 
 function makeChatTitle(text){
@@ -1048,61 +767,40 @@ function makeChatTitle(text){
       .replace(/\s+/g," ")
       .trim();
 
-
   if(clean.length > 34){
 
     clean =
-      clean.slice(0,34)
-      .trim() +
+      clean.slice(0,34).trim() +
       "…";
   }
 
-
-  return clean ||
-    "Guitar chat";
+  return clean || "Guitar chat";
 }
 
 
 /* =====================================================
-   ADD MESSAGE TO CHAT DATA
+   STORE MESSAGE
 ===================================================== */
 
-function storeMessage(
-  role,
-  content,
-  interpreted = null
-){
+function storeMessage(role,content){
 
   const active =
     getCurrentChat();
-
 
   if(!active){
     return;
   }
 
-
   active.messages.push({
 
     role,
-
     content,
-
-    interpreted,
-
-    time:
-      Date.now()
+    time:Date.now()
 
   });
 
-
   active.updatedAt =
     Date.now();
-
-
-  /*
-  First user message becomes title.
-  */
 
   if(
     role === "user" &&
@@ -1116,24 +814,18 @@ function storeMessage(
       makeChatTitle(content);
   }
 
-
-  /*
-  Put most recently used chat first.
-  */
-
   chats.sort(
     (a,b) =>
       b.updatedAt -
       a.updatedAt
   );
 
-
   saveChats();
 }
 
 
 /* =====================================================
-   SEND MESSAGE
+   SEND
 ===================================================== */
 
 function sendCurrentMessage(){
@@ -1141,11 +833,12 @@ function sendCurrentMessage(){
   const text =
     input.value.trim();
 
-
-  if(!text){
+  if(
+    !text ||
+    waitingForNova
+  ){
     return;
   }
-
 
   input.value = "";
 
@@ -1153,28 +846,24 @@ function sendCurrentMessage(){
 
   sendButton.disabled = true;
 
-
   sendUserMessage(text);
 }
 
 
-function sendUserMessage(text){
+async function sendUserMessage(text){
+
+  if(waitingForNova){
+    return;
+  }
 
   if(!currentChatId){
     createChat();
   }
 
-
-  const interpretation =
-    understandText(text);
-
-
   storeMessage(
     "user",
-    interpretation.original,
-    interpretation.understood
+    text
   );
-
 
   renderCurrentChat();
 
@@ -1182,28 +871,104 @@ function sendUserMessage(text){
 
   scrollToBottom();
 
+  waitingForNova = true;
 
-  /*
-  TEMPORARY local response.
+  sendButton.disabled = true;
 
-  Later this is where the full conversation
-  will be sent to the real Nova model.
-  */
 
-  setTimeout(() => {
-
-    removeThinking();
-
+  try{
 
     const active =
       getCurrentChat();
 
 
-    const reply =
-      novaBrain(
-        active.messages,
-        interpretation
+    /*
+    Send recent conversation history.
+
+    This allows Nova to understand follow-ups such as:
+
+    "yes"
+    "why?"
+    "that one"
+    "the second one"
+    "idk"
+    */
+
+    const messages =
+      active.messages
+        .slice(-30)
+        .filter(
+          message =>
+            message.role === "user" ||
+            message.role === "assistant"
+        )
+        .map(
+          message => ({
+            role:message.role,
+            content:message.content
+          })
+        );
+
+
+    const response =
+      await fetch(
+        NOVA_API,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              messages
+            })
+        }
       );
+
+
+    let data = null;
+
+
+    try{
+
+      data =
+        await response.json();
+
+    }catch(error){
+
+      throw new Error(
+        "Nova returned an unreadable response."
+      );
+    }
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data?.error ||
+        "Nova couldn't answer right now."
+      );
+    }
+
+
+    const reply =
+      typeof data?.reply === "string"
+        ? data.reply.trim()
+        : "";
+
+
+    if(!reply){
+
+      throw new Error(
+        "Nova didn't return a reply."
+      );
+    }
+
+
+    removeThinking();
 
 
     storeMessage(
@@ -1216,7 +981,35 @@ function sendUserMessage(text){
 
     scrollToBottom();
 
-  },500);
+
+  }catch(error){
+
+    console.error(
+      "Nova AI error:",
+      error
+    );
+
+
+    removeThinking();
+
+
+    storeMessage(
+      "assistant",
+      "I couldn't connect to Nova AI just now. Please try sending that message again."
+    );
+
+
+    renderCurrentChat();
+
+    scrollToBottom();
+
+  }finally{
+
+    waitingForNova = false;
+
+    sendButton.disabled =
+      !input.value.trim();
+  }
 }
 
 
@@ -1228,10 +1021,8 @@ function renderCurrentChat(){
 
   conversation.innerHTML = "";
 
-
   const active =
     getCurrentChat();
-
 
   if(
     !active ||
@@ -1244,10 +1035,8 @@ function renderCurrentChat(){
     return;
   }
 
-
   suggestions.style.display =
     "none";
-
 
   active.messages.forEach(
     message => {
@@ -1259,19 +1048,15 @@ function renderCurrentChat(){
     }
   );
 
-
   scrollToBottom();
 }
 
 
 /* =====================================================
-   RENDER MESSAGE
+   MESSAGE
 ===================================================== */
 
-function renderMessage(
-  role,
-  text
-){
+function renderMessage(role,text){
 
   const sender =
     role === "assistant"
@@ -1290,9 +1075,7 @@ function renderMessage(
     label.textContent =
       "Nova";
 
-    conversation.appendChild(
-      label
-    );
+    conversation.appendChild(label);
   }
 
 
@@ -1300,8 +1083,7 @@ function renderMessage(
     document.createElement("div");
 
   row.className =
-    "messageRow " +
-    sender;
+    "messageRow " + sender;
 
 
   const bubble =
@@ -1314,14 +1096,9 @@ function renderMessage(
     text;
 
 
-  row.appendChild(
-    bubble
-  );
+  row.appendChild(bubble);
 
-
-  conversation.appendChild(
-    row
-  );
+  conversation.appendChild(row);
 }
 
 
@@ -1332,6 +1109,21 @@ function renderMessage(
 function showThinking(){
 
   removeThinking();
+
+
+  const label =
+    document.createElement("div");
+
+  label.className =
+    "novaLabel";
+
+  label.id =
+    "thinkingLabel";
+
+  label.textContent =
+    "Nova";
+
+  conversation.appendChild(label);
 
 
   const row =
@@ -1350,397 +1142,37 @@ function showThinking(){
   bubble.className =
     "message";
 
-
   bubble.innerHTML =
     '<span class="thinking">' +
     '<i></i><i></i><i></i>' +
     '</span>';
 
 
-  row.appendChild(
-    bubble
-  );
+  row.appendChild(bubble);
 
-
-  conversation.appendChild(
-    row
-  );
+  conversation.appendChild(row);
 }
 
 
 function removeThinking(){
 
-  const old =
+  const row =
     document.getElementById(
       "thinkingRow"
     );
 
-
-  if(old){
-    old.remove();
-  }
-}
-
-
-/* =====================================================
-   CONVERSATIONAL CONTEXT HELPERS
-===================================================== */
-
-function previousAssistantMessage(
-  messages
-){
-
-  for(
-    let i =
-      messages.length - 2;
-    i >= 0;
-    i--
-  ){
-
-    if(
-      messages[i].role ===
-      "assistant"
-    ){
-
-      return messages[i].content;
-    }
-  }
-
-
-  return "";
-}
-
-
-function previousUserMessage(
-  messages
-){
-
-  let foundLatest = false;
-
-
-  for(
-    let i =
-      messages.length - 1;
-    i >= 0;
-    i--
-  ){
-
-    if(
-      messages[i].role ===
-      "user"
-    ){
-
-      if(foundLatest){
-        return messages[i].content;
-      }
-
-
-      foundLatest = true;
-    }
-  }
-
-
-  return "";
-}
-
-
-/* =====================================================
-   TEMPORARY NOVA BRAIN
-
-   THIS IS NOT THE FINAL AI.
-
-   Unlike the previous demonstration, this receives
-   the WHOLE conversation.
-
-   That means short replies such as:
-   "yes"
-   "no"
-   "idk"
-   "the second one"
-   can at least use preceding context.
-
-   The final generative Nova model will replace
-   this function entirely.
-===================================================== */
-
-function novaBrain(
-  messages,
-  interpretation
-){
-
-  const text =
-    interpretation.understood
-      .toLowerCase();
-
-
-  const previousNova =
-    previousAssistantMessage(
-      messages
-    ).toLowerCase();
-
-
-  /*
-  ---------------------------------------------
-  CONTEXTUAL YES
-  ---------------------------------------------
-  */
-
-  if(
-    text === "yes" ||
-    text === "yes." ||
-    text === "okay" ||
-    text === "ok"
-  ){
-
-    if(
-      previousNova.includes(
-        "start with em"
-      ) ||
-      previousNova.includes(
-        "want to learn em"
-      )
-    ){
-
-      return (
-        "Great — let's start with Em.\n\n" +
-
-        "Put one finger on the 2nd fret of the A string and another on the 2nd fret of the D string. Leave the other strings open, then gently strum all six strings.\n\n" +
-
-        "Listen for six clear notes. If one sounds muted or buzzy, tell me which one."
-      );
-    }
-
-
-    if(
-      previousNova.includes(
-        "practice"
-      )
-    ){
-
-      return (
-        "Great. We'll do it together. Start slowly and don't worry about speed yet. Tell me when you're ready for the first exercise."
-      );
-    }
-
-
-    return (
-      "Got it. Tell me what you'd like to do next."
+  const label =
+    document.getElementById(
+      "thinkingLabel"
     );
+
+  if(row){
+    row.remove();
   }
 
-
-  /*
-  ---------------------------------------------
-  IDK / I DON'T KNOW
-
-  Because IDK was normalized before reaching here,
-  both forms behave the same way.
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes(
-      "i don't know"
-    )
-  ){
-
-    if(
-      previousNova.includes(
-        "em"
-      )
-    ){
-
-      return (
-        "That's okay — I'll choose for us. Let's start with Em because it's one of the simplest full guitar chords and gives you a good first feel for fretting and strumming."
-      );
-    }
-
-
-    return (
-      "That's fine — I can guide you. If you're starting from scratch, we'll begin with the basics and take it one step at a time."
-    );
+  if(label){
+    label.remove();
   }
-
-
-  /*
-  ---------------------------------------------
-  BEGINNER
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes(
-      "beginner"
-    )
-  ){
-
-    return (
-      "Perfect. We can start right from the beginning and build from there.\n\n" +
-
-      "I'd begin with how to hold the guitar comfortably, then one simple chord, and then your first chord change.\n\n" +
-
-      "Would you like to start with Em?"
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  EM
-  ---------------------------------------------
-  */
-
-  if(
-    /\bem\b/.test(text) ||
-    text.includes(
-      "e minor"
-    )
-  ){
-
-    return (
-      "For Em, place two fingers on the 2nd fret: one on the A string and one on the D string. The remaining strings stay open.\n\n" +
-
-      "Strum all six strings slowly. Each one should ring clearly."
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  DM
-  ---------------------------------------------
-  */
-
-  if(
-    /\bdm\b/.test(text) ||
-    text.includes(
-      "d minor"
-    )
-  ){
-
-    return (
-      "For D minor, put your index finger on the 1st fret of the high E string, middle finger on the 2nd fret of G, and ring finger on the 3rd fret of B.\n\n" +
-
-      "Strum from the D string downward."
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  CHORD
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes(
-      "chord"
-    )
-  ){
-
-    return (
-      "Absolutely. Which chord are you working on? You can give me its name — Em, G, C, D, Am, Dm, F, or another one — and we'll work through it together."
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  PRACTICE
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes("practice") ||
-    text.includes("practise")
-  ){
-
-    return (
-      "We can build a practice session around your actual level rather than giving everyone the same routine.\n\n" +
-
-      "Are you a complete beginner, do you already know a few chords, or can you already play some songs?"
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  SONG
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes(
-      "song"
-    )
-  ){
-
-    return (
-      "Tell me which song. Then tell me roughly what you can already play, and I'll break it into manageable parts rather than dumping the whole thing on you."
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  BANANA / OFF-TOPIC EXAMPLE
-
-  Nova can answer normally, then naturally
-  reconnect to its guitar role.
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes(
-      "banana"
-    )
-  ){
-
-    return (
-      "A banana is an edible fruit that grows in clusters on large flowering plants. It's usually eaten when the peel turns yellow, although there are many varieties.\n\n" +
-
-      "Anyway — I'm your guitar AI. What are we playing today?"
-    );
-  }
-
-
-  /*
-  ---------------------------------------------
-  WHAT DO YOU MEAN
-  ---------------------------------------------
-  */
-
-  if(
-    text.includes(
-      "what do you mean"
-    )
-  ){
-
-    if(previousNova){
-
-      return (
-        "I mean the last thing I was explaining. Tell me which part wasn't clear and I'll explain it in a simpler way."
-      );
-    }
-  }
-
-
-  /*
-  ---------------------------------------------
-  DEFAULT
-
-  Temporary only.
-
-  The future generative model removes the need
-  for this fallback.
-  ---------------------------------------------
-  */
-
-  return (
-    "I understand what you're asking, but this prototype is still using Nova's temporary local conversation brain.\n\n" +
-
-    "The next stage is connecting the generative Nova model so I can answer freely rather than relying on programmed examples."
-  );
 }
 
 
@@ -1751,7 +1183,6 @@ function novaBrain(
 function renderHistory(){
 
   historyList.innerHTML = "";
-
 
   if(chats.length === 0){
 
@@ -1764,9 +1195,7 @@ function renderHistory(){
     empty.textContent =
       "Your Nova conversations will appear here.";
 
-    historyList.appendChild(
-      empty
-    );
+    historyList.appendChild(empty);
 
     return;
   }
@@ -1781,19 +1210,13 @@ function renderHistory(){
     .forEach(item => {
 
       const button =
-        document.createElement(
-          "button"
-        );
-
+        document.createElement("button");
 
       button.className =
         "historyItem";
 
 
-      if(
-        item.id ===
-        currentChatId
-      ){
+      if(item.id === currentChatId){
 
         button.classList.add(
           "active"
@@ -1802,9 +1225,7 @@ function renderHistory(){
 
 
       const title =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       title.className =
         "historyTitle";
@@ -1814,17 +1235,13 @@ function renderHistory(){
 
 
       const date =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       date.className =
         "historyDate";
 
       date.textContent =
-        formatDate(
-          item.updatedAt
-        );
+        formatDate(item.updatedAt);
 
 
       button.appendChild(title);
@@ -1863,7 +1280,6 @@ function formatDate(timestamp){
 
   const date =
     new Date(timestamp);
-
 
   const today =
     new Date();
@@ -1905,25 +1321,17 @@ function openHistory(){
 
   renderHistory();
 
-  drawer.classList.add(
-    "open"
-  );
+  drawer.classList.add("open");
 
-  overlay.classList.add(
-    "open"
-  );
+  overlay.classList.add("open");
 }
 
 
 function closeHistory(){
 
-  drawer.classList.remove(
-    "open"
-  );
+  drawer.classList.remove("open");
 
-  overlay.classList.remove(
-    "open"
-  );
+  overlay.classList.remove("open");
 }
 
 
@@ -1966,9 +1374,7 @@ drawerNewChat.addEventListener(
 ===================================================== */
 
 document
-  .querySelectorAll(
-    ".suggestion"
-  )
+  .querySelectorAll(".suggestion")
   .forEach(button => {
 
     button.addEventListener(
@@ -1994,6 +1400,7 @@ input.addEventListener(
     resizeInput();
 
     sendButton.disabled =
+      waitingForNova ||
       !input.value.trim();
   }
 );
@@ -2025,8 +1432,7 @@ sendButton.addEventListener(
 /* =====================================================
    MICROPHONE
 
-   Deliberately NOT reconnecting the inaccurate
-   tuner yet.
+   Voice/audio comes later.
 ===================================================== */
 
 micButton.addEventListener(
@@ -2037,12 +1443,10 @@ micButton.addEventListener(
       createChat();
     }
 
-
     storeMessage(
       "assistant",
-      "Voice and guitar listening will plug into this button later. For now, type to me here."
+      "Voice and guitar listening are coming later. For now, type your message to me."
     );
-
 
     renderCurrentChat();
   }
@@ -2058,13 +1462,11 @@ function resizeInput(){
   input.style.height =
     "auto";
 
-
   input.style.height =
     Math.min(
       input.scrollHeight,
       130
-    ) +
-    "px";
+    ) + "px";
 }
 
 
@@ -2090,13 +1492,6 @@ function scrollToBottom(){
    STARTUP
 ===================================================== */
 
-/*
-If there is already a saved chat,
-open the most recently used one.
-
-Otherwise create a fresh conversation.
-*/
-
 if(chats.length > 0){
 
   chats.sort(
@@ -2105,10 +1500,8 @@ if(chats.length > 0){
       a.updatedAt
   );
 
-
   currentChatId =
     chats[0].id;
-
 
   renderCurrentChat();
 
