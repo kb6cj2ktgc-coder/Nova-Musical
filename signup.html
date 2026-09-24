@@ -1,715 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070909">
+<title>Create Account | Nova Musical</title>
 
-  <title>Create Account | Nova Musical</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #070909;
-      --panel: #101313;
-      --panel-2: #151919;
-      --border: #252b2b;
-      --text: #f4f7f6;
-      --muted: #8e9996;
-      --green: #55e6a5;
-      --green-dark: #36c98b;
-      --danger: #ff7272;
-    }
-
-    html,
-    body {
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      justify-content: center;
-    }
-
-    .page {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      min-height: 100dvh;
-      padding:
-        max(30px, env(safe-area-inset-top))
-        22px
-        max(35px, env(safe-area-inset-bottom));
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand {
-      text-align: center;
-      margin-top: 18px;
-      margin-bottom: 38px;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 850;
-      letter-spacing: 2.5px;
-    }
-
-    .logo span {
-      color: var(--green);
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 6px 11px;
-      border: 1px solid rgba(85, 230, 165, 0.28);
-      border-radius: 999px;
-      color: var(--green);
-      background: rgba(85, 230, 165, 0.06);
-      font-size: 10px;
-      font-weight: 750;
-      letter-spacing: 1.4px;
-    }
-
-    .card {
-      width: 100%;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 27px 21px 24px;
-      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.25);
-    }
-
-    h1 {
-      font-size: 29px;
-      line-height: 1.1;
-      text-align: center;
-      margin-bottom: 9px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 27px;
-    }
-
-    .field {
-      margin-bottom: 17px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin: 0 0 8px 2px;
-    }
-
-    input {
-      width: 100%;
-      height: 52px;
-      padding: 0 15px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      outline: none;
-      background: var(--panel-2);
-      color: var(--text);
-      font-size: 16px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    input::placeholder {
-      color: #697370;
-    }
-
-    input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(85, 230, 165, 0.09);
-    }
-
-    .username-wrap,
-    .password-wrap {
-      position: relative;
-    }
-
-    .username-prefix {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      font-size: 16px;
-      pointer-events: none;
-    }
-
-    #username {
-      padding-left: 32px;
-    }
-
-    .show-password {
-      position: absolute;
-      right: 13px;
-      top: 50%;
-      transform: translateY(-50%);
-      border: 0;
-      background: transparent;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 750;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    #password {
-      padding-right: 65px;
-    }
-
-    .hint {
-      margin: 7px 2px 0;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.4;
-    }
-
-    .submit {
-      width: 100%;
-      height: 54px;
-      margin-top: 7px;
-      border: 0;
-      border-radius: 15px;
-      background: var(--green);
-      color: #06110c;
-      font-size: 15px;
-      font-weight: 850;
-      cursor: pointer;
-      transition: transform 0.15s, opacity 0.15s;
-    }
-
-    .submit:active {
-      transform: scale(0.985);
-    }
-
-    .submit:disabled {
-      cursor: default;
-      opacity: 0.55;
-    }
-
-    .message {
-      display: none;
-      margin-top: 17px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .message.error {
-      display: block;
-      color: #ffaaaa;
-      border: 1px solid rgba(255, 114, 114, 0.22);
-      background: rgba(255, 114, 114, 0.07);
-    }
-
-    .message.success {
-      display: block;
-      color: #9bf4ca;
-      border: 1px solid rgba(85, 230, 165, 0.25);
-      background: rgba(85, 230, 165, 0.07);
-    }
-
-    .login {
-      text-align: center;
-      margin-top: 23px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .login a {
-      color: var(--green);
-      text-decoration: none;
-      font-weight: 750;
-    }
-
-    .terms {
-      margin-top: 18px;
-      text-align: center;
-      color: #697370;
-      font-size: 10px;
-      line-height: 1.5;
-    }
-
-    .footer {
-      margin-top: auto;
-      padding-top: 34px;
-      text-align: center;
-      color: #59625f;
-      font-size: 11px;
-    }
-
-    @media (min-width: 700px) {
-      .page {
-        justify-content: center;
-      }
-
-      .brand {
-        margin-top: 0;
-      }
-
-      .footer {
-        margin-top: 30px;
-      }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#070909;
+ --panel:#101313;
+ --panel2:#151919;
+ --border:#252b2b;
+ --text:#f4f7f6;
+ --muted:#8e9996;
+ --green:#55e6a5;
+ --danger:#ff7777;
+}
+html,body{
+ margin:0;
+ min-height:100%;
+ background:var(--bg);
+ color:var(--text);
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body{
+ min-height:100vh;
+ min-height:100dvh;
+ display:flex;
+ justify-content:center;
+}
+body:before{
+ content:"";
+ position:fixed;
+ top:-220px;
+ left:50%;
+ transform:translateX(-50%);
+ width:480px;
+ height:480px;
+ border-radius:50%;
+ background:rgba(85,230,165,.09);
+ filter:blur(90px);
+ pointer-events:none;
+}
+.page{
+ position:relative;
+ width:100%;
+ max-width:520px;
+ padding:max(30px,env(safe-area-inset-top)) 22px max(35px,env(safe-area-inset-bottom));
+}
+.brand{
+ text-align:center;
+ margin:18px 0 38px;
+}
+.logo{
+ font-size:25px;
+ font-weight:900;
+ letter-spacing:2px;
+}
+.logo span{color:var(--green)}
+.badge{
+ display:inline-block;
+ margin-top:10px;
+ padding:6px 11px;
+ border:1px solid rgba(85,230,165,.28);
+ border-radius:999px;
+ color:var(--green);
+ background:rgba(85,230,165,.06);
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:1.2px;
+}
+.card{
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:24px;
+ padding:27px 21px 25px;
+}
+h1{
+ text-align:center;
+ margin:0 0 9px;
+ font-size:29px;
+}
+.subtitle{
+ text-align:center;
+ color:var(--muted);
+ font-size:14px;
+ line-height:1.5;
+ margin-bottom:27px;
+}
+.field{margin-bottom:17px}
+label{
+ display:block;
+ margin:0 0 8px 2px;
+ font-size:13px;
+ font-weight:700;
+}
+input{
+ width:100%;
+ height:52px;
+ border:1px solid var(--border);
+ border-radius:14px;
+ outline:none;
+ padding:0 15px;
+ background:var(--panel2);
+ color:var(--text);
+ font-size:16px;
+}
+input:focus{
+ border-color:var(--green);
+ box-shadow:0 0 0 3px rgba(85,230,165,.08);
+}
+.username{position:relative}
+.username span{
+ position:absolute;
+ left:15px;
+ top:50%;
+ transform:translateY(-50%);
+ color:var(--muted);
+}
+#username{padding-left:32px}
+.hint{
+ margin:7px 2px 0;
+ color:var(--muted);
+ font-size:11px;
+}
+button{
+ width:100%;
+ min-height:54px;
+ border:0;
+ border-radius:15px;
+ background:var(--green);
+ color:#06110c;
+ font-size:15px;
+ font-weight:900;
+}
+button:disabled{opacity:.55}
+.message{
+ display:none;
+ margin-top:17px;
+ padding:13px;
+ border-radius:13px;
+ font-size:13px;
+ line-height:1.5;
+}
+.error{
+ display:block;
+ color:#ffaaaa;
+ border:1px solid rgba(255,100,100,.2);
+ background:rgba(255,100,100,.06);
+}
+.success{
+ display:block;
+ color:#a0f4ce;
+ border:1px solid rgba(85,230,165,.23);
+ background:rgba(85,230,165,.06);
+}
+.login{
+ text-align:center;
+ margin-top:22px;
+ color:var(--muted);
+ font-size:13px;
+}
+a{
+ color:var(--green);
+ text-decoration:none;
+ font-weight:750;
+}
+.footer{
+ margin-top:34px;
+ text-align:center;
+ color:#59625f;
+ font-size:10px;
+ line-height:1.7;
+}
+</style>
 </head>
 
 <body>
 
-  <main class="page">
+<main class="page">
 
-    <header class="brand">
-      <div class="logo">
-        NOVA <span>MUSICAL</span>
-      </div>
+<header class="brand">
+ <div class="logo">NOVA <span>MUSICAL</span></div>
+ <div class="badge">NOVA AI MUSIC LEARNING</div>
+</header>
 
-      <div class="badge">
-        NOVA AI MUSIC LEARNING
-      </div>
-    </header>
+<section class="card">
 
-    <section class="card">
+<h1>Create your account</h1>
 
-      <h1>Create your account</h1>
+<p class="subtitle">
+Join Nova Musical and begin your learning journey.
+</p>
 
-      <p class="subtitle">
-        Start your Nova Musical journey.
-      </p>
+<form id="form">
 
-      <form id="signupForm">
+<div class="field">
+<label>Name</label>
+<input id="name" type="text" autocomplete="name" placeholder="Your name" maxlength="60" required>
+</div>
 
-        <div class="field">
-          <label for="displayName">Name</label>
+<div class="field">
+<label>Username</label>
+<div class="username">
+<span>@</span>
+<input id="username" type="text" autocomplete="username" placeholder="username" maxlength="24" autocapitalize="none" required>
+</div>
+<div class="hint">3–24 characters. Letters, numbers and underscores.</div>
+</div>
 
-          <input
-            id="displayName"
-            type="text"
-            placeholder="Your name"
-            autocomplete="name"
-            maxlength="60"
-            required
-          />
-        </div>
+<div class="field">
+<label>Email</label>
+<input id="email" type="email" autocomplete="email" placeholder="you@example.com" autocapitalize="none" required>
+</div>
 
-        <div class="field">
-          <label for="username">Username</label>
+<div class="field">
+<label>Password</label>
+<input id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required>
+</div>
 
-          <div class="username-wrap">
-            <span class="username-prefix">@</span>
+<button id="submit" type="submit">
+CREATE ACCOUNT
+</button>
 
-            <input
-              id="username"
-              type="text"
-              placeholder="username"
-              autocomplete="username"
-              autocapitalize="none"
-              spellcheck="false"
-              maxlength="24"
-              required
-            />
-          </div>
+<div id="message" class="message"></div>
 
-          <div class="hint">
-            3–24 characters. Letters, numbers and underscores only.
-          </div>
-        </div>
+</form>
 
-        <div class="field">
-          <label for="email">Email</label>
+<div class="login">
+Already have an account?
+<a href="login.html">Log in</a>
+</div>
 
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            autocomplete="email"
-            autocapitalize="none"
-            required
-          />
-        </div>
+</section>
 
-        <div class="field">
-          <label for="password">Password</label>
+<footer class="footer">
+© 2026 Nova Musical<br>
+Andrea Fredy • Aryan Jude Fredy
+</footer>
 
-          <div class="password-wrap">
-            <input
-              id="password"
-              type="password"
-              placeholder="Create a password"
-              autocomplete="new-password"
-              minlength="8"
-              required
-            />
+</main>
 
-            <button
-              class="show-password"
-              id="showPassword"
-              type="button"
-            >
-              SHOW
-            </button>
-          </div>
+<script>
+const SUPABASE_URL =
+"https://docyfgbghwncylldlcfs.supabase.co";
 
-          <div class="hint">
-            Use at least 8 characters.
-          </div>
-        </div>
+const SUPABASE_KEY =
+"sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk";
 
-        <button
-          id="submitButton"
-          class="submit"
-          type="submit"
-        >
-          CREATE ACCOUNT
-        </button>
+const client =
+supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY,
+ {
+  auth:{
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
+  }
+ }
+);
 
-        <div
-          id="message"
-          class="message"
-          role="status"
-          aria-live="polite"
-        ></div>
+const form=document.getElementById("form");
+const usernameInput=document.getElementById("username");
+const message=document.getElementById("message");
+const submit=document.getElementById("submit");
 
-      </form>
+usernameInput.addEventListener("input",()=>{
+ usernameInput.value=
+ usernameInput.value
+ .toLowerCase()
+ .replace(/[^a-z0-9_]/g,"");
+});
 
-      <div class="login">
-        Already have an account?
-        <a href="login.html">Log in</a>
-      </div>
+function show(text,type){
+ message.textContent=text;
+ message.className="message "+type;
+}
 
-      <div class="terms">
-        By creating an account, you agree to Nova Musical's
-        Terms and Privacy Policy.
-      </div>
+form.addEventListener("submit",async(e)=>{
+ e.preventDefault();
 
-    </section>
+ const displayName=
+ document.getElementById("name").value.trim();
 
-    <footer class="footer">
-      © Nova Musical
-    </footer>
+ const username=
+ usernameInput.value.trim().toLowerCase();
 
-  </main>
+ const email=
+ document.getElementById("email")
+ .value.trim().toLowerCase();
 
+ const password=
+ document.getElementById("password").value;
 
-  <script>
-    const SUPABASE_URL =
-      "https://docyfgbghwncylldlcfs.supabase.co";
+ if(!/^[a-z0-9_]{3,24}$/.test(username)){
+  show(
+   "Username must be 3–24 characters using letters, numbers or underscores.",
+   "error"
+  );
+  return;
+ }
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk";
+ if(password.length<8){
+  show(
+   "Your password must contain at least 8 characters.",
+   "error"
+  );
+  return;
+ }
 
-    const { createClient } = supabase;
+ submit.disabled=true;
+ submit.textContent="CREATING ACCOUNT...";
 
-    const novaSupabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
-    );
+ try{
 
+  const redirectURL=
+   new URL("login.html",window.location.href).href;
 
-    const signupForm =
-      document.getElementById("signupForm");
-
-    const displayNameInput =
-      document.getElementById("displayName");
-
-    const usernameInput =
-      document.getElementById("username");
-
-    const emailInput =
-      document.getElementById("email");
-
-    const passwordInput =
-      document.getElementById("password");
-
-    const submitButton =
-      document.getElementById("submitButton");
-
-    const messageBox =
-      document.getElementById("message");
-
-    const showPasswordButton =
-      document.getElementById("showPassword");
-
-
-    showPasswordButton.addEventListener(
-      "click",
-      () => {
-
-        const hidden =
-          passwordInput.type === "password";
-
-        passwordInput.type =
-          hidden ? "text" : "password";
-
-        showPasswordButton.textContent =
-          hidden ? "HIDE" : "SHOW";
-      }
-    );
-
-
-    usernameInput.addEventListener(
-      "input",
-      () => {
-
-        usernameInput.value =
-          usernameInput.value
-            .toLowerCase()
-            .replace(/[^a-z0-9_]/g, "");
-      }
-    );
-
-
-    function showMessage(text, type) {
-
-      messageBox.textContent = text;
-
-      messageBox.className =
-        "message " + type;
+  const {data,error}=
+   await client.auth.signUp({
+    email,
+    password,
+    options:{
+     emailRedirectTo:redirectURL,
+     data:{
+      username,
+      display_name:displayName
+     }
     }
+   });
 
+  if(error) throw error;
 
-    function clearMessage() {
+  if(!data.user){
+   throw new Error(
+    "Nova couldn't create your account."
+   );
+  }
 
-      messageBox.textContent = "";
-      messageBox.className = "message";
-    }
+  /*
+   With Confirm Email enabled, Supabase returns
+   the new user but no authenticated session.
+  */
 
+  if(!data.session){
 
-    signupForm.addEventListener(
-      "submit",
-      async (event) => {
+   form.style.display="none";
 
-        event.preventDefault();
-        clearMessage();
+   show(
+    "Check your email. We sent you a verification link. Tap the link to verify your email, then return to Nova Musical and log in.",
+    "success"
+   );
 
-        const displayName =
-          displayNameInput.value.trim();
+  }else{
 
-        const username =
-          usernameInput.value
-            .trim()
-            .toLowerCase();
+   show(
+    "Account created successfully.",
+    "success"
+   );
 
-        const email =
-          emailInput.value
-            .trim()
-            .toLowerCase();
+   setTimeout(()=>{
+    window.location.href="guitar.html";
+   },700);
+  }
 
-        const password =
-          passwordInput.value;
+ }catch(err){
 
+  console.error(err);
 
-        if (displayName.length < 1) {
-          showMessage(
-            "Please enter your name.",
-            "error"
-          );
-          return;
-        }
+  let text=
+   err?.message ||
+   "Nova couldn't create your account.";
 
+  if(
+   text.toLowerCase().includes("duplicate") ||
+   text.toLowerCase().includes("unique")
+  ){
+   text=
+    "That username is already taken. Choose another one.";
+  }
 
-        if (
-          username.length < 3 ||
-          username.length > 24 ||
-          !/^[a-z0-9_]+$/.test(username)
-        ) {
+  show(text,"error");
 
-          showMessage(
-            "Your username must be 3–24 characters and use only letters, numbers or underscores.",
-            "error"
-          );
-
-          return;
-        }
-
-
-        if (password.length < 8) {
-
-          showMessage(
-            "Your password must contain at least 8 characters.",
-            "error"
-          );
-
-          return;
-        }
-
-
-        submitButton.disabled = true;
-        submitButton.textContent =
-          "CREATING ACCOUNT...";
-
-
-        try {
-
-          const {
-            data,
-            error
-          } = await novaSupabase.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-              data: {
-                username: username,
-                display_name: displayName
-              }
-            }
-          });
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          if (!data.user) {
-
-            throw new Error(
-              "Nova couldn't create the account."
-            );
-          }
-
-
-          /*
-           * Our database trigger automatically creates
-           * the matching public.profiles row.
-           *
-           * Because Confirm Email is currently disabled,
-           * Supabase should also return a session and
-           * the user can enter Nova immediately.
-           */
-
-          if (data.session) {
-
-            showMessage(
-              "Account created. Welcome to Nova Musical!",
-              "success"
-            );
-
-            setTimeout(() => {
-              window.location.href =
-                "guitar.html";
-            }, 700);
-
-          } else {
-
-            showMessage(
-              "Account created. You can now log in.",
-              "success"
-            );
-
-            setTimeout(() => {
-              window.location.href =
-                "login.html";
-            }, 1000);
-          }
-
-
-        } catch (error) {
-
-          console.error(
-            "Nova signup error:",
-            error
-          );
-
-
-          let friendlyMessage =
-            error?.message ||
-            "Nova couldn't create your account. Please try again.";
-
-
-          const lower =
-            friendlyMessage.toLowerCase();
-
-
-          if (
-            lower.includes("duplicate") ||
-            lower.includes("unique") ||
-            lower.includes("already")
-          ) {
-
-            friendlyMessage =
-              "That email or username is already registered.";
-          }
-
-
-          showMessage(
-            friendlyMessage,
-            "error"
-          );
-
-
-        } finally {
-
-          submitButton.disabled = false;
-          submitButton.textContent =
-            "CREATE ACCOUNT";
-        }
-      }
-    );
-
-
-    /*
-     * If somebody who is already signed in opens
-     * signup.html, send them back into Nova Guitar.
-     */
-
-    async function checkExistingSession() {
-
-      const {
-        data: { session }
-      } =
-        await novaSupabase.auth.getSession();
-
-
-      if (session) {
-        window.location.href =
-          "guitar.html";
-      }
-    }
-
-
-    checkExistingSession();
-  </script>
+ }finally{
+  submit.disabled=false;
+  submit.textContent="CREATE ACCOUNT";
+ }
+});
+</script>
 
 </body>
 </html>
