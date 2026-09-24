@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070909">
+
+<title>Choose Your Instrument | Nova Musical</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#070909;
+  --panel:#101514;
+  --border:#27302d;
+  --text:#f5f8f7;
+  --muted:#929d99;
+  --green:#55e6a5;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+body{
+  min-height:100dvh;
+}
+
+.page{
+  width:min(100%,620px);
+  margin:auto;
+  padding:max(35px,env(safe-area-inset-top)) 22px 45px;
+}
+
+.brand{
+  text-align:center;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.brand span{color:var(--green)}
+
+.hero{
+  margin:55px 0 34px;
+  text-align:center;
+}
+
+h1{
+  margin:0;
+  font-size:36px;
+  line-height:1.08;
+}
+
+#welcomeName{
+  color:var(--green);
+}
+
+.subtitle{
+  color:var(--muted);
+  line-height:1.6;
+  margin-top:14px;
+}
+
+.instrument{
+  width:100%;
+  min-height:100px;
+  margin:13px 0;
+  padding:19px;
+
+  display:flex;
+  align-items:center;
+  gap:17px;
+
+  text-align:left;
+
+  border:1px solid var(--border);
+  border-radius:21px;
+
+  background:var(--panel);
+  color:var(--text);
+}
+
+.instrument.available{
+  border-color:rgba(85,230,165,.42);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(85,230,165,.11),
+      #101514
+    );
+}
+
+.icon{
+  width:57px;
+  height:57px;
+  flex:0 0 auto;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:17px;
+
+  background:rgba(255,255,255,.05);
+
+  font-size:27px;
+}
+
+.available .icon{
+  background:rgba(85,230,165,.13);
+}
+
+.info{
+  flex:1;
+}
+
+.name{
+  font-size:19px;
+  font-weight:900;
+}
+
+.description{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+
+.status{
+  color:var(--green);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.coming{
+  opacity:.55;
+}
+
+.coming .status{
+  color:var(--muted);
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+}
+
+.footer{
+  margin-top:48px;
+  text-align:center;
+  color:#59625f;
+  font-size:10px;
+  line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+  <div class="brand">
+    NOVA <span>MUSICAL</span>
+  </div>
+
+  <section class="hero">
+
+    <h1>
+      Welcome, <span id="welcomeName">Musician</span>
+    </h1>
+
+    <div class="subtitle">
+      What would you like to learn?
+      Choose your instrument to continue.
+    </div>
+
+  </section>
+
+
+  <button
+    class="instrument available"
+    id="guitar"
+    type="button"
+  >
+
+    <div class="icon">🎸</div>
+
+    <div class="info">
+      <div class="name">Guitar</div>
+
+      <div class="description">
+        Learn, practise and talk with Nova Guitar AI.
+      </div>
+    </div>
+
+    <div class="status">
+      AVAILABLE ›
+    </div>
+
+  </button>
+
+
+  <div class="instrument coming">
+
+    <div class="icon">🎹</div>
+
+    <div class="info">
+      <div class="name">Piano</div>
+
+      <div class="description">
+        Nova Piano is being developed.
+      </div>
+    </div>
+
+    <div class="status">
+      COMING SOON
+    </div>
+
+  </div>
+
+
+  <div class="instrument coming">
+
+    <div class="icon">🎤</div>
+
+    <div class="info">
+      <div class="name">Singing</div>
+
+      <div class="description">
+        Voice learning with Nova is coming later.
+      </div>
+    </div>
+
+    <div class="status">
+      COMING SOON
+    </div>
+
+  </div>
+
+
+  <div class="instrument coming">
+
+    <div class="icon">🎸</div>
+
+    <div class="info">
+      <div class="name">Bass</div>
+
+      <div class="description">
+        Nova Bass is coming soon.
+      </div>
+    </div>
+
+    <div class="status">
+      COMING SOON
+    </div>
+
+  </div>
+
+
+  <footer class="footer">
+    © 2026 Nova Musical<br>
+    Andrea Fredy • Aryan Jude Fredy
+  </footer>
+
+</main>
+
+
+<script>
+
+const novaSupabase =
+  supabase.createClient(
+    "https://docyfgbghwncylldlcfs.supabase.co",
+    "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk",
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true
+      }
+    }
+  );
+
+
+async function start(){
+
+  const {
+    data:{user},
+    error
+  } =
+    await novaSupabase.auth.getUser();
+
+
+  if(error || !user){
+
+    window.location.replace(
+      "login.html"
+    );
+
+    return;
+  }
+
+
+  const {data:profile} =
+    await novaSupabase
+      .from("profiles")
+      .select("display_name,username")
+      .eq("id",user.id)
+      .single();
+
+
+  const name =
+    profile?.display_name ||
+    user.user_metadata?.display_name ||
+    profile?.username ||
+    "Musician";
+
+
+  document
+    .getElementById("welcomeName")
+    .textContent =
+      name.split(" ")[0];
+
+}
+
+
+document
+  .getElementById("guitar")
+  .addEventListener(
+    "click",
+    () => {
+
+      window.location.href =
+        "guitar.html";
+
+    }
+  );
+
+
+start();
+
+</script>
+
+</body>
+</html>
