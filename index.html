@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nova Musical</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: white;
+      background:
+        radial-gradient(circle at top, #272153 0%, #111426 40%, #080a12 75%);
+    }
+
+    nav {
+      padding: 24px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .nova {
+      color: #a68cff;
+    }
+
+    main {
+      max-width: 1050px;
+      margin: auto;
+      padding: 65px 22px;
+      text-align: center;
+    }
+
+    .tag {
+      color: #9d8cff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 8vw, 76px);
+      line-height: 1;
+      margin: 18px 0;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, #a17cff, #27e0cc);
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: #aaaebe;
+      font-size: 18px;
+      margin-bottom: 45px;
+    }
+
+    .instruments {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .instrument {
+      border: 1px solid #ffffff1f;
+      border-radius: 25px;
+      padding: 28px 12px;
+      min-height: 190px;
+
+      background: #121624;
+      color: white;
+
+      cursor: pointer;
+
+      transition: .2s;
+    }
+
+    .instrument:hover,
+    .instrument.active {
+      transform: translateY(-5px);
+      border-color: #9277ff;
+      background: #19182d;
+    }
+
+    .icon {
+      display: block;
+      font-size: 43px;
+      margin-bottom: 14px;
+    }
+
+    .instrument strong {
+      display: block;
+      font-size: 21px;
+    }
+
+    .instrument small {
+      display: block;
+      color: #858a9b;
+      margin-top: 8px;
+    }
+
+    #novaCoach {
+      display: none;
+
+      max-width: 620px;
+      margin: 30px auto;
+
+      text-align: left;
+
+      border: 1px solid #ffffff1f;
+      border-radius: 22px;
+
+      background: #121624;
+
+      padding: 20px;
+    }
+
+    .ai-name {
+      font-weight: 800;
+      color: #a68cff;
+    }
+
+    #message {
+      color: #c4c7d2;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .instruments {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      main {
+        padding-top: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <span class="nova">NOVA</span> MUSICAL
+</nav>
+
+<main>
+
+  <div class="tag">
+    MEET NOVA AI
+  </div>
+
+  <h1>
+    What do you want to
+    <span>play?</span>
+  </h1>
+
+  <p class="subtitle">
+    Choose your instrument and Nova will begin building
+    your personal music journey.
+  </p>
+
+  <div class="instruments">
+
+    <button class="instrument" onclick="chooseInstrument('guitar', this)">
+      <span class="icon">🎸</span>
+      <strong>Guitar</strong>
+      <small>Listen • Tune • Learn</small>
+    </button>
+
+    <button class="instrument" onclick="chooseInstrument('piano', this)">
+      <span class="icon">🎹</span>
+      <strong>Piano</strong>
+      <small>Notes • Chords • Songs</small>
+    </button>
+
+    <button class="instrument" onclick="chooseInstrument('singing', this)">
+      <span class="icon">🎤</span>
+      <strong>Singing</strong>
+      <small>Pitch • Voice • Songs</small>
+    </button>
+
+    <button class="instrument" onclick="chooseInstrument('bass', this)">
+      <span class="icon">🎸</span>
+      <strong>Bass</strong>
+      <small>Timing • Groove • Songs</small>
+    </button>
+
+  </div>
+
+  <section id="novaCoach">
+
+    <div class="ai-name">
+      ✦ Nova AI
+    </div>
+
+    <p id="message"></p>
+
+  </section>
+
+</main>
+
+<script>
+
+const NovaAI = {
+
+  learner: {
+    instrument: null,
+    level: null
+  },
+
+  begin(instrument) {
+
+    this.learner.instrument = instrument;
+
+    const responses = {
+
+      guitar:
+        "Great choice. I'm Nova. First I'll learn how you play, then we'll check your tuning and start building your guitar path.",
+
+      piano:
+        "Let's find your starting point. I'll build your piano journey around your notes, chords and songs.",
+
+      singing:
+        "Let's discover your comfortable vocal range first. Then we'll work on pitch, control and songs.",
+
+      bass:
+        "Let's build your timing, fretboard knowledge and groove step by step."
+
+    };
+
+    return responses[instrument];
+
+  },
+
+
+  evaluatePitch(frequency, targetFrequency) {
+
+    if (!frequency || !targetFrequency) {
+      return "Play a clear note for me.";
+    }
+
+    const cents =
+      1200 * Math.log2(frequency / targetFrequency);
+
+    if (Math.abs(cents) <= 5) {
+      return "Perfect. You're in tune.";
+    }
+
+    if (cents < 0) {
+      return "You're a little flat. Tune up slowly.";
+    }
+
+    return "You're a little sharp. Tune down slowly.";
+
+  }
+
+};
+
+
+function chooseInstrument(instrument, button) {
+
+  document
+    .querySelectorAll(".instrument")
+    .forEach(item => item.classList.remove("active"));
+
+  button.classList.add("active");
+
+  const reply =
+    NovaAI.begin(instrument);
+
+  document.getElementById("message").textContent =
+    reply;
+
+  document.getElementById("novaCoach").style.display =
+    "block";
+
+}
+
+</script>
+
+</body>
+</html>
