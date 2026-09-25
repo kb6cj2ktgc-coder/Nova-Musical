@@ -178,16 +178,15 @@ button{cursor:pointer}
 .messageRow{
   display:flex;
   margin:14px 0;
-  animation:appear .2s ease;
 }
 
-@keyframes appear{
-  from{opacity:0;transform:translateY(4px)}
-  to{opacity:1;transform:translateY(0)}
+.messageRow.user{
+  justify-content:flex-end;
 }
 
-.messageRow.user{justify-content:flex-end}
-.messageRow.nova{justify-content:flex-start}
+.messageRow.nova{
+  justify-content:flex-start;
+}
 
 .message{
   max-width:88%;
@@ -335,12 +334,12 @@ textarea::placeholder{color:#69778b}
 
 .send:disabled{opacity:.35}
 
-/* DRAWER */
+/* MENU DRAWER */
 
 .overlay{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.56);
+  background:rgba(0,0,0,.58);
   opacity:0;
   pointer-events:none;
   transition:.22s;
@@ -358,7 +357,7 @@ textarea::placeholder{color:#69778b}
   bottom:0;
   left:0;
   width:min(88%,370px);
-  padding:max(20px,env(safe-area-inset-top)) 14px 20px;
+  padding:max(20px,env(safe-area-inset-top)) 14px 25px;
   background:#0d131b;
   border-right:1px solid var(--line);
   transform:translateX(-102%);
@@ -367,17 +366,19 @@ textarea::placeholder{color:#69778b}
   overflow-y:auto;
 }
 
-.drawer.open{transform:translateX(0)}
+.drawer.open{
+  transform:translateX(0);
+}
 
 .drawerTop{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:14px;
+  margin-bottom:16px;
 }
 
 .drawerTitle{
-  font-size:22px;
+  font-size:27px;
   font-weight:900;
 }
 
@@ -391,53 +392,54 @@ textarea::placeholder{color:#69778b}
   font-size:21px;
 }
 
-.accountInfo{
-  padding:12px 13px;
-  margin-bottom:12px;
+.accountCard{
+  padding:13px 14px;
+  margin-bottom:13px;
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:15px;
   background:#111923;
 }
 
-.accountLabel{
+.accountSmall{
   color:var(--muted);
   font-size:10px;
-  font-weight:800;
-  text-transform:uppercase;
+  font-weight:850;
   letter-spacing:.8px;
+  text-transform:uppercase;
 }
 
 .accountName{
-  margin-top:4px;
+  margin-top:5px;
   font-size:15px;
   font-weight:850;
 }
 
-.drawerAction{
+.menuButton{
   width:100%;
-  padding:13px 14px;
+  min-height:51px;
   margin-bottom:8px;
+  padding:13px 15px;
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:15px;
   background:#131b25;
   color:white;
   text-align:left;
   font-weight:800;
 }
 
-.drawerAction.green{
-  border-color:rgba(24,231,161,.35);
+.menuButton.primary{
+  border-color:rgba(24,231,161,.38);
   background:var(--greenSoft);
   color:var(--green);
 }
 
-.drawerAction.logout{
+.menuButton.logout{
   color:var(--danger);
 }
 
-.drawerDivider{
+.divider{
   height:1px;
-  margin:16px 0;
+  margin:17px 0;
   background:var(--line);
 }
 
@@ -494,13 +496,19 @@ textarea::placeholder{color:#69778b}
 <div class="app">
 
 <header class="header">
+
   <div class="headerRow">
 
-    <button class="iconButton" id="historyButton" aria-label="Menu">
+    <button
+      class="iconButton"
+      id="menuButton"
+      aria-label="Open menu"
+    >
       ☰
     </button>
 
     <div class="brand">
+
       <div class="brandName">
         NOVA <span>GUITAR AI</span>
       </div>
@@ -509,23 +517,25 @@ textarea::placeholder{color:#69778b}
         <span class="onlineDot"></span>
         AI online
       </div>
+
     </div>
 
-    <!--
-      This button now returns to the instrument chooser.
-      New Chat remains inside the left menu.
-    -->
-    <button class="iconButton" id="instrumentsButton" aria-label="Choose instrument">
+    <button
+      class="iconButton"
+      id="instrumentButton"
+      aria-label="Choose instrument"
+    >
       ♫
     </button>
 
   </div>
+
 </header>
 
 
 <main class="chat" id="chat">
 
-<section class="intro" id="intro">
+<section class="intro">
 
   <div class="aiIdentity">
 
@@ -533,6 +543,7 @@ textarea::placeholder{color:#69778b}
 
     <div>
       <div class="aiTitle">Nova</div>
+
       <div class="aiSubtitle">
         Your personal guitar AI
       </div>
@@ -540,10 +551,12 @@ textarea::placeholder{color:#69778b}
 
   </div>
 
+
   <h1>
     What do you want to
     <span>play?</span>
   </h1>
+
 
   <div class="introText">
     Talk naturally with Nova.
@@ -554,23 +567,37 @@ textarea::placeholder{color:#69778b}
 
 </section>
 
+
 <div id="conversation"></div>
+
 
 <div class="suggestions" id="suggestions">
 
-  <button class="suggestion" data-prompt="I'm a complete beginner">
+  <button
+    class="suggestion"
+    data-prompt="I'm a complete beginner"
+  >
     I'm a beginner
   </button>
 
-  <button class="suggestion" data-prompt="Teach me a guitar chord">
+  <button
+    class="suggestion"
+    data-prompt="Teach me a guitar chord"
+  >
     Learn a chord
   </button>
 
-  <button class="suggestion" data-prompt="Give me a practice session">
+  <button
+    class="suggestion"
+    data-prompt="Give me a practice session"
+  >
     Start practice
   </button>
 
-  <button class="suggestion" data-prompt="Help me learn a song">
+  <button
+    class="suggestion"
+    data-prompt="Help me learn a song"
+  >
     Learn a song
   </button>
 
@@ -583,7 +610,11 @@ textarea::placeholder{color:#69778b}
 
   <div class="composer">
 
-    <button class="composerButton mic" id="micButton" aria-label="Voice">
+    <button
+      class="composerButton mic"
+      id="micButton"
+      aria-label="Voice"
+    >
       🎙
     </button>
 
@@ -593,7 +624,11 @@ textarea::placeholder{color:#69778b}
       placeholder="Message Nova..."
     ></textarea>
 
-    <button class="composerButton send" id="sendButton" disabled>
+    <button
+      class="composerButton send"
+      id="sendButton"
+      disabled
+    >
       ↑
     </button>
 
@@ -613,51 +648,80 @@ textarea::placeholder{color:#69778b}
       Nova
     </div>
 
-    <button class="closeDrawer" id="closeDrawer">
+    <button
+      class="closeDrawer"
+      id="closeDrawer"
+      aria-label="Close menu"
+    >
       ×
     </button>
 
   </div>
 
 
-  <div class="accountInfo">
-    <div class="accountLabel">
+  <div class="accountCard">
+
+    <div class="accountSmall">
       Signed in
     </div>
 
-    <div class="accountName" id="accountName">
+    <div
+      class="accountName"
+      id="accountName"
+    >
       Nova musician
     </div>
+
   </div>
 
 
-  <button class="drawerAction green" id="drawerNewChat">
-    + New chat
+  <button
+    class="menuButton primary"
+    id="newChatButton"
+  >
+    ＋ New chat
   </button>
 
-  <button class="drawerAction" id="chooseInstrumentButton">
+
+  <button
+    class="menuButton"
+    id="chooseInstrumentButton"
+  >
     ♫ Choose instrument
   </button>
 
-  <button class="drawerAction" id="profileButton">
+
+  <button
+    class="menuButton"
+    id="profileButton"
+  >
     Profile
   </button>
 
-  <button class="drawerAction" id="settingsButton">
+
+  <button
+    class="menuButton"
+    id="settingsButton"
+  >
     Settings
   </button>
 
-  <button class="drawerAction logout" id="logoutButton">
+
+  <button
+    class="menuButton logout"
+    id="logoutButton"
+  >
     Log out
   </button>
 
 
-  <div class="drawerDivider"></div>
+  <div class="divider"></div>
 
 
   <div class="historyHeading">
     Recent chats
   </div>
+
 
   <div id="historyList"></div>
 
@@ -668,9 +732,9 @@ textarea::placeholder{color:#69778b}
 
 <script>
 
-/* =====================================================
-   NOVA SUPABASE
-===================================================== */
+/* ==========================================
+   SUPABASE
+========================================== */
 
 const novaSupabase =
   supabase.createClient(
@@ -685,17 +749,17 @@ const novaSupabase =
   );
 
 
-/* =====================================================
-   NOVA GUITAR AI
-===================================================== */
+/* ==========================================
+   NOVA
+========================================== */
 
 const NOVA_API =
   "https://nova-guitar-ai.kb6cj2ktgc.workers.dev";
 
+
 let STORAGE_KEY =
   "nova_guitar_chats_v2";
 
-let learnerName = "";
 
 let chats = [];
 
@@ -703,8 +767,12 @@ let currentChatId = null;
 
 let waitingForNova = false;
 
+let learnerName = "";
 
-/* ELEMENTS */
+
+/* ==========================================
+   ELEMENTS
+========================================== */
 
 const conversation =
   document.getElementById("conversation");
@@ -721,8 +789,8 @@ const sendButton =
 const suggestions =
   document.getElementById("suggestions");
 
-const historyButton =
-  document.getElementById("historyButton");
+const menuButton =
+  document.getElementById("menuButton");
 
 const drawer =
   document.getElementById("drawer");
@@ -736,17 +804,14 @@ const closeDrawer =
 const historyList =
   document.getElementById("historyList");
 
-const drawerNewChat =
-  document.getElementById("drawerNewChat");
-
-const micButton =
-  document.getElementById("micButton");
-
-const instrumentsButton =
-  document.getElementById("instrumentsButton");
+const newChatButton =
+  document.getElementById("newChatButton");
 
 const chooseInstrumentButton =
   document.getElementById("chooseInstrumentButton");
+
+const instrumentButton =
+  document.getElementById("instrumentButton");
 
 const profileButton =
   document.getElementById("profileButton");
@@ -760,10 +825,13 @@ const logoutButton =
 const accountName =
   document.getElementById("accountName");
 
+const micButton =
+  document.getElementById("micButton");
 
-/* =====================================================
-   AUTH STARTUP
-===================================================== */
+
+/* ==========================================
+   AUTHENTICATION
+========================================== */
 
 async function startNova(){
 
@@ -785,9 +853,7 @@ async function startNova(){
 
 
   /*
-    Each signed-in account now gets its own browser
-    chat storage instead of every account sharing
-    exactly the same localStorage key.
+    Each account gets separate browser chat history.
   */
 
   STORAGE_KEY =
@@ -814,7 +880,7 @@ async function startNova(){
   }catch(error){
 
     console.warn(
-      "Nova couldn't load the profile.",
+      "Profile unavailable",
       error
     );
   }
@@ -841,7 +907,7 @@ async function startNova(){
     loadChats();
 
 
-  if(chats.length > 0){
+  if(chats.length){
 
     chats.sort(
       (a,b) =>
@@ -864,23 +930,28 @@ async function startNova(){
 }
 
 
-/* =====================================================
-   STORAGE
-===================================================== */
+/* ==========================================
+   CHAT STORAGE
+========================================== */
 
 function loadChats(){
 
   try{
 
     const saved =
-      localStorage.getItem(STORAGE_KEY);
+      localStorage.getItem(
+        STORAGE_KEY
+      );
+
 
     if(!saved){
       return [];
     }
 
+
     const parsed =
       JSON.parse(saved);
+
 
     return Array.isArray(parsed)
       ? parsed
@@ -910,13 +981,14 @@ function saveChats(){
     );
   }
 
+
   renderHistory();
 }
 
 
-/* =====================================================
-   CREATE CHAT
-===================================================== */
+/* ==========================================
+   NEW CHAT
+========================================== */
 
 function createChat(){
 
@@ -943,24 +1015,28 @@ function createChat(){
   };
 
 
-  chats.unshift(chatObject);
+  chats.unshift(
+    chatObject
+  );
+
 
   currentChatId =
     chatObject.id;
+
 
   saveChats();
 
   renderCurrentChat();
 
-  closeHistory();
+  closeMenu();
 
   input.focus();
 }
 
 
-/* =====================================================
+/* ==========================================
    CURRENT CHAT
-===================================================== */
+========================================== */
 
 function getCurrentChat(){
 
@@ -971,9 +1047,9 @@ function getCurrentChat(){
 }
 
 
-/* =====================================================
-   TITLE
-===================================================== */
+/* ==========================================
+   CHAT TITLE
+========================================== */
 
 function makeChatTitle(text){
 
@@ -982,6 +1058,7 @@ function makeChatTitle(text){
       .replace(/\s+/g," ")
       .trim();
 
+
   if(clean.length > 34){
 
     clean =
@@ -989,18 +1066,24 @@ function makeChatTitle(text){
       "…";
   }
 
-  return clean || "Guitar chat";
+
+  return clean ||
+    "Guitar chat";
 }
 
 
-/* =====================================================
-   STORE MESSAGE
-===================================================== */
+/* ==========================================
+   SAVE MESSAGE
+========================================== */
 
-function storeMessage(role,content){
+function storeMessage(
+  role,
+  content
+){
 
   const active =
     getCurrentChat();
+
 
   if(!active){
     return;
@@ -1008,11 +1091,9 @@ function storeMessage(role,content){
 
 
   active.messages.push({
-
     role,
     content,
     time:Date.now()
-
   });
 
 
@@ -1029,7 +1110,9 @@ function storeMessage(role,content){
   ){
 
     active.title =
-      makeChatTitle(content);
+      makeChatTitle(
+        content
+      );
   }
 
 
@@ -1044,14 +1127,15 @@ function storeMessage(role,content){
 }
 
 
-/* =====================================================
-   SEND
-===================================================== */
+/* ==========================================
+   SEND MESSAGE
+========================================== */
 
 function sendCurrentMessage(){
 
   const text =
     input.value.trim();
+
 
   if(
     !text ||
@@ -1065,9 +1149,13 @@ function sendCurrentMessage(){
 
   resizeInput();
 
-  sendButton.disabled = true;
+  sendButton.disabled =
+    true;
 
-  sendUserMessage(text);
+
+  sendUserMessage(
+    text
+  );
 }
 
 
@@ -1095,9 +1183,13 @@ async function sendUserMessage(text){
 
   scrollToBottom();
 
-  waitingForNova = true;
 
-  sendButton.disabled = true;
+  waitingForNova =
+    true;
+
+
+  sendButton.disabled =
+    true;
 
 
   try{
@@ -1116,8 +1208,11 @@ async function sendUserMessage(text){
         )
         .map(
           message => ({
-            role:message.role,
-            content:message.content
+            role:
+              message.role,
+
+            content:
+              message.content
           })
         );
 
@@ -1153,7 +1248,7 @@ async function sendUserMessage(text){
     }catch(error){
 
       throw new Error(
-        "Nova returned an unreadable response."
+        "Unreadable response"
       );
     }
 
@@ -1162,7 +1257,7 @@ async function sendUserMessage(text){
 
       throw new Error(
         data?.error ||
-        "Nova couldn't answer right now."
+        "Nova couldn't answer."
       );
     }
 
@@ -1176,7 +1271,7 @@ async function sendUserMessage(text){
     if(!reply){
 
       throw new Error(
-        "Nova didn't return a reply."
+        "Nova returned no reply."
       );
     }
 
@@ -1218,7 +1313,9 @@ async function sendUserMessage(text){
 
   }finally{
 
-    waitingForNova = false;
+    waitingForNova =
+      false;
+
 
     sendButton.disabled =
       !input.value.trim();
@@ -1226,13 +1323,15 @@ async function sendUserMessage(text){
 }
 
 
-/* =====================================================
+/* ==========================================
    RENDER CHAT
-===================================================== */
+========================================== */
 
 function renderCurrentChat(){
 
-  conversation.innerHTML = "";
+  conversation.innerHTML =
+    "";
+
 
   const active =
     getCurrentChat();
@@ -1269,11 +1368,10 @@ function renderCurrentChat(){
 }
 
 
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-function renderMessage(role,text){
+function renderMessage(
+  role,
+  text
+){
 
   const sender =
     role === "assistant"
@@ -1284,44 +1382,64 @@ function renderMessage(role,text){
   if(sender === "nova"){
 
     const label =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     label.className =
       "novaLabel";
 
+
     label.textContent =
       "Nova";
 
-    conversation.appendChild(label);
+
+    conversation.appendChild(
+      label
+    );
   }
 
 
   const row =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   row.className =
-    "messageRow " + sender;
+    "messageRow " +
+    sender;
 
 
   const bubble =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   bubble.className =
     "message";
+
 
   bubble.textContent =
     text;
 
 
-  row.appendChild(bubble);
+  row.appendChild(
+    bubble
+  );
 
-  conversation.appendChild(row);
+
+  conversation.appendChild(
+    row
+  );
 }
 
 
-/* =====================================================
+/* ==========================================
    THINKING
-===================================================== */
+========================================== */
 
 function showThinking(){
 
@@ -1329,35 +1447,51 @@ function showThinking(){
 
 
   const label =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   label.className =
     "novaLabel";
 
+
   label.id =
     "thinkingLabel";
+
 
   label.textContent =
     "Nova";
 
-  conversation.appendChild(label);
+
+  conversation.appendChild(
+    label
+  );
 
 
   const row =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   row.className =
     "messageRow nova";
+
 
   row.id =
     "thinkingRow";
 
 
   const bubble =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   bubble.className =
     "message";
+
 
   bubble.innerHTML =
     '<span class="thinking">' +
@@ -1365,9 +1499,14 @@ function showThinking(){
     '</span>';
 
 
-  row.appendChild(bubble);
+  row.appendChild(
+    bubble
+  );
 
-  conversation.appendChild(row);
+
+  conversation.appendChild(
+    row
+  );
 }
 
 
@@ -1377,6 +1516,7 @@ function removeThinking(){
     document.getElementById(
       "thinkingRow"
     );
+
 
   const label =
     document.getElementById(
@@ -1388,33 +1528,43 @@ function removeThinking(){
     row.remove();
   }
 
+
   if(label){
     label.remove();
   }
 }
 
 
-/* =====================================================
+/* ==========================================
    HISTORY
-===================================================== */
+========================================== */
 
 function renderHistory(){
 
-  historyList.innerHTML = "";
+  historyList.innerHTML =
+    "";
 
 
-  if(chats.length === 0){
+  if(!chats.length){
 
     const empty =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     empty.className =
       "emptyHistory";
 
+
     empty.textContent =
       "Your Nova conversations will appear here.";
 
-    historyList.appendChild(empty);
+
+    historyList.appendChild(
+      empty
+    );
+
 
     return;
   }
@@ -1426,79 +1576,104 @@ function renderHistory(){
         b.updatedAt -
         a.updatedAt
     )
-    .forEach(item => {
+    .forEach(
+      item => {
 
-      const button =
-        document.createElement("button");
+        const button =
+          document.createElement(
+            "button"
+          );
 
-      button.className =
-        "historyItem";
+
+        button.className =
+          "historyItem";
 
 
-      if(item.id === currentChatId){
+        if(
+          item.id ===
+          currentChatId
+        ){
 
-        button.classList.add(
-          "active"
+          button.classList.add(
+            "active"
+          );
+        }
+
+
+        const title =
+          document.createElement(
+            "div"
+          );
+
+
+        title.className =
+          "historyTitle";
+
+
+        title.textContent =
+          item.title;
+
+
+        const date =
+          document.createElement(
+            "div"
+          );
+
+
+        date.className =
+          "historyDate";
+
+
+        date.textContent =
+          formatDate(
+            item.updatedAt
+          );
+
+
+        button.appendChild(
+          title
+        );
+
+
+        button.appendChild(
+          date
+        );
+
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            currentChatId =
+              item.id;
+
+
+            renderCurrentChat();
+
+            renderHistory();
+
+            closeMenu();
+          }
+        );
+
+
+        historyList.appendChild(
+          button
         );
       }
-
-
-      const title =
-        document.createElement("div");
-
-      title.className =
-        "historyTitle";
-
-      title.textContent =
-        item.title;
-
-
-      const date =
-        document.createElement("div");
-
-      date.className =
-        "historyDate";
-
-      date.textContent =
-        formatDate(item.updatedAt);
-
-
-      button.appendChild(title);
-
-      button.appendChild(date);
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          currentChatId =
-            item.id;
-
-          renderCurrentChat();
-
-          renderHistory();
-
-          closeHistory();
-        }
-      );
-
-
-      historyList.appendChild(
-        button
-      );
-    });
+    );
 }
 
 
-/* =====================================================
+/* ==========================================
    DATE
-===================================================== */
+========================================== */
 
 function formatDate(timestamp){
 
   const date =
     new Date(timestamp);
+
 
   const today =
     new Date();
@@ -1532,69 +1707,93 @@ function formatDate(timestamp){
 }
 
 
-/* =====================================================
-   DRAWER
-===================================================== */
+/* ==========================================
+   MENU
+========================================== */
 
-function openHistory(){
+function openMenu(){
 
   renderHistory();
 
-  drawer.classList.add("open");
 
-  overlay.classList.add("open");
+  drawer.classList.add(
+    "open"
+  );
+
+
+  overlay.classList.add(
+    "open"
+  );
 }
 
 
-function closeHistory(){
+function closeMenu(){
 
-  drawer.classList.remove("open");
+  drawer.classList.remove(
+    "open"
+  );
 
-  overlay.classList.remove("open");
+
+  overlay.classList.remove(
+    "open"
+  );
 }
 
 
-historyButton.addEventListener(
+menuButton.addEventListener(
   "click",
-  openHistory
+  openMenu
 );
 
 
 closeDrawer.addEventListener(
   "click",
-  closeHistory
+  closeMenu
 );
 
 
 overlay.addEventListener(
   "click",
-  closeHistory
+  closeMenu
 );
 
 
-/* =====================================================
-   NAVIGATION
-===================================================== */
+/* ==========================================
+   NEW CHAT
+========================================== */
 
-instrumentsButton.addEventListener(
+newChatButton.addEventListener(
   "click",
-  () => {
+  createChat
+);
 
-    window.location.href =
-      "instruments.html";
-  }
+
+/* ==========================================
+   CHOOSE INSTRUMENT
+========================================== */
+
+function goToInstruments(){
+
+  window.location.href =
+    "instruments.html";
+}
+
+
+instrumentButton.addEventListener(
+  "click",
+  goToInstruments
 );
 
 
 chooseInstrumentButton.addEventListener(
   "click",
-  () => {
-
-    window.location.href =
-      "instruments.html";
-  }
+  goToInstruments
 );
 
+
+/* ==========================================
+   PROFILE
+========================================== */
 
 profileButton.addEventListener(
   "click",
@@ -1606,6 +1805,10 @@ profileButton.addEventListener(
 );
 
 
+/* ==========================================
+   SETTINGS
+========================================== */
+
 settingsButton.addEventListener(
   "click",
   () => {
@@ -1616,15 +1819,17 @@ settingsButton.addEventListener(
 );
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+/* ==========================================
+   LOG OUT
+========================================== */
 
 logoutButton.addEventListener(
   "click",
   async () => {
 
-    logoutButton.disabled = true;
+    logoutButton.disabled =
+      true;
+
 
     logoutButton.textContent =
       "Logging out…";
@@ -1633,9 +1838,11 @@ logoutButton.addEventListener(
     try{
 
       const {error} =
-        await novaSupabase.auth.signOut({
-          scope:"local"
-        });
+        await novaSupabase
+          .auth
+          .signOut({
+            scope:"local"
+          });
 
 
       if(error){
@@ -1644,13 +1851,11 @@ logoutButton.addEventListener(
 
 
       /*
-        Account-specific chat history is intentionally
-        NOT deleted on logout.
+        We keep this account's local chat history.
 
-        It belongs to this user's browser profile and
-        will appear again when that same user signs in.
-
-        Another user gets a different storage key.
+        Because the storage key includes the user's
+        permanent Supabase ID, another account on
+        this phone will not use the same chat history.
       */
 
 
@@ -1667,7 +1872,9 @@ logoutButton.addEventListener(
       );
 
 
-      logoutButton.disabled = false;
+      logoutButton.disabled =
+        false;
+
 
       logoutButton.textContent =
         "Log out";
@@ -1681,45 +1888,40 @@ logoutButton.addEventListener(
 );
 
 
-/* =====================================================
-   NEW CHAT
-===================================================== */
-
-drawerNewChat.addEventListener(
-  "click",
-  createChat
-);
-
-
-/* =====================================================
+/* ==========================================
    SUGGESTIONS
-===================================================== */
+========================================== */
 
 document
-  .querySelectorAll(".suggestion")
-  .forEach(button => {
+  .querySelectorAll(
+    ".suggestion"
+  )
+  .forEach(
+    button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-        sendUserMessage(
-          button.dataset.prompt
-        );
-      }
-    );
-  });
+          sendUserMessage(
+            button.dataset.prompt
+          );
+        }
+      );
+    }
+  );
 
 
-/* =====================================================
+/* ==========================================
    INPUT
-===================================================== */
+========================================== */
 
 input.addEventListener(
   "input",
   () => {
 
     resizeInput();
+
 
     sendButton.disabled =
       waitingForNova ||
@@ -1751,9 +1953,9 @@ sendButton.addEventListener(
 );
 
 
-/* =====================================================
-   MICROPHONE
-===================================================== */
+/* ==========================================
+   MICROPHONE PLACEHOLDER
+========================================== */
 
 micButton.addEventListener(
   "click",
@@ -1775,14 +1977,15 @@ micButton.addEventListener(
 );
 
 
-/* =====================================================
+/* ==========================================
    TEXTAREA
-===================================================== */
+========================================== */
 
 function resizeInput(){
 
   input.style.height =
     "auto";
+
 
   input.style.height =
     Math.min(
@@ -1792,9 +1995,9 @@ function resizeInput(){
 }
 
 
-/* =====================================================
+/* ==========================================
    SCROLL
-===================================================== */
+========================================== */
 
 function scrollToBottom(){
 
@@ -1810,9 +2013,9 @@ function scrollToBottom(){
 }
 
 
-/* =====================================================
-   START NOVA
-===================================================== */
+/* ==========================================
+   START
+========================================== */
 
 startNova();
 
