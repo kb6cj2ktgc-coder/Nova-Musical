@@ -7,6 +7,8 @@
 
 <title>Nova Guitar AI</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
   --bg:#090d12;
@@ -17,6 +19,7 @@
   --muted:#8996a7;
   --green:#18e7a1;
   --greenSoft:rgba(24,231,161,.12);
+  --danger:#ff7474;
 }
 
 *{
@@ -332,7 +335,7 @@ textarea::placeholder{color:#69778b}
 
 .send:disabled{opacity:.35}
 
-/* HISTORY */
+/* DRAWER */
 
 .overlay{
   position:absolute;
@@ -370,7 +373,7 @@ textarea::placeholder{color:#69778b}
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:18px;
+  margin-bottom:14px;
 }
 
 .drawerTitle{
@@ -388,15 +391,54 @@ textarea::placeholder{color:#69778b}
   font-size:21px;
 }
 
-.newChatLarge{
+.accountInfo{
+  padding:12px 13px;
+  margin-bottom:12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#111923;
+}
+
+.accountLabel{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.accountName{
+  margin-top:4px;
+  font-size:15px;
+  font-weight:850;
+}
+
+.drawerAction{
   width:100%;
-  padding:14px;
-  border:1px solid rgba(24,231,161,.35);
-  border-radius:15px;
+  padding:13px 14px;
+  margin-bottom:8px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#131b25;
+  color:white;
+  text-align:left;
+  font-weight:800;
+}
+
+.drawerAction.green{
+  border-color:rgba(24,231,161,.35);
   background:var(--greenSoft);
   color:var(--green);
-  font-weight:850;
-  margin-bottom:18px;
+}
+
+.drawerAction.logout{
+  color:var(--danger);
+}
+
+.drawerDivider{
+  height:1px;
+  margin:16px 0;
+  background:var(--line);
 }
 
 .historyHeading{
@@ -454,7 +496,7 @@ textarea::placeholder{color:#69778b}
 <header class="header">
   <div class="headerRow">
 
-    <button class="iconButton" id="historyButton" aria-label="Chat history">
+    <button class="iconButton" id="historyButton" aria-label="Menu">
       ☰
     </button>
 
@@ -469,8 +511,12 @@ textarea::placeholder{color:#69778b}
       </div>
     </div>
 
-    <button class="iconButton" id="newChatButton" aria-label="New chat">
-      +
+    <!--
+      This button now returns to the instrument chooser.
+      New Chat remains inside the left menu.
+    -->
+    <button class="iconButton" id="instrumentsButton" aria-label="Choose instrument">
+      ♫
     </button>
 
   </div>
@@ -564,7 +610,7 @@ textarea::placeholder{color:#69778b}
   <div class="drawerTop">
 
     <div class="drawerTitle">
-      Chats
+      Nova
     </div>
 
     <button class="closeDrawer" id="closeDrawer">
@@ -573,12 +619,44 @@ textarea::placeholder{color:#69778b}
 
   </div>
 
-  <button class="newChatLarge" id="drawerNewChat">
+
+  <div class="accountInfo">
+    <div class="accountLabel">
+      Signed in
+    </div>
+
+    <div class="accountName" id="accountName">
+      Nova musician
+    </div>
+  </div>
+
+
+  <button class="drawerAction green" id="drawerNewChat">
     + New chat
   </button>
 
+  <button class="drawerAction" id="chooseInstrumentButton">
+    ♫ Choose instrument
+  </button>
+
+  <button class="drawerAction" id="profileButton">
+    Profile
+  </button>
+
+  <button class="drawerAction" id="settingsButton">
+    Settings
+  </button>
+
+  <button class="drawerAction logout" id="logoutButton">
+    Log out
+  </button>
+
+
+  <div class="drawerDivider"></div>
+
+
   <div class="historyHeading">
-    Recent
+    Recent chats
   </div>
 
   <div id="historyList"></div>
@@ -591,16 +669,42 @@ textarea::placeholder{color:#69778b}
 <script>
 
 /* =====================================================
+   NOVA SUPABASE
+===================================================== */
+
+const novaSupabase =
+  supabase.createClient(
+    "https://docyfgbghwncylldlcfs.supabase.co",
+    "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk",
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true
+      }
+    }
+  );
+
+
+/* =====================================================
    NOVA GUITAR AI
-   Cloudflare Workers AI connected version
 ===================================================== */
 
 const NOVA_API =
   "https://nova-guitar-ai.kb6cj2ktgc.workers.dev";
 
-const STORAGE_KEY =
+let STORAGE_KEY =
   "nova_guitar_chats_v2";
 
+let learnerName = "";
+
+let chats = [];
+
+let currentChatId = null;
+
+let waitingForNova = false;
+
+
+/* ELEMENTS */
 
 const conversation =
   document.getElementById("conversation");
@@ -632,22 +736,132 @@ const closeDrawer =
 const historyList =
   document.getElementById("historyList");
 
-const newChatButton =
-  document.getElementById("newChatButton");
-
 const drawerNewChat =
   document.getElementById("drawerNewChat");
 
 const micButton =
   document.getElementById("micButton");
 
+const instrumentsButton =
+  document.getElementById("instrumentsButton");
 
-let chats =
-  loadChats();
+const chooseInstrumentButton =
+  document.getElementById("chooseInstrumentButton");
 
-let currentChatId = null;
+const profileButton =
+  document.getElementById("profileButton");
 
-let waitingForNova = false;
+const settingsButton =
+  document.getElementById("settingsButton");
+
+const logoutButton =
+  document.getElementById("logoutButton");
+
+const accountName =
+  document.getElementById("accountName");
+
+
+/* =====================================================
+   AUTH STARTUP
+===================================================== */
+
+async function startNova(){
+
+  const {
+    data:{user},
+    error
+  } =
+    await novaSupabase.auth.getUser();
+
+
+  if(error || !user){
+
+    window.location.replace(
+      "login.html"
+    );
+
+    return;
+  }
+
+
+  /*
+    Each signed-in account now gets its own browser
+    chat storage instead of every account sharing
+    exactly the same localStorage key.
+  */
+
+  STORAGE_KEY =
+    "nova_guitar_chats_v2_" +
+    user.id;
+
+
+  let profile = null;
+
+
+  try{
+
+    const result =
+      await novaSupabase
+        .from("profiles")
+        .select("display_name,username")
+        .eq("id",user.id)
+        .single();
+
+
+    profile =
+      result.data;
+
+  }catch(error){
+
+    console.warn(
+      "Nova couldn't load the profile.",
+      error
+    );
+  }
+
+
+  const fullName =
+    profile?.display_name ||
+    user.user_metadata?.display_name ||
+    profile?.username ||
+    "Nova musician";
+
+
+  learnerName =
+    fullName
+      .trim()
+      .split(/\s+/)[0];
+
+
+  accountName.textContent =
+    fullName;
+
+
+  chats =
+    loadChats();
+
+
+  if(chats.length > 0){
+
+    chats.sort(
+      (a,b) =>
+        b.updatedAt -
+        a.updatedAt
+    );
+
+    currentChatId =
+      chats[0].id;
+
+    renderCurrentChat();
+
+  }else{
+
+    createChat();
+  }
+
+
+  renderHistory();
+}
 
 
 /* =====================================================
@@ -728,6 +942,7 @@ function createChat(){
     messages:[]
   };
 
+
   chats.unshift(chatObject);
 
   currentChatId =
@@ -791,6 +1006,7 @@ function storeMessage(role,content){
     return;
   }
 
+
   active.messages.push({
 
     role,
@@ -799,8 +1015,10 @@ function storeMessage(role,content){
 
   });
 
+
   active.updatedAt =
     Date.now();
+
 
   if(
     role === "user" &&
@@ -814,11 +1032,13 @@ function storeMessage(role,content){
       makeChatTitle(content);
   }
 
+
   chats.sort(
     (a,b) =>
       b.updatedAt -
       a.updatedAt
   );
+
 
   saveChats();
 }
@@ -840,6 +1060,7 @@ function sendCurrentMessage(){
     return;
   }
 
+
   input.value = "";
 
   resizeInput();
@@ -856,14 +1077,17 @@ async function sendUserMessage(text){
     return;
   }
 
+
   if(!currentChatId){
     createChat();
   }
+
 
   storeMessage(
     "user",
     text
   );
+
 
   renderCurrentChat();
 
@@ -881,18 +1105,6 @@ async function sendUserMessage(text){
     const active =
       getCurrentChat();
 
-
-    /*
-    Send recent conversation history.
-
-    This allows Nova to understand follow-ups such as:
-
-    "yes"
-    "why?"
-    "that one"
-    "the second one"
-    "idk"
-    */
 
     const messages =
       active.messages
@@ -923,7 +1135,8 @@ async function sendUserMessage(text){
 
           body:
             JSON.stringify({
-              messages
+              messages,
+              learnerName
             })
         }
       );
@@ -1024,6 +1237,7 @@ function renderCurrentChat(){
   const active =
     getCurrentChat();
 
+
   if(
     !active ||
     active.messages.length === 0
@@ -1035,8 +1249,10 @@ function renderCurrentChat(){
     return;
   }
 
+
   suggestions.style.display =
     "none";
+
 
   active.messages.forEach(
     message => {
@@ -1047,6 +1263,7 @@ function renderCurrentChat(){
       );
     }
   );
+
 
   scrollToBottom();
 }
@@ -1166,6 +1383,7 @@ function removeThinking(){
       "thinkingLabel"
     );
 
+
   if(row){
     row.remove();
   }
@@ -1183,6 +1401,7 @@ function removeThinking(){
 function renderHistory(){
 
   historyList.innerHTML = "";
+
 
   if(chats.length === 0){
 
@@ -1354,14 +1573,117 @@ overlay.addEventListener(
 
 
 /* =====================================================
-   NEW CHAT
+   NAVIGATION
 ===================================================== */
 
-newChatButton.addEventListener(
+instrumentsButton.addEventListener(
   "click",
-  createChat
+  () => {
+
+    window.location.href =
+      "instruments.html";
+  }
 );
 
+
+chooseInstrumentButton.addEventListener(
+  "click",
+  () => {
+
+    window.location.href =
+      "instruments.html";
+  }
+);
+
+
+profileButton.addEventListener(
+  "click",
+  () => {
+
+    window.location.href =
+      "profile.html";
+  }
+);
+
+
+settingsButton.addEventListener(
+  "click",
+  () => {
+
+    window.location.href =
+      "settings.html";
+  }
+);
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+logoutButton.addEventListener(
+  "click",
+  async () => {
+
+    logoutButton.disabled = true;
+
+    logoutButton.textContent =
+      "Logging out…";
+
+
+    try{
+
+      const {error} =
+        await novaSupabase.auth.signOut({
+          scope:"local"
+        });
+
+
+      if(error){
+        throw error;
+      }
+
+
+      /*
+        Account-specific chat history is intentionally
+        NOT deleted on logout.
+
+        It belongs to this user's browser profile and
+        will appear again when that same user signs in.
+
+        Another user gets a different storage key.
+      */
+
+
+      window.location.replace(
+        "index.html"
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "Logout failed:",
+        error
+      );
+
+
+      logoutButton.disabled = false;
+
+      logoutButton.textContent =
+        "Log out";
+
+
+      alert(
+        "We couldn't log you out. Please try again."
+      );
+    }
+  }
+);
+
+
+/* =====================================================
+   NEW CHAT
+===================================================== */
 
 drawerNewChat.addEventListener(
   "click",
@@ -1431,8 +1753,6 @@ sendButton.addEventListener(
 
 /* =====================================================
    MICROPHONE
-
-   Voice/audio comes later.
 ===================================================== */
 
 micButton.addEventListener(
@@ -1443,10 +1763,12 @@ micButton.addEventListener(
       createChat();
     }
 
+
     storeMessage(
       "assistant",
       "Voice and guitar listening are coming later. For now, type your message to me."
     );
+
 
     renderCurrentChat();
   }
@@ -1489,29 +1811,10 @@ function scrollToBottom(){
 
 
 /* =====================================================
-   STARTUP
+   START NOVA
 ===================================================== */
 
-if(chats.length > 0){
-
-  chats.sort(
-    (a,b) =>
-      b.updatedAt -
-      a.updatedAt
-  );
-
-  currentChatId =
-    chats[0].id;
-
-  renderCurrentChat();
-
-}else{
-
-  createChat();
-}
-
-
-renderHistory();
+startNova();
 
 </script>
 
