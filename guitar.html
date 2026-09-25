@@ -49,8 +49,6 @@ button{cursor:pointer}
     var(--bg);
 }
 
-/* HEADER */
-
 .header{
   flex:0 0 auto;
   padding:max(14px,env(safe-area-inset-top)) 16px 12px;
@@ -80,12 +78,7 @@ button{cursor:pointer}
 }
 
 .brand{text-align:center}
-
-.brandName{
-  font-size:17px;
-  font-weight:900;
-}
-
+.brandName{font-size:17px;font-weight:900}
 .brandName span{color:var(--green)}
 
 .online{
@@ -105,8 +98,6 @@ button{cursor:pointer}
   box-shadow:0 0 10px var(--green);
 }
 
-/* CHAT */
-
 .chat{
   flex:1;
   overflow-y:auto;
@@ -115,10 +106,7 @@ button{cursor:pointer}
 }
 
 .chat::-webkit-scrollbar{display:none}
-
-.intro{
-  padding:8px 5px 20px;
-}
+.intro{padding:8px 5px 20px}
 
 .aiIdentity{
   display:flex;
@@ -138,10 +126,7 @@ button{cursor:pointer}
   background:linear-gradient(145deg,#7b72ff,var(--green));
 }
 
-.aiTitle{
-  font-size:20px;
-  font-weight:900;
-}
+.aiTitle{font-size:20px;font-weight:900}
 
 .aiSubtitle{
   margin-top:3px;
@@ -197,6 +182,53 @@ button{cursor:pointer}
   border-bottom-right-radius:6px;
 }
 
+.messageText{
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+/* NOVA VOICE BUTTON INSIDE MESSAGE */
+
+.novaVoiceBar{
+  display:flex;
+  align-items:center;
+  margin-top:11px;
+  padding-top:9px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+
+.novaSpeakButton{
+  width:35px;
+  height:35px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.055);
+  color:#b7c2cf;
+  font-size:16px;
+  transition:.18s ease;
+}
+
+.novaSpeakButton:active{
+  transform:scale(.92);
+}
+
+.novaSpeakButton.playing{
+  background:var(--greenSoft);
+  color:var(--green);
+}
+
+.novaSpeakButton.loading{
+  opacity:.55;
+  cursor:wait;
+}
+
+.novaSpeakButton:disabled{
+  cursor:wait;
+}
+
 .novaLabel{
   margin:18px 0 7px 3px;
   color:var(--muted);
@@ -226,8 +258,6 @@ button{cursor:pointer}
   font-weight:750;
   white-space:nowrap;
 }
-
-/* COMPOSER */
 
 .composerArea{
   position:absolute;
@@ -294,8 +324,6 @@ textarea::placeholder{color:#69778b}
 
 .send:disabled{opacity:.35}
 
-/* RECORDING BAR */
-
 .recordingComposer{
   min-height:62px;
   display:none;
@@ -307,9 +335,7 @@ textarea::placeholder{color:#69778b}
   background:#111925;
 }
 
-.recordingComposer.active{
-  display:flex;
-}
+.recordingComposer.active{display:flex}
 
 .cancelRecord{
   width:44px;
@@ -379,11 +405,7 @@ textarea::placeholder{color:#69778b}
   white-space:nowrap;
 }
 
-.voiceStatus.show{
-  opacity:1;
-}
-
-/* THINKING */
+.voiceStatus.show{opacity:1}
 
 .thinking{
   display:inline-flex;
@@ -405,8 +427,6 @@ textarea::placeholder{color:#69778b}
   0%,60%,100%{opacity:.3;transform:translateY(0)}
   30%{opacity:1;transform:translateY(-3px)}
 }
-
-/* DRAWER */
 
 .overlay{
   position:absolute;
@@ -447,10 +467,7 @@ textarea::placeholder{color:#69778b}
   margin-bottom:16px;
 }
 
-.drawerTitle{
-  font-size:27px;
-  font-weight:900;
-}
+.drawerTitle{font-size:27px;font-weight:900}
 
 .closeDrawer{
   width:40px;
@@ -562,87 +579,85 @@ textarea::placeholder{color:#69778b}
 <div class="app">
 
 <header class="header">
-  <div class="headerRow">
+<div class="headerRow">
+<button class="iconButton" id="menuButton">☰</button>
 
-    <button class="iconButton" id="menuButton">☰</button>
+<div class="brand">
+<div class="brandName">NOVA <span>GUITAR AI</span></div>
+<div class="online">
+<span class="onlineDot"></span>AI online
+</div>
+</div>
 
-    <div class="brand">
-      <div class="brandName">NOVA <span>GUITAR AI</span></div>
-      <div class="online">
-        <span class="onlineDot"></span>AI online
-      </div>
-    </div>
-
-    <button class="iconButton" id="instrumentButton">♫</button>
-
-  </div>
+<button class="iconButton" id="instrumentButton">♫</button>
+</div>
 </header>
 
 <main class="chat" id="chat">
 
 <section class="intro">
 
-  <div class="aiIdentity">
-    <div class="avatar">♪</div>
-    <div>
-      <div class="aiTitle">Nova</div>
-      <div class="aiSubtitle">Your personal guitar AI</div>
-    </div>
-  </div>
+<div class="aiIdentity">
+<div class="avatar">♪</div>
+<div>
+<div class="aiTitle">Nova</div>
+<div class="aiSubtitle">Your personal guitar AI</div>
+</div>
+</div>
 
-  <h1>What do you want to <span>play?</span></h1>
+<h1>What do you want to <span>play?</span></h1>
 
-  <div class="introText">
-    Talk naturally with Nova. Ask about chords, songs,
-    technique, theory, practice or anything you're trying to understand.
-  </div>
+<div class="introText">
+Talk naturally with Nova. Ask about chords, songs,
+technique, theory, practice or anything you're trying to understand.
+</div>
 
 </section>
 
 <div id="conversation"></div>
 
 <div class="suggestions" id="suggestions">
-  <button class="suggestion" data-prompt="I'm a complete beginner">I'm a beginner</button>
-  <button class="suggestion" data-prompt="Teach me a guitar chord">Learn a chord</button>
-  <button class="suggestion" data-prompt="Give me a practice session">Start practice</button>
-  <button class="suggestion" data-prompt="Help me learn a song">Learn a song</button>
+<button class="suggestion" data-prompt="I'm a complete beginner">I'm a beginner</button>
+<button class="suggestion" data-prompt="Teach me a guitar chord">Learn a chord</button>
+<button class="suggestion" data-prompt="Give me a practice session">Start practice</button>
+<button class="suggestion" data-prompt="Help me learn a song">Learn a song</button>
 </div>
 
 </main>
 
 <div class="composerArea">
 
-  <div class="voiceStatus" id="voiceStatus"></div>
+<div class="voiceStatus" id="voiceStatus"></div>
 
-  <div class="composer" id="normalComposer">
+<div class="composer" id="normalComposer">
 
-    <button class="composerButton mic" id="micButton">🎙</button>
+<button class="composerButton mic" id="micButton">🎙</button>
 
-    <textarea
-      id="input"
-      rows="1"
-      placeholder="Message Nova..."
-    ></textarea>
+<textarea
+id="input"
+rows="1"
+placeholder="Message Nova..."
+></textarea>
 
-    <button
-      class="composerButton send"
-      id="sendButton"
-      disabled
-    >↑</button>
+<button
+class="composerButton send"
+id="sendButton"
+disabled
+>↑</button>
 
-  </div>
+</div>
 
-  <div class="recordingComposer" id="recordingComposer">
+<div class="recordingComposer" id="recordingComposer">
 
-    <button class="cancelRecord" id="cancelRecord">×</button>
+<button class="cancelRecord" id="cancelRecord">×</button>
 
-    <div class="waveArea" id="waveArea"></div>
+<div class="waveArea" id="waveArea"></div>
 
-    <button class="stopRecord" id="stopRecord" aria-label="Stop recording">
-      <span class="stopSquare"></span>
-    </button>
+<button class="stopRecord" id="stopRecord" aria-label="Stop recording">
+<span class="stopSquare"></span>
+</button>
 
-  </div>
+</div>
 
 </div>
 
@@ -650,26 +665,26 @@ textarea::placeholder{color:#69778b}
 
 <aside class="drawer" id="drawer">
 
-  <div class="drawerTop">
-    <div class="drawerTitle">Nova</div>
-    <button class="closeDrawer" id="closeDrawer">×</button>
-  </div>
+<div class="drawerTop">
+<div class="drawerTitle">Nova</div>
+<button class="closeDrawer" id="closeDrawer">×</button>
+</div>
 
-  <div class="accountCard">
-    <div class="accountSmall">Signed in</div>
-    <div class="accountName" id="accountName">Nova musician</div>
-  </div>
+<div class="accountCard">
+<div class="accountSmall">Signed in</div>
+<div class="accountName" id="accountName">Nova musician</div>
+</div>
 
-  <button class="menuButton primary" id="newChatButton">＋ New chat</button>
-  <button class="menuButton" id="chooseInstrumentButton">♫ Choose instrument</button>
-  <button class="menuButton" id="profileButton">Profile</button>
-  <button class="menuButton" id="settingsButton">Settings</button>
-  <button class="menuButton logout" id="logoutButton">Log out</button>
+<button class="menuButton primary" id="newChatButton">＋ New chat</button>
+<button class="menuButton" id="chooseInstrumentButton">♫ Choose instrument</button>
+<button class="menuButton" id="profileButton">Profile</button>
+<button class="menuButton" id="settingsButton">Settings</button>
+<button class="menuButton logout" id="logoutButton">Log out</button>
 
-  <div class="divider"></div>
+<div class="divider"></div>
 
-  <div class="historyHeading">Recent chats</div>
-  <div id="historyList"></div>
+<div class="historyHeading">Recent chats</div>
+<div id="historyList"></div>
 
 </aside>
 
@@ -696,7 +711,7 @@ let currentChatId = null;
 let waitingForNova = false;
 let learnerName = "";
 
-/* VOICE */
+/* MICROPHONE */
 
 let mediaRecorder = null;
 let microphoneStream = null;
@@ -705,6 +720,15 @@ let analyser = null;
 let waveformAnimation = null;
 let recordedChunks = [];
 let recordingCancelled = false;
+
+/* NOVA TTS */
+
+let novaAudio = null;
+let novaAudioUrl = null;
+let activeSpeakButton = null;
+let voiceRequestController = null;
+
+const DEFAULT_NOVA_VOICE = "luna";
 
 const conversation = document.getElementById("conversation");
 const chat = document.getElementById("chat");
@@ -849,6 +873,8 @@ function saveChats(){
 
 function createChat(){
 
+  stopNovaVoice();
+
   const chatObject = {
     id:
       "chat_" +
@@ -937,6 +963,8 @@ function sendCurrentMessage(){
 async function sendUserMessage(text){
 
   if(waitingForNova) return;
+
+  stopNovaVoice();
 
   if(!currentChatId){
     createChat();
@@ -1032,6 +1060,224 @@ async function sendUserMessage(text){
 
 
 /* =====================================
+   NOVA HUMAN-LIKE TEXT TO SPEECH
+===================================== */
+
+function getNovaVoice(){
+
+  const saved =
+    localStorage.getItem(
+      "nova_selected_voice"
+    );
+
+  return saved || DEFAULT_NOVA_VOICE;
+}
+
+
+function resetSpeakButton(button){
+
+  if(!button) return;
+
+  button.classList.remove(
+    "playing",
+    "loading"
+  );
+
+  button.disabled = false;
+  button.textContent = "🔊";
+  button.setAttribute(
+    "aria-label",
+    "Listen to Nova"
+  );
+}
+
+
+function stopNovaVoice(){
+
+  if(voiceRequestController){
+    voiceRequestController.abort();
+    voiceRequestController = null;
+  }
+
+  if(novaAudio){
+
+    try{
+      novaAudio.pause();
+      novaAudio.currentTime = 0;
+    }catch{}
+
+    novaAudio = null;
+  }
+
+  if(novaAudioUrl){
+    URL.revokeObjectURL(
+      novaAudioUrl
+    );
+    novaAudioUrl = null;
+  }
+
+  if(activeSpeakButton){
+    resetSpeakButton(
+      activeSpeakButton
+    );
+    activeSpeakButton = null;
+  }
+}
+
+
+async function speakNovaMessage(
+  text,
+  button
+){
+
+  /*
+    Tapping the active button again
+    acts as STOP.
+  */
+
+  if(
+    activeSpeakButton === button &&
+    (
+      novaAudio ||
+      button.classList.contains("loading")
+    )
+  ){
+    stopNovaVoice();
+    return;
+  }
+
+  stopNovaVoice();
+
+  activeSpeakButton = button;
+
+  button.classList.add("loading");
+  button.disabled = false;
+  button.textContent = "…";
+  button.setAttribute(
+    "aria-label",
+    "Preparing Nova voice"
+  );
+
+  voiceRequestController =
+    new AbortController();
+
+  try{
+
+    const response =
+      await fetch(
+        NOVA_API + "/speak",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            text,
+            voice:getNovaVoice()
+          }),
+
+          signal:
+            voiceRequestController.signal
+        }
+      );
+
+    if(!response.ok){
+
+      let message =
+        "Nova voice is temporarily unavailable.";
+
+      try{
+        const errorData =
+          await response.json();
+
+        if(errorData?.error){
+          message =
+            errorData.error;
+        }
+      }catch{}
+
+      throw new Error(message);
+    }
+
+    const audioBlob =
+      await response.blob();
+
+    if(!audioBlob.size){
+      throw new Error(
+        "Nova didn't return any audio."
+      );
+    }
+
+    novaAudioUrl =
+      URL.createObjectURL(
+        audioBlob
+      );
+
+    novaAudio =
+      new Audio(novaAudioUrl);
+
+    button.classList.remove(
+      "loading"
+    );
+
+    button.classList.add(
+      "playing"
+    );
+
+    button.textContent = "■";
+
+    button.setAttribute(
+      "aria-label",
+      "Stop Nova voice"
+    );
+
+    novaAudio.onended =
+      () => {
+        stopNovaVoice();
+      };
+
+    novaAudio.onerror =
+      () => {
+        stopNovaVoice();
+
+        showVoiceStatus(
+          "Nova couldn't play that voice response."
+        );
+      };
+
+    await novaAudio.play();
+
+  }catch(error){
+
+    if(
+      error?.name === "AbortError"
+    ){
+      return;
+    }
+
+    console.error(
+      "Nova voice error:",
+      error
+    );
+
+    stopNovaVoice();
+
+    showVoiceStatus(
+      error?.message ||
+      "Nova voice is temporarily unavailable."
+    );
+
+  }finally{
+
+    voiceRequestController = null;
+  }
+}
+
+
+/* =====================================
    REAL MICROPHONE + LIVE WAVEFORM
 ===================================== */
 
@@ -1054,6 +1300,8 @@ function buildWaveform(){
 
 
 async function startRecording(){
+
+  stopNovaVoice();
 
   if(
     !navigator.mediaDevices ||
@@ -1508,6 +1756,8 @@ function hideVoiceStatus(){
 
 function renderCurrentChat(){
 
+  stopNovaVoice();
+
   conversation.innerHTML = "";
 
   const active = getCurrentChat();
@@ -1533,6 +1783,7 @@ function renderCurrentChat(){
 
   scrollToBottom();
 }
+
 
 function renderMessage(role,text){
 
@@ -1562,7 +1813,63 @@ function renderMessage(role,text){
     document.createElement("div");
 
   bubble.className = "message";
-  bubble.textContent = text;
+
+  if(sender === "nova"){
+
+    const textElement =
+      document.createElement("div");
+
+    textElement.className =
+      "messageText";
+
+    textElement.textContent = text;
+
+    const voiceBar =
+      document.createElement("div");
+
+    voiceBar.className =
+      "novaVoiceBar";
+
+    const speakButton =
+      document.createElement("button");
+
+    speakButton.className =
+      "novaSpeakButton";
+
+    speakButton.type = "button";
+    speakButton.textContent = "🔊";
+
+    speakButton.setAttribute(
+      "aria-label",
+      "Listen to Nova"
+    );
+
+    speakButton.addEventListener(
+      "click",
+      () => {
+        speakNovaMessage(
+          text,
+          speakButton
+        );
+      }
+    );
+
+    voiceBar.appendChild(
+      speakButton
+    );
+
+    bubble.appendChild(
+      textElement
+    );
+
+    bubble.appendChild(
+      voiceBar
+    );
+
+  }else{
+
+    bubble.textContent = text;
+  }
 
   row.appendChild(bubble);
   conversation.appendChild(row);
@@ -1603,6 +1910,7 @@ function showThinking(){
   row.appendChild(bubble);
   conversation.appendChild(row);
 }
+
 
 function removeThinking(){
 
@@ -1677,6 +1985,8 @@ function renderHistory(){
           "click",
           () => {
 
+            stopNovaVoice();
+
             currentChatId =
               item.id;
 
@@ -1690,6 +2000,7 @@ function renderHistory(){
       }
     );
 }
+
 
 function formatDate(timestamp){
 
@@ -1744,10 +2055,15 @@ newChatButton.addEventListener(
   createChat
 );
 
+
 function goToInstruments(){
+
+  stopNovaVoice();
+
   window.location.href =
     "instruments.html";
 }
+
 
 instrumentButton.addEventListener(
   "click",
@@ -1762,6 +2078,9 @@ chooseInstrumentButton.addEventListener(
 profileButton.addEventListener(
   "click",
   () => {
+
+    stopNovaVoice();
+
     window.location.href =
       "profile.html";
   }
@@ -1770,6 +2089,9 @@ profileButton.addEventListener(
 settingsButton.addEventListener(
   "click",
   () => {
+
+    stopNovaVoice();
+
     window.location.href =
       "settings.html";
   }
@@ -1781,6 +2103,8 @@ settingsButton.addEventListener(
 logoutButton.addEventListener(
   "click",
   async () => {
+
+    stopNovaVoice();
 
     logoutButton.disabled = true;
     logoutButton.textContent =
@@ -1866,7 +2190,7 @@ sendButton.addEventListener(
 );
 
 
-/* VOICE BUTTONS */
+/* MICROPHONE BUTTONS */
 
 micButton.addEventListener(
   "click",
@@ -1912,6 +2236,14 @@ function scrollToBottom(){
     }
   );
 }
+
+
+/* CLEAN UP AUDIO IF PAGE CLOSES */
+
+window.addEventListener(
+  "pagehide",
+  stopNovaVoice
+);
 
 
 /* START */
