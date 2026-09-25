@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090d12">
-
 <title>Nova Guitar AI</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,7 +12,6 @@
 :root{
   --bg:#090d12;
   --panel:#101720;
-  --panel2:#151e2b;
   --line:rgba(255,255,255,.09);
   --text:#f7f9fb;
   --muted:#8996a7;
@@ -22,10 +20,7 @@
   --danger:#ff7474;
 }
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
 html,body{
   margin:0;
@@ -37,8 +32,7 @@ html,body{
 }
 
 body{overflow:hidden}
-
-button,textarea,input{font:inherit}
+button,textarea{font:inherit}
 button{cursor:pointer}
 
 .app{
@@ -116,7 +110,7 @@ button{cursor:pointer}
 .chat{
   flex:1;
   overflow-y:auto;
-  padding:20px 14px 145px;
+  padding:20px 14px 150px;
   scroll-behavior:smooth;
 }
 
@@ -142,7 +136,6 @@ button{cursor:pointer}
   font-size:26px;
   color:#04130e;
   background:linear-gradient(145deg,#7b72ff,var(--green));
-  box-shadow:0 0 0 3px rgba(255,255,255,.06);
 }
 
 .aiTitle{
@@ -173,20 +166,13 @@ button{cursor:pointer}
   line-height:1.55;
 }
 
-/* MESSAGES */
-
 .messageRow{
   display:flex;
   margin:14px 0;
 }
 
-.messageRow.user{
-  justify-content:flex-end;
-}
-
-.messageRow.nova{
-  justify-content:flex-start;
-}
+.messageRow.user{justify-content:flex-end}
+.messageRow.nova{justify-content:flex-start}
 
 .message{
   max-width:88%;
@@ -220,8 +206,6 @@ button{cursor:pointer}
   text-transform:uppercase;
 }
 
-/* SUGGESTIONS */
-
 .suggestions{
   display:flex;
   gap:9px;
@@ -243,29 +227,6 @@ button{cursor:pointer}
   white-space:nowrap;
 }
 
-/* THINKING */
-
-.thinking{
-  display:inline-flex;
-  gap:5px;
-}
-
-.thinking i{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--muted);
-  animation:pulse 1s infinite;
-}
-
-.thinking i:nth-child(2){animation-delay:.15s}
-.thinking i:nth-child(3){animation-delay:.3s}
-
-@keyframes pulse{
-  0%,60%,100%{opacity:.3;transform:translateY(0)}
-  30%{opacity:1;transform:translateY(-3px)}
-}
-
 /* COMPOSER */
 
 .composerArea{
@@ -274,12 +235,11 @@ button{cursor:pointer}
   right:0;
   bottom:0;
   padding:10px 13px max(12px,env(safe-area-inset-bottom));
-  background:
-    linear-gradient(
-      transparent,
-      rgba(9,13,18,.97) 24%,
-      var(--bg) 55%
-    );
+  background:linear-gradient(
+    transparent,
+    rgba(9,13,18,.97) 24%,
+    var(--bg) 55%
+  );
   z-index:30;
 }
 
@@ -334,7 +294,119 @@ textarea::placeholder{color:#69778b}
 
 .send:disabled{opacity:.35}
 
-/* MENU DRAWER */
+/* RECORDING BAR */
+
+.recordingComposer{
+  min-height:62px;
+  display:none;
+  align-items:center;
+  gap:10px;
+  padding:7px 8px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:28px;
+  background:#111925;
+}
+
+.recordingComposer.active{
+  display:flex;
+}
+
+.cancelRecord{
+  width:44px;
+  height:44px;
+  flex:0 0 auto;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:white;
+  font-size:27px;
+}
+
+.waveArea{
+  flex:1;
+  min-width:0;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  overflow:hidden;
+}
+
+.waveBar{
+  width:3px;
+  min-height:4px;
+  height:4px;
+  border-radius:99px;
+  background:#d8dee7;
+  transition:height .055s linear;
+}
+
+.stopRecord{
+  width:44px;
+  height:44px;
+  flex:0 0 auto;
+  border:2px solid rgba(255,255,255,.72);
+  border-radius:50%;
+  background:transparent;
+  display:grid;
+  place-items:center;
+}
+
+.stopSquare{
+  width:13px;
+  height:13px;
+  border-radius:3px;
+  background:white;
+}
+
+.voiceStatus{
+  position:absolute;
+  bottom:82px;
+  left:50%;
+  transform:translateX(-50%);
+  max-width:90%;
+  padding:8px 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#151e2b;
+  color:#d5dce5;
+  font-size:12px;
+  font-weight:750;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  white-space:nowrap;
+}
+
+.voiceStatus.show{
+  opacity:1;
+}
+
+/* THINKING */
+
+.thinking{
+  display:inline-flex;
+  gap:5px;
+}
+
+.thinking i{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--muted);
+  animation:pulse 1s infinite;
+}
+
+.thinking i:nth-child(2){animation-delay:.15s}
+.thinking i:nth-child(3){animation-delay:.3s}
+
+@keyframes pulse{
+  0%,60%,100%{opacity:.3;transform:translateY(0)}
+  30%{opacity:1;transform:translateY(-3px)}
+}
+
+/* DRAWER */
 
 .overlay{
   position:absolute;
@@ -366,9 +438,7 @@ textarea::placeholder{color:#69778b}
   overflow-y:auto;
 }
 
-.drawer.open{
-  transform:translateX(0);
-}
+.drawer.open{transform:translateX(0)}
 
 .drawerTop{
   display:flex;
@@ -433,9 +503,7 @@ textarea::placeholder{color:#69778b}
   color:var(--green);
 }
 
-.menuButton.logout{
-  color:var(--danger);
-}
+.menuButton.logout{color:var(--danger)}
 
 .divider{
   height:1px;
@@ -485,9 +553,7 @@ textarea::placeholder{color:#69778b}
   padding:20px 8px;
   color:var(--muted);
   text-align:center;
-  line-height:1.5;
 }
-
 </style>
 </head>
 
@@ -496,127 +562,61 @@ textarea::placeholder{color:#69778b}
 <div class="app">
 
 <header class="header">
-
   <div class="headerRow">
 
-    <button
-      class="iconButton"
-      id="menuButton"
-      aria-label="Open menu"
-    >
-      ☰
-    </button>
+    <button class="iconButton" id="menuButton">☰</button>
 
     <div class="brand">
-
-      <div class="brandName">
-        NOVA <span>GUITAR AI</span>
-      </div>
-
+      <div class="brandName">NOVA <span>GUITAR AI</span></div>
       <div class="online">
-        <span class="onlineDot"></span>
-        AI online
+        <span class="onlineDot"></span>AI online
       </div>
-
     </div>
 
-    <button
-      class="iconButton"
-      id="instrumentButton"
-      aria-label="Choose instrument"
-    >
-      ♫
-    </button>
+    <button class="iconButton" id="instrumentButton">♫</button>
 
   </div>
-
 </header>
-
 
 <main class="chat" id="chat">
 
 <section class="intro">
 
   <div class="aiIdentity">
-
     <div class="avatar">♪</div>
-
     <div>
       <div class="aiTitle">Nova</div>
-
-      <div class="aiSubtitle">
-        Your personal guitar AI
-      </div>
+      <div class="aiSubtitle">Your personal guitar AI</div>
     </div>
-
   </div>
 
-
-  <h1>
-    What do you want to
-    <span>play?</span>
-  </h1>
-
+  <h1>What do you want to <span>play?</span></h1>
 
   <div class="introText">
-    Talk naturally with Nova.
-    Ask about chords, songs, technique,
-    theory, practice or anything you're
-    trying to understand.
+    Talk naturally with Nova. Ask about chords, songs,
+    technique, theory, practice or anything you're trying to understand.
   </div>
 
 </section>
 
-
 <div id="conversation"></div>
 
-
 <div class="suggestions" id="suggestions">
-
-  <button
-    class="suggestion"
-    data-prompt="I'm a complete beginner"
-  >
-    I'm a beginner
-  </button>
-
-  <button
-    class="suggestion"
-    data-prompt="Teach me a guitar chord"
-  >
-    Learn a chord
-  </button>
-
-  <button
-    class="suggestion"
-    data-prompt="Give me a practice session"
-  >
-    Start practice
-  </button>
-
-  <button
-    class="suggestion"
-    data-prompt="Help me learn a song"
-  >
-    Learn a song
-  </button>
-
+  <button class="suggestion" data-prompt="I'm a complete beginner">I'm a beginner</button>
+  <button class="suggestion" data-prompt="Teach me a guitar chord">Learn a chord</button>
+  <button class="suggestion" data-prompt="Give me a practice session">Start practice</button>
+  <button class="suggestion" data-prompt="Help me learn a song">Learn a song</button>
 </div>
 
 </main>
 
-
 <div class="composerArea">
 
-  <div class="composer">
+  <div class="voiceStatus" id="voiceStatus"></div>
 
-    <button
-      class="composerButton mic"
-      id="micButton"
-      aria-label="Voice"
-    >
-      🎙
-    </button>
+  <div class="composer" id="normalComposer">
+
+    <button class="composerButton mic" id="micButton">🎙</button>
 
     <textarea
       id="input"
@@ -628,185 +628,97 @@ textarea::placeholder{color:#69778b}
       class="composerButton send"
       id="sendButton"
       disabled
-    >
-      ↑
+    >↑</button>
+
+  </div>
+
+  <div class="recordingComposer" id="recordingComposer">
+
+    <button class="cancelRecord" id="cancelRecord">×</button>
+
+    <div class="waveArea" id="waveArea"></div>
+
+    <button class="stopRecord" id="stopRecord" aria-label="Stop recording">
+      <span class="stopSquare"></span>
     </button>
 
   </div>
 
 </div>
 
-
 <div class="overlay" id="overlay"></div>
-
 
 <aside class="drawer" id="drawer">
 
   <div class="drawerTop">
-
-    <div class="drawerTitle">
-      Nova
-    </div>
-
-    <button
-      class="closeDrawer"
-      id="closeDrawer"
-      aria-label="Close menu"
-    >
-      ×
-    </button>
-
+    <div class="drawerTitle">Nova</div>
+    <button class="closeDrawer" id="closeDrawer">×</button>
   </div>
-
 
   <div class="accountCard">
-
-    <div class="accountSmall">
-      Signed in
-    </div>
-
-    <div
-      class="accountName"
-      id="accountName"
-    >
-      Nova musician
-    </div>
-
+    <div class="accountSmall">Signed in</div>
+    <div class="accountName" id="accountName">Nova musician</div>
   </div>
 
-
-  <button
-    class="menuButton primary"
-    id="newChatButton"
-  >
-    ＋ New chat
-  </button>
-
-
-  <button
-    class="menuButton"
-    id="chooseInstrumentButton"
-  >
-    ♫ Choose instrument
-  </button>
-
-
-  <button
-    class="menuButton"
-    id="profileButton"
-  >
-    Profile
-  </button>
-
-
-  <button
-    class="menuButton"
-    id="settingsButton"
-  >
-    Settings
-  </button>
-
-
-  <button
-    class="menuButton logout"
-    id="logoutButton"
-  >
-    Log out
-  </button>
-
+  <button class="menuButton primary" id="newChatButton">＋ New chat</button>
+  <button class="menuButton" id="chooseInstrumentButton">♫ Choose instrument</button>
+  <button class="menuButton" id="profileButton">Profile</button>
+  <button class="menuButton" id="settingsButton">Settings</button>
+  <button class="menuButton logout" id="logoutButton">Log out</button>
 
   <div class="divider"></div>
 
-
-  <div class="historyHeading">
-    Recent chats
-  </div>
-
-
+  <div class="historyHeading">Recent chats</div>
   <div id="historyList"></div>
 
 </aside>
 
 </div>
 
-
 <script>
-
-/* ==========================================
-   SUPABASE
-========================================== */
-
-const novaSupabase =
-  supabase.createClient(
-    "https://docyfgbghwncylldlcfs.supabase.co",
-    "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk",
-    {
-      auth:{
-        persistSession:true,
-        autoRefreshToken:true
-      }
+const novaSupabase = supabase.createClient(
+  "https://docyfgbghwncylldlcfs.supabase.co",
+  "sb_publishable_9m_olDXjv4gjSWklXvhg-g_vDwcbBRk",
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true
     }
-  );
-
-
-/* ==========================================
-   NOVA
-========================================== */
+  }
+);
 
 const NOVA_API =
   "https://nova-guitar-ai.kb6cj2ktgc.workers.dev";
 
-
-let STORAGE_KEY =
-  "nova_guitar_chats_v2";
-
-
+let STORAGE_KEY = "nova_guitar_chats_v2";
 let chats = [];
-
 let currentChatId = null;
-
 let waitingForNova = false;
-
 let learnerName = "";
 
+/* VOICE */
 
-/* ==========================================
-   ELEMENTS
-========================================== */
+let mediaRecorder = null;
+let microphoneStream = null;
+let audioContext = null;
+let analyser = null;
+let waveformAnimation = null;
+let recordedChunks = [];
+let recordingCancelled = false;
 
-const conversation =
-  document.getElementById("conversation");
+const conversation = document.getElementById("conversation");
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const sendButton = document.getElementById("sendButton");
+const suggestions = document.getElementById("suggestions");
 
-const chat =
-  document.getElementById("chat");
+const menuButton = document.getElementById("menuButton");
+const drawer = document.getElementById("drawer");
+const overlay = document.getElementById("overlay");
+const closeDrawer = document.getElementById("closeDrawer");
+const historyList = document.getElementById("historyList");
 
-const input =
-  document.getElementById("input");
-
-const sendButton =
-  document.getElementById("sendButton");
-
-const suggestions =
-  document.getElementById("suggestions");
-
-const menuButton =
-  document.getElementById("menuButton");
-
-const drawer =
-  document.getElementById("drawer");
-
-const overlay =
-  document.getElementById("overlay");
-
-const closeDrawer =
-  document.getElementById("closeDrawer");
-
-const historyList =
-  document.getElementById("historyList");
-
-const newChatButton =
-  document.getElementById("newChatButton");
-
+const newChatButton = document.getElementById("newChatButton");
 const chooseInstrumentButton =
   document.getElementById("chooseInstrumentButton");
 
@@ -828,44 +740,45 @@ const accountName =
 const micButton =
   document.getElementById("micButton");
 
+const normalComposer =
+  document.getElementById("normalComposer");
 
-/* ==========================================
-   AUTHENTICATION
-========================================== */
+const recordingComposer =
+  document.getElementById("recordingComposer");
+
+const waveArea =
+  document.getElementById("waveArea");
+
+const cancelRecord =
+  document.getElementById("cancelRecord");
+
+const stopRecord =
+  document.getElementById("stopRecord");
+
+const voiceStatus =
+  document.getElementById("voiceStatus");
+
+
+/* AUTH */
 
 async function startNova(){
 
   const {
     data:{user},
     error
-  } =
-    await novaSupabase.auth.getUser();
-
+  } = await novaSupabase.auth.getUser();
 
   if(error || !user){
-
-    window.location.replace(
-      "login.html"
-    );
-
+    window.location.replace("login.html");
     return;
   }
 
-
-  /*
-    Each account gets separate browser chat history.
-  */
-
   STORAGE_KEY =
-    "nova_guitar_chats_v2_" +
-    user.id;
-
+    "nova_guitar_chats_v2_" + user.id;
 
   let profile = null;
 
-
   try{
-
     const result =
       await novaSupabase
         .from("profiles")
@@ -873,18 +786,10 @@ async function startNova(){
         .eq("id",user.id)
         .single();
 
-
-    profile =
-      result.data;
-
+    profile = result.data;
   }catch(error){
-
-    console.warn(
-      "Profile unavailable",
-      error
-    );
+    console.warn("Profile unavailable");
   }
-
 
   const fullName =
     profile?.display_name ||
@@ -892,203 +797,102 @@ async function startNova(){
     profile?.username ||
     "Nova musician";
 
-
   learnerName =
-    fullName
-      .trim()
-      .split(/\s+/)[0];
+    fullName.trim().split(/\s+/)[0];
 
+  accountName.textContent = fullName;
 
-  accountName.textContent =
-    fullName;
-
-
-  chats =
-    loadChats();
-
+  chats = loadChats();
 
   if(chats.length){
-
-    chats.sort(
-      (a,b) =>
-        b.updatedAt -
-        a.updatedAt
-    );
-
-    currentChatId =
-      chats[0].id;
-
+    chats.sort((a,b) => b.updatedAt - a.updatedAt);
+    currentChatId = chats[0].id;
     renderCurrentChat();
-
   }else{
-
     createChat();
   }
-
 
   renderHistory();
 }
 
 
-/* ==========================================
-   CHAT STORAGE
-========================================== */
+/* STORAGE */
 
 function loadChats(){
-
   try{
-
     const saved =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
+      localStorage.getItem(STORAGE_KEY);
 
+    if(!saved) return [];
 
-    if(!saved){
-      return [];
-    }
-
-
-    const parsed =
-      JSON.parse(saved);
-
+    const parsed = JSON.parse(saved);
 
     return Array.isArray(parsed)
       ? parsed
       : [];
-
-  }catch(error){
-
+  }catch{
     return [];
   }
 }
 
-
 function saveChats(){
-
-  try{
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(chats)
-    );
-
-  }catch(error){
-
-    console.warn(
-      "Nova couldn't save chats.",
-      error
-    );
-  }
-
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(chats)
+  );
 
   renderHistory();
 }
 
 
-/* ==========================================
-   NEW CHAT
-========================================== */
+/* CHAT */
 
 function createChat(){
 
   const chatObject = {
-
     id:
       "chat_" +
       Date.now() +
       "_" +
-      Math.random()
-        .toString(36)
-        .slice(2,8),
+      Math.random().toString(36).slice(2,8),
 
-    title:
-      "New guitar chat",
-
-    createdAt:
-      Date.now(),
-
-    updatedAt:
-      Date.now(),
-
+    title:"New guitar chat",
+    createdAt:Date.now(),
+    updatedAt:Date.now(),
     messages:[]
   };
 
-
-  chats.unshift(
-    chatObject
-  );
-
-
-  currentChatId =
-    chatObject.id;
-
+  chats.unshift(chatObject);
+  currentChatId = chatObject.id;
 
   saveChats();
-
   renderCurrentChat();
-
   closeMenu();
-
-  input.focus();
 }
-
-
-/* ==========================================
-   CURRENT CHAT
-========================================== */
 
 function getCurrentChat(){
-
   return chats.find(
-    item =>
-      item.id === currentChatId
+    item => item.id === currentChatId
   );
 }
-
-
-/* ==========================================
-   CHAT TITLE
-========================================== */
 
 function makeChatTitle(text){
 
   let clean =
-    text
-      .replace(/\s+/g," ")
-      .trim();
-
+    text.replace(/\s+/g," ").trim();
 
   if(clean.length > 34){
-
-    clean =
-      clean.slice(0,34).trim() +
-      "…";
+    clean = clean.slice(0,34).trim() + "…";
   }
 
-
-  return clean ||
-    "Guitar chat";
+  return clean || "Guitar chat";
 }
 
+function storeMessage(role,content){
 
-/* ==========================================
-   SAVE MESSAGE
-========================================== */
+  const active = getCurrentChat();
 
-function storeMessage(
-  role,
-  content
-){
-
-  const active =
-    getCurrentChat();
-
-
-  if(!active){
-    return;
-  }
-
+  if(!active) return;
 
   active.messages.push({
     role,
@@ -1096,107 +900,60 @@ function storeMessage(
     time:Date.now()
   });
 
-
-  active.updatedAt =
-    Date.now();
-
+  active.updatedAt = Date.now();
 
   if(
     role === "user" &&
     active.messages.filter(
-      message =>
-        message.role === "user"
+      message => message.role === "user"
     ).length === 1
   ){
-
-    active.title =
-      makeChatTitle(
-        content
-      );
+    active.title = makeChatTitle(content);
   }
 
-
   chats.sort(
-    (a,b) =>
-      b.updatedAt -
-      a.updatedAt
+    (a,b) => b.updatedAt - a.updatedAt
   );
-
 
   saveChats();
 }
 
 
-/* ==========================================
-   SEND MESSAGE
-========================================== */
+/* NOVA AI */
 
 function sendCurrentMessage(){
 
-  const text =
-    input.value.trim();
+  const text = input.value.trim();
 
-
-  if(
-    !text ||
-    waitingForNova
-  ){
-    return;
-  }
-
+  if(!text || waitingForNova) return;
 
   input.value = "";
-
   resizeInput();
+  sendButton.disabled = true;
 
-  sendButton.disabled =
-    true;
-
-
-  sendUserMessage(
-    text
-  );
+  sendUserMessage(text);
 }
-
 
 async function sendUserMessage(text){
 
-  if(waitingForNova){
-    return;
-  }
-
+  if(waitingForNova) return;
 
   if(!currentChatId){
     createChat();
   }
 
-
-  storeMessage(
-    "user",
-    text
-  );
-
+  storeMessage("user",text);
 
   renderCurrentChat();
-
   showThinking();
-
   scrollToBottom();
 
-
-  waitingForNova =
-    true;
-
-
-  sendButton.disabled =
-    true;
-
+  waitingForNova = true;
+  sendButton.disabled = true;
 
   try{
 
-    const active =
-      getCurrentChat();
-
+    const active = getCurrentChat();
 
     const messages =
       active.messages
@@ -1208,18 +965,409 @@ async function sendUserMessage(text){
         )
         .map(
           message => ({
-            role:
-              message.role,
-
-            content:
-              message.content
+            role:message.role,
+            content:message.content
           })
         );
-
 
     const response =
       await fetch(
         NOVA_API,
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            messages,
+            learnerName
+          })
+        }
+      );
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error("Nova couldn't answer.");
+    }
+
+    const reply =
+      typeof data?.reply === "string"
+        ? data.reply.trim()
+        : "";
+
+    if(!reply){
+      throw new Error("No reply");
+    }
+
+    removeThinking();
+
+    storeMessage(
+      "assistant",
+      reply
+    );
+
+    renderCurrentChat();
+    scrollToBottom();
+
+  }catch(error){
+
+    removeThinking();
+
+    storeMessage(
+      "assistant",
+      "I couldn't connect to Nova AI just now. Please try again."
+    );
+
+    renderCurrentChat();
+
+  }finally{
+
+    waitingForNova = false;
+
+    sendButton.disabled =
+      !input.value.trim();
+  }
+}
+
+
+/* =====================================
+   REAL MICROPHONE + LIVE WAVEFORM
+===================================== */
+
+function buildWaveform(){
+
+  waveArea.innerHTML = "";
+
+  const count = 38;
+
+  for(let i=0;i<count;i++){
+
+    const bar =
+      document.createElement("span");
+
+    bar.className = "waveBar";
+
+    waveArea.appendChild(bar);
+  }
+}
+
+
+async function startRecording(){
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+    showVoiceStatus(
+      "Microphone recording isn't available in this browser."
+    );
+    return;
+  }
+
+  try{
+
+    microphoneStream =
+      await navigator.mediaDevices.getUserMedia({
+        audio:{
+          echoCancellation:true,
+          noiseSuppression:true,
+          autoGainControl:true
+        }
+      });
+
+    recordedChunks = [];
+    recordingCancelled = false;
+
+    let mimeType = "";
+
+    const preferredTypes = [
+      "audio/webm;codecs=opus",
+      "audio/webm",
+      "audio/mp4"
+    ];
+
+    for(const type of preferredTypes){
+
+      if(
+        window.MediaRecorder &&
+        MediaRecorder.isTypeSupported(type)
+      ){
+        mimeType = type;
+        break;
+      }
+    }
+
+    mediaRecorder =
+      mimeType
+        ? new MediaRecorder(
+            microphoneStream,
+            {mimeType}
+          )
+        : new MediaRecorder(
+            microphoneStream
+          );
+
+    mediaRecorder.ondataavailable =
+      event => {
+
+        if(
+          event.data &&
+          event.data.size > 0
+        ){
+          recordedChunks.push(
+            event.data
+          );
+        }
+      };
+
+    mediaRecorder.onstop =
+      async () => {
+
+        stopWaveform();
+
+        const actualType =
+          mediaRecorder?.mimeType ||
+          mimeType ||
+          "audio/webm";
+
+        const blob =
+          new Blob(
+            recordedChunks,
+            {type:actualType}
+          );
+
+        cleanupMicrophone();
+
+        if(recordingCancelled){
+          return;
+        }
+
+        if(blob.size < 1000){
+          showVoiceStatus(
+            "I couldn't hear enough audio. Try again."
+          );
+          return;
+        }
+
+        await transcribeRecording(blob);
+      };
+
+    buildWaveform();
+
+    normalComposer.style.display = "none";
+
+    recordingComposer.classList.add(
+      "active"
+    );
+
+    mediaRecorder.start(250);
+
+    startWaveform();
+
+  }catch(error){
+
+    console.error(
+      "Microphone error:",
+      error
+    );
+
+    showVoiceStatus(
+      "Nova needs microphone permission to hear you."
+    );
+  }
+}
+
+
+function startWaveform(){
+
+  audioContext =
+    new (
+      window.AudioContext ||
+      window.webkitAudioContext
+    )();
+
+  const source =
+    audioContext.createMediaStreamSource(
+      microphoneStream
+    );
+
+  analyser =
+    audioContext.createAnalyser();
+
+  analyser.fftSize = 256;
+  analyser.smoothingTimeConstant = .72;
+
+  source.connect(analyser);
+
+  const data =
+    new Uint8Array(
+      analyser.frequencyBinCount
+    );
+
+  const bars =
+    Array.from(
+      document.querySelectorAll(
+        ".waveBar"
+      )
+    );
+
+  function draw(){
+
+    if(!analyser) return;
+
+    analyser.getByteFrequencyData(data);
+
+    let total = 0;
+
+    for(let i=0;i<data.length;i++){
+      total += data[i];
+    }
+
+    const average =
+      total / data.length;
+
+    const strength =
+      Math.min(
+        1,
+        Math.max(
+          .04,
+          average / 80
+        )
+      );
+
+    const time =
+      performance.now() / 125;
+
+    bars.forEach(
+      (bar,index) => {
+
+        const wave =
+          .32 +
+          Math.abs(
+            Math.sin(
+              time +
+              index * .48
+            )
+          ) * .68;
+
+        const variation =
+          .70 +
+          Math.random() * .30;
+
+        const height =
+          4 +
+          strength *
+          wave *
+          variation *
+          34;
+
+        bar.style.height =
+          Math.max(
+            4,
+            Math.min(40,height)
+          ) + "px";
+      }
+    );
+
+    waveformAnimation =
+      requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+
+
+function stopWaveform(){
+
+  if(waveformAnimation){
+    cancelAnimationFrame(
+      waveformAnimation
+    );
+  }
+
+  waveformAnimation = null;
+  analyser = null;
+
+  if(audioContext){
+
+    audioContext.close()
+      .catch(()=>{});
+
+    audioContext = null;
+  }
+}
+
+
+function cleanupMicrophone(){
+
+  if(microphoneStream){
+
+    microphoneStream
+      .getTracks()
+      .forEach(
+        track => track.stop()
+      );
+  }
+
+  microphoneStream = null;
+
+  recordingComposer.classList.remove(
+    "active"
+  );
+
+  normalComposer.style.display = "flex";
+}
+
+
+function cancelRecording(){
+
+  if(!mediaRecorder) return;
+
+  recordingCancelled = true;
+
+  if(mediaRecorder.state !== "inactive"){
+    mediaRecorder.stop();
+  }else{
+    cleanupMicrophone();
+  }
+}
+
+
+function finishRecording(){
+
+  if(
+    !mediaRecorder ||
+    mediaRecorder.state === "inactive"
+  ){
+    return;
+  }
+
+  stopRecord.disabled = true;
+
+  mediaRecorder.stop();
+}
+
+
+/* =====================================
+   SPEECH TO TEXT
+===================================== */
+
+async function transcribeRecording(blob){
+
+  showVoiceStatus(
+    "Turning your voice into text…",
+    true
+  );
+
+  try{
+
+    const audioBase64 =
+      await blobToBase64(blob);
+
+    const response =
+      await fetch(
+        NOVA_API + "/transcribe",
         {
           method:"POST",
 
@@ -1228,134 +1376,154 @@ async function sendUserMessage(text){
               "application/json"
           },
 
-          body:
-            JSON.stringify({
-              messages,
-              learnerName
-            })
+          body:JSON.stringify({
+            audio:audioBase64,
+            mimeType:
+              blob.type ||
+              "audio/webm"
+          })
         }
       );
 
-
-    let data = null;
-
-
-    try{
-
-      data =
-        await response.json();
-
-    }catch(error){
-
-      throw new Error(
-        "Unreadable response"
-      );
-    }
-
+    const data =
+      await response.json();
 
     if(!response.ok){
-
       throw new Error(
         data?.error ||
-        "Nova couldn't answer."
+        "Transcription failed"
       );
     }
 
-
-    const reply =
-      typeof data?.reply === "string"
-        ? data.reply.trim()
+    const text =
+      typeof data?.text === "string"
+        ? data.text.trim()
         : "";
 
-
-    if(!reply){
-
+    if(!text){
       throw new Error(
-        "Nova returned no reply."
+        "No speech detected"
       );
     }
 
+    input.value =
+      input.value.trim()
+        ? input.value.trim() +
+          " " +
+          text
+        : text;
 
-    removeThinking();
+    resizeInput();
 
+    sendButton.disabled = false;
 
-    storeMessage(
-      "assistant",
-      reply
-    );
+    hideVoiceStatus();
 
-
-    renderCurrentChat();
-
-    scrollToBottom();
-
+    input.focus();
 
   }catch(error){
 
     console.error(
-      "Nova AI error:",
+      "Transcription error:",
       error
     );
 
-
-    removeThinking();
-
-
-    storeMessage(
-      "assistant",
-      "I couldn't connect to Nova AI just now. Please try sending that message again."
+    showVoiceStatus(
+      "I couldn't turn that recording into text. Please try again."
     );
-
-
-    renderCurrentChat();
-
-    scrollToBottom();
 
   }finally{
 
-    waitingForNova =
-      false;
-
-
-    sendButton.disabled =
-      !input.value.trim();
+    stopRecord.disabled = false;
+    mediaRecorder = null;
+    recordedChunks = [];
   }
 }
 
 
-/* ==========================================
-   RENDER CHAT
-========================================== */
+function blobToBase64(blob){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      const reader =
+        new FileReader();
+
+      reader.onloadend =
+        () => {
+
+          const result =
+            String(reader.result || "");
+
+          const comma =
+            result.indexOf(",");
+
+          resolve(
+            comma >= 0
+              ? result.slice(comma + 1)
+              : result
+          );
+        };
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(blob);
+    }
+  );
+}
+
+
+function showVoiceStatus(
+  message,
+  persistent=false
+){
+
+  voiceStatus.textContent =
+    message;
+
+  voiceStatus.classList.add(
+    "show"
+  );
+
+  if(!persistent){
+
+    setTimeout(
+      hideVoiceStatus,
+      3500
+    );
+  }
+}
+
+
+function hideVoiceStatus(){
+
+  voiceStatus.classList.remove(
+    "show"
+  );
+}
+
+
+/* RENDER */
 
 function renderCurrentChat(){
 
-  conversation.innerHTML =
-    "";
+  conversation.innerHTML = "";
 
-
-  const active =
-    getCurrentChat();
-
+  const active = getCurrentChat();
 
   if(
     !active ||
     active.messages.length === 0
   ){
-
-    suggestions.style.display =
-      "flex";
-
+    suggestions.style.display = "flex";
     return;
   }
 
-
-  suggestions.style.display =
-    "none";
-
+  suggestions.style.display = "none";
 
   active.messages.forEach(
     message => {
-
       renderMessage(
         message.role,
         message.content
@@ -1363,282 +1531,147 @@ function renderCurrentChat(){
     }
   );
 
-
   scrollToBottom();
 }
 
-
-function renderMessage(
-  role,
-  text
-){
+function renderMessage(role,text){
 
   const sender =
     role === "assistant"
       ? "nova"
       : "user";
 
-
   if(sender === "nova"){
 
     const label =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
+    label.className = "novaLabel";
+    label.textContent = "Nova";
 
-    label.className =
-      "novaLabel";
-
-
-    label.textContent =
-      "Nova";
-
-
-    conversation.appendChild(
-      label
-    );
+    conversation.appendChild(label);
   }
 
-
   const row =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
 
   row.className =
-    "messageRow " +
-    sender;
-
+    "messageRow " + sender;
 
   const bubble =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
+  bubble.className = "message";
+  bubble.textContent = text;
 
-  bubble.className =
-    "message";
-
-
-  bubble.textContent =
-    text;
-
-
-  row.appendChild(
-    bubble
-  );
-
-
-  conversation.appendChild(
-    row
-  );
+  row.appendChild(bubble);
+  conversation.appendChild(row);
 }
 
 
-/* ==========================================
-   THINKING
-========================================== */
+/* THINKING */
 
 function showThinking(){
 
   removeThinking();
 
-
   const label =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
+  label.className = "novaLabel";
+  label.id = "thinkingLabel";
+  label.textContent = "Nova";
 
-  label.className =
-    "novaLabel";
-
-
-  label.id =
-    "thinkingLabel";
-
-
-  label.textContent =
-    "Nova";
-
-
-  conversation.appendChild(
-    label
-  );
-
+  conversation.appendChild(label);
 
   const row =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
-
-  row.className =
-    "messageRow nova";
-
-
-  row.id =
-    "thinkingRow";
-
+  row.className = "messageRow nova";
+  row.id = "thinkingRow";
 
   const bubble =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
-
-  bubble.className =
-    "message";
-
+  bubble.className = "message";
 
   bubble.innerHTML =
     '<span class="thinking">' +
     '<i></i><i></i><i></i>' +
     '</span>';
 
-
-  row.appendChild(
-    bubble
-  );
-
-
-  conversation.appendChild(
-    row
-  );
+  row.appendChild(bubble);
+  conversation.appendChild(row);
 }
-
 
 function removeThinking(){
 
-  const row =
-    document.getElementById(
-      "thinkingRow"
-    );
+  document
+    .getElementById("thinkingRow")
+    ?.remove();
 
-
-  const label =
-    document.getElementById(
-      "thinkingLabel"
-    );
-
-
-  if(row){
-    row.remove();
-  }
-
-
-  if(label){
-    label.remove();
-  }
+  document
+    .getElementById("thinkingLabel")
+    ?.remove();
 }
 
 
-/* ==========================================
-   HISTORY
-========================================== */
+/* HISTORY */
 
 function renderHistory(){
 
-  historyList.innerHTML =
-    "";
-
+  historyList.innerHTML = "";
 
   if(!chats.length){
 
     const empty =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    empty.className =
-      "emptyHistory";
-
+    empty.className = "emptyHistory";
 
     empty.textContent =
       "Your Nova conversations will appear here.";
 
-
-    historyList.appendChild(
-      empty
-    );
-
+    historyList.appendChild(empty);
 
     return;
   }
 
-
   chats
-    .sort(
-      (a,b) =>
-        b.updatedAt -
-        a.updatedAt
-    )
+    .sort((a,b) => b.updatedAt - a.updatedAt)
     .forEach(
       item => {
 
         const button =
-          document.createElement(
-            "button"
-          );
-
+          document.createElement("button");
 
         button.className =
           "historyItem";
 
-
-        if(
-          item.id ===
-          currentChatId
-        ){
-
-          button.classList.add(
-            "active"
-          );
+        if(item.id === currentChatId){
+          button.classList.add("active");
         }
 
-
         const title =
-          document.createElement(
-            "div"
-          );
-
+          document.createElement("div");
 
         title.className =
           "historyTitle";
 
-
         title.textContent =
           item.title;
 
-
         const date =
-          document.createElement(
-            "div"
-          );
-
+          document.createElement("div");
 
         date.className =
           "historyDate";
 
-
         date.textContent =
-          formatDate(
-            item.updatedAt
-          );
+          formatDate(item.updatedAt);
 
-
-        button.appendChild(
-          title
-        );
-
-
-        button.appendChild(
-          date
-        );
-
+        button.appendChild(title);
+        button.appendChild(date);
 
         button.addEventListener(
           "click",
@@ -1647,43 +1680,26 @@ function renderHistory(){
             currentChatId =
               item.id;
 
-
             renderCurrentChat();
-
             renderHistory();
-
             closeMenu();
           }
         );
 
-
-        historyList.appendChild(
-          button
-        );
+        historyList.appendChild(button);
       }
     );
 }
 
-
-/* ==========================================
-   DATE
-========================================== */
-
 function formatDate(timestamp){
 
-  const date =
-    new Date(timestamp);
-
-
-  const today =
-    new Date();
-
+  const date = new Date(timestamp);
+  const today = new Date();
 
   if(
     date.toDateString() ===
     today.toDateString()
   ){
-
     return (
       "Today • " +
       date.toLocaleTimeString(
@@ -1696,7 +1712,6 @@ function formatDate(timestamp){
     );
   }
 
-
   return date.toLocaleDateString(
     [],
     {
@@ -1707,178 +1722,88 @@ function formatDate(timestamp){
 }
 
 
-/* ==========================================
-   MENU
-========================================== */
+/* MENU */
 
 function openMenu(){
-
   renderHistory();
-
-
-  drawer.classList.add(
-    "open"
-  );
-
-
-  overlay.classList.add(
-    "open"
-  );
+  drawer.classList.add("open");
+  overlay.classList.add("open");
 }
-
 
 function closeMenu(){
-
-  drawer.classList.remove(
-    "open"
-  );
-
-
-  overlay.classList.remove(
-    "open"
-  );
+  drawer.classList.remove("open");
+  overlay.classList.remove("open");
 }
 
-
-menuButton.addEventListener(
-  "click",
-  openMenu
-);
-
-
-closeDrawer.addEventListener(
-  "click",
-  closeMenu
-);
-
-
-overlay.addEventListener(
-  "click",
-  closeMenu
-);
-
-
-/* ==========================================
-   NEW CHAT
-========================================== */
+menuButton.addEventListener("click",openMenu);
+closeDrawer.addEventListener("click",closeMenu);
+overlay.addEventListener("click",closeMenu);
 
 newChatButton.addEventListener(
   "click",
   createChat
 );
 
-
-/* ==========================================
-   CHOOSE INSTRUMENT
-========================================== */
-
 function goToInstruments(){
-
   window.location.href =
     "instruments.html";
 }
-
 
 instrumentButton.addEventListener(
   "click",
   goToInstruments
 );
 
-
 chooseInstrumentButton.addEventListener(
   "click",
   goToInstruments
 );
 
-
-/* ==========================================
-   PROFILE
-========================================== */
-
 profileButton.addEventListener(
   "click",
   () => {
-
     window.location.href =
       "profile.html";
   }
 );
 
-
-/* ==========================================
-   SETTINGS
-========================================== */
-
 settingsButton.addEventListener(
   "click",
   () => {
-
     window.location.href =
       "settings.html";
   }
 );
 
 
-/* ==========================================
-   LOG OUT
-========================================== */
+/* LOGOUT */
 
 logoutButton.addEventListener(
   "click",
   async () => {
 
-    logoutButton.disabled =
-      true;
-
-
+    logoutButton.disabled = true;
     logoutButton.textContent =
       "Logging out…";
-
 
     try{
 
       const {error} =
-        await novaSupabase
-          .auth
-          .signOut({
-            scope:"local"
-          });
+        await novaSupabase.auth.signOut({
+          scope:"local"
+        });
 
-
-      if(error){
-        throw error;
-      }
-
-
-      /*
-        We keep this account's local chat history.
-
-        Because the storage key includes the user's
-        permanent Supabase ID, another account on
-        this phone will not use the same chat history.
-      */
-
+      if(error) throw error;
 
       window.location.replace(
         "index.html"
       );
 
+    }catch{
 
-    }catch(error){
-
-      console.error(
-        "Logout failed:",
-        error
-      );
-
-
-      logoutButton.disabled =
-        false;
-
-
+      logoutButton.disabled = false;
       logoutButton.textContent =
         "Log out";
-
 
       alert(
         "We couldn't log you out. Please try again."
@@ -1888,21 +1813,16 @@ logoutButton.addEventListener(
 );
 
 
-/* ==========================================
-   SUGGESTIONS
-========================================== */
+/* SUGGESTIONS */
 
 document
-  .querySelectorAll(
-    ".suggestion"
-  )
+  .querySelectorAll(".suggestion")
   .forEach(
     button => {
 
       button.addEventListener(
         "click",
         () => {
-
           sendUserMessage(
             button.dataset.prompt
           );
@@ -1912,9 +1832,7 @@ document
   );
 
 
-/* ==========================================
-   INPUT
-========================================== */
+/* INPUT */
 
 input.addEventListener(
   "input",
@@ -1922,13 +1840,11 @@ input.addEventListener(
 
     resizeInput();
 
-
     sendButton.disabled =
       waitingForNova ||
       !input.value.trim();
   }
 );
-
 
 input.addEventListener(
   "keydown",
@@ -1938,14 +1854,11 @@ input.addEventListener(
       event.key === "Enter" &&
       !event.shiftKey
     ){
-
       event.preventDefault();
-
       sendCurrentMessage();
     }
   }
 );
-
 
 sendButton.addEventListener(
   "click",
@@ -1953,39 +1866,29 @@ sendButton.addEventListener(
 );
 
 
-/* ==========================================
-   MICROPHONE PLACEHOLDER
-========================================== */
+/* VOICE BUTTONS */
 
 micButton.addEventListener(
   "click",
-  () => {
+  startRecording
+);
 
-    if(!currentChatId){
-      createChat();
-    }
+cancelRecord.addEventListener(
+  "click",
+  cancelRecording
+);
 
-
-    storeMessage(
-      "assistant",
-      "Voice and guitar listening are coming later. For now, type your message to me."
-    );
-
-
-    renderCurrentChat();
-  }
+stopRecord.addEventListener(
+  "click",
+  finishRecording
 );
 
 
-/* ==========================================
-   TEXTAREA
-========================================== */
+/* TEXTAREA */
 
 function resizeInput(){
 
-  input.style.height =
-    "auto";
-
+  input.style.height = "auto";
 
   input.style.height =
     Math.min(
@@ -1995,9 +1898,7 @@ function resizeInput(){
 }
 
 
-/* ==========================================
-   SCROLL
-========================================== */
+/* SCROLL */
 
 function scrollToBottom(){
 
@@ -2013,12 +1914,9 @@ function scrollToBottom(){
 }
 
 
-/* ==========================================
-   START
-========================================== */
+/* START */
 
 startNova();
-
 </script>
 
 </body>
