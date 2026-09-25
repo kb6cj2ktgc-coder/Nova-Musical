@@ -19,6 +19,7 @@
   --text:#f5f8f7;
   --muted:#929d99;
   --green:#55e6a5;
+  --danger:#ff7474;
 }
 
 html,body{
@@ -39,14 +40,68 @@ body{
   padding:max(35px,env(safe-area-inset-top)) 22px 45px;
 }
 
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
 .brand{
-  text-align:center;
   font-size:24px;
   font-weight:900;
   letter-spacing:2px;
 }
 
 .brand span{color:var(--green)}
+
+.accountButton{
+  width:44px;
+  height:44px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+  color:var(--text);
+  font-size:22px;
+  cursor:pointer;
+}
+
+.accountMenu{
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:var(--panel);
+}
+
+.accountMenu.open{
+  display:block;
+}
+
+.accountName{
+  padding:7px 7px 13px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.menuButton{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:13px 14px;
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+  text-align:left;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.logoutButton{
+  margin-top:8px;
+  color:var(--danger);
+}
 
 .hero{
   margin:55px 0 34px;
@@ -150,7 +205,17 @@ h1{
 
 button{
   font:inherit;
-  cursor:pointer;
+}
+
+#logoutStatus{
+  display:none;
+  margin:14px 0;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center;
 }
 
 .footer{
@@ -167,9 +232,56 @@ button{
 
 <main class="page">
 
-  <div class="brand">
-    NOVA <span>MUSICAL</span>
+  <div class="topbar">
+
+    <div class="brand">
+      NOVA <span>MUSICAL</span>
+    </div>
+
+    <button
+      id="accountButton"
+      class="accountButton"
+      type="button"
+      aria-label="Account menu"
+    >
+      ☰
+    </button>
+
   </div>
+
+
+  <div id="accountMenu" class="accountMenu">
+
+    <div id="accountName" class="accountName">
+      Signed in
+    </div>
+
+    <button
+      id="profileButton"
+      class="menuButton"
+      type="button"
+    >
+      Profile
+    </button>
+
+    <button
+      id="settingsButton"
+      class="menuButton"
+      type="button"
+    >
+      Settings
+    </button>
+
+    <button
+      id="logoutButton"
+      class="menuButton logoutButton"
+      type="button"
+    >
+      Log out
+    </button>
+
+  </div>
+
 
   <section class="hero">
 
@@ -183,6 +295,11 @@ button{
     </div>
 
   </section>
+
+
+  <div id="logoutStatus">
+    Logging you out…
+  </div>
 
 
   <button
@@ -288,6 +405,9 @@ const novaSupabase =
   );
 
 
+let currentUser = null;
+
+
 async function start(){
 
   const {
@@ -307,6 +427,9 @@ async function start(){
   }
 
 
+  currentUser = user;
+
+
   const {data:profile} =
     await novaSupabase
       .from("profiles")
@@ -322,12 +445,139 @@ async function start(){
     "Musician";
 
 
+  const firstName =
+    name.split(" ")[0];
+
+
   document
     .getElementById("welcomeName")
     .textContent =
-      name.split(" ")[0];
+      firstName;
+
+
+  document
+    .getElementById("accountName")
+    .textContent =
+      "Signed in as " + name;
 
 }
+
+
+document
+  .getElementById("accountButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById("accountMenu")
+        .classList
+        .toggle("open");
+
+    }
+  );
+
+
+document
+  .getElementById("profileButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      window.location.href =
+        "profile.html";
+
+    }
+  );
+
+
+document
+  .getElementById("settingsButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      window.location.href =
+        "settings.html";
+
+    }
+  );
+
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const logoutButton =
+        document.getElementById(
+          "logoutButton"
+        );
+
+      const logoutStatus =
+        document.getElementById(
+          "logoutStatus"
+        );
+
+
+      logoutButton.disabled = true;
+
+      logoutStatus.style.display =
+        "block";
+
+
+      try{
+
+        /*
+          Sign out this browser/device.
+        */
+
+        await novaSupabase.auth.signOut({
+          scope:"local"
+        });
+
+
+        /*
+          Remove Nova's account-related browser state.
+
+          We deliberately DON'T delete every localStorage
+          item because appearance preferences may later be
+          shared across sessions on the device.
+        */
+
+        sessionStorage.clear();
+
+
+        /*
+          Go back to Nova Musical's public welcome page.
+
+          replace() prevents Back from immediately returning
+          to the authenticated chooser.
+        */
+
+        window.location.replace(
+          "index.html"
+        );
+
+      }
+      catch(error){
+
+        console.error(
+          "Logout failed:",
+          error
+        );
+
+
+        logoutStatus.textContent =
+          "We couldn't log you out. Please try again.";
+
+        logoutButton.disabled = false;
+
+      }
+
+    }
+  );
 
 
 document
